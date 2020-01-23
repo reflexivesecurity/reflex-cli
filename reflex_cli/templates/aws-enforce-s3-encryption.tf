@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "enforce_s3_encryption" {
-  source           = "github.com/cloudmitigator/reflex-aws-enforce-s3-encryption?ref=0.0.1"
+  source           = "git@github.com:cloudmitigator/reflex-aws-enforce-s3-encryption"
   email            = "{{ email }}"
 }
 
