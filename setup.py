@@ -4,6 +4,7 @@ setup(
     name="reflex",
     version="0.1.0",
     packages=["reflex_cli", "reflex_cli.commands"],
+    package_data={"reflex_cli": ["templates/*"]},
     include_package_data=True,
     install_requires=["click",],
     entry_points="""

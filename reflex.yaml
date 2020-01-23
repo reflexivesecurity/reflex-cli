@@ -1,0 +1,15 @@
+version: 0.1
+
+default_notification_email: "john@example.com"
+
+providers:
+  - aws
+
+measures:
+    - aws-detect-root-user-activity
+    - aws-detect-deactivate-mfa:
+        email: 'john.smith@example.com'
+    - aws-enforce-no-public-ami
+    - aws-enforce-s3-encryption
+    - aws-detect-pants-on-fire:
+        url: 'github.com/example/pants-on-fire'
