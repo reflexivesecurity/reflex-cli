@@ -24,7 +24,8 @@ class Environment(object):
 
 
 pass_environment = click.make_pass_decorator(Environment, ensure=True)
-cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
+cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                          "commands"))
 
 
 class reflexCli(click.MultiCommand):
@@ -40,7 +41,10 @@ class reflexCli(click.MultiCommand):
         try:
             if sys.version_info[0] == 2:
                 name = name.encode("ascii", "replace")
-            mod = __import__("reflex_cli.commands.cmd_" + name, None, None, ["cli"])
+            mod = __import__("reflex_cli.commands.cmd_" + name,
+                             None,
+                             None,
+                             ["cli"])
         except ImportError:
             return
         return mod.cli
