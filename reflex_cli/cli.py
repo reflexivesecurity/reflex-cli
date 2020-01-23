@@ -24,5 +24,5 @@ def cli(ctx, verbose, home):
         ctx.home = home
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

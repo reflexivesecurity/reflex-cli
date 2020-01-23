@@ -3,12 +3,12 @@ import os
 import sys
 import click
 
-CMD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                          "commands"))
+CMD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
 
 
 class ReflexCli(click.MultiCommand):
     """Class that handles subcommand setup."""
+
     def list_commands(self, context):
         command_files = []
         for filename in os.listdir(CMD_FOLDER):
@@ -21,10 +21,7 @@ class ReflexCli(click.MultiCommand):
         try:
             if sys.version_info[0] == 2:
                 name = name.encode("ascii", "replace")
-            mod = __import__("reflex_cli.commands.cmd_" + name,
-                             None,
-                             None,
-                             ["cli"])
+            mod = __import__("reflex_cli.commands.cmd_" + name, None, None, ["cli"])
         except ImportError:
             return
         return mod.cli
