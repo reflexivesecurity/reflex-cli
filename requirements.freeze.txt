@@ -2,6 +2,8 @@ appdirs==1.4.3
 attrs==19.3.0
 black==19.10b0
 Click==7.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
 pathspec==0.7.0
 PyYAML==5.3
 regex==2020.1.8
