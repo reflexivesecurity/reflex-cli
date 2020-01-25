@@ -1,8 +1,8 @@
 """Holder of template generation logic"""
 import os
+from pathlib import Path
 import jinja2
 from jinja2 import Environment, PackageLoader, select_autoescape
-from pathlib import Path
 
 
 class TemplateGenerator:
@@ -15,6 +15,7 @@ class TemplateGenerator:
             loader=PackageLoader("reflex_cli", "templates"),
             autoescape=select_autoescape(["tf"]),
         )
+        self.default_email = self.configuration["default_notification_email"]
         self._ensure_output_directory_exists()
 
     def _ensure_output_directory_exists(self):
@@ -24,23 +25,33 @@ class TemplateGenerator:
     def create_templates(self):
         """Generates templates for every measure in configuration."""
         for measure in self.configuration["measures"]:
-            default_email = self.configuration["default_notification_email"]
-            self.generate_template(measure, default_email)
+            template_name = self.determine_template_name(measure)
+            rendered_template = self.generate_template(template_name)
+            if rendered_template:
+                self.write_template_file(template_name, rendered_template)
 
-    def generate_template(self, measure, email):
-        """Creates tf output for every file in our template."""
+    @staticmethod
+    def determine_template_name(measure):
+        """Inspects instance type of measure to determine file name."""
         if isinstance(measure, str):
             template_name = measure + ".tf"
         elif isinstance(measure, dict):
             template_name = list(measure)[0] + ".tf"
+        return template_name
+
+    def write_template_file(self, template_name, rendered_template):
+        """Writes output of rendering to file"""
+        output_file = os.path.join(self.output_directory, template_name)
+        with open(output_file, "w+") as file_handler:
+            file_handler.write(rendered_template)
+
+    def generate_template(self, template_name):
+        """Creates tf output for every file in our template."""
         try:
             template = self.template_env.get_template(template_name)
-
-            rendered_template = template.render(email=email)
+            rendered_template = template.render(email=self.default_email)
             print(rendered_template)
-            output_file = os.path.join(self.output_directory, template_name)
-            with open(output_file, "w+") as file_handler:
-                file_handler.write(rendered_template)
-
+            return rendered_template
         except jinja2.exceptions.TemplateNotFound:
             print(f"No template found for {template_name}")
+            return None
