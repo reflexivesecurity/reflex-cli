@@ -21,6 +21,3 @@ def cli(ctx, tf_args):
     tf_args_str = " ".join(tf_args)
     process = subprocess.Popen(f"terraform {tf_args_str}", shell=True)
     stdout, stderr = process.communicate()
-
-    ctx.log(stdout)
-    ctx.log(stderr)
