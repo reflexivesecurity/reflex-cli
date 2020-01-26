@@ -1,5 +1,4 @@
 """Command that will create a bootstrapped directory for reflex."""
-import subprocess
 import click
 from reflex_cli.cli import pass_environment
 from reflex_cli.reflex_initializer import ReflexInitializer

@@ -27,6 +27,7 @@ OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 @pass_environment
 def cli(ctx, config, output):
     """CLI entrypoint for build command."""
+    del ctx
     configuration = ConfigParser(config)
     config_dictionary = configuration.generate_config()
     generator = TemplateGenerator(config_dictionary, output)
