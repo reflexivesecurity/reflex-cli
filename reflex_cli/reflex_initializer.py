@@ -34,7 +34,7 @@ class ReflexInitializer:
 
     def determine_config_values(self):
         """Outlines keys of config file and gathers values."""
-        self.configs["version"] = pkg_resources.require("reflex")[0].version
+        self.configs["version"] = pkg_resources.require("reflex-cli")[0].version
         self.configs["default_notification_email"] = input("Default email:")
         self.configs["providers"] = ["aws"]
         self.configs["measures"] = self.query_possible_measures()

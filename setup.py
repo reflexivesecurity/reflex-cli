@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name="reflex",
+    name="reflex-cli",
     version="0.1.0",
     packages=["reflex_cli", "reflex_cli.commands"],
     package_data={"reflex_cli": ["templates/*"]},
