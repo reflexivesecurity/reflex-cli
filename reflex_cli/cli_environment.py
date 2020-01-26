@@ -1,4 +1,5 @@
 """Class to create decorator for command classes."""
+# pylint: disable=too-few-public-methods
 import os
 
 

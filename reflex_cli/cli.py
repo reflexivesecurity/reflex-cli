@@ -1,4 +1,5 @@
 """Entrypoint for our reflex CLI application."""
+# pylint: disable=invalid-name,no-value-for-parameter
 import click
 from reflex_cli.cli_environment import CliEnvironment
 from reflex_cli.reflex_cli import ReflexCli
