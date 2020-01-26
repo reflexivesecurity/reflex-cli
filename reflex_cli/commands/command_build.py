@@ -3,7 +3,6 @@ import os
 import click
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.template_generator import TemplateGenerator
-from reflex_cli.cli import pass_environment
 
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
@@ -24,10 +23,8 @@ OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )
-@pass_environment
-def cli(ctx, config, output):
+def cli(config, output):
     """CLI entrypoint for build command."""
-    del ctx
     configuration = ConfigParser(config)
     config_dictionary = configuration.generate_config()
     generator = TemplateGenerator(config_dictionary, output)

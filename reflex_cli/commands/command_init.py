@@ -6,8 +6,8 @@ from reflex_cli.reflex_initializer import ReflexInitializer
 
 @click.command("init", short_help="Runs `terraform init`")
 @pass_environment
-def cli(ctx):
+def cli(context):
     """Creates a new reflex ready directory structure."""
-    initializer = ReflexInitializer(ctx.home)
+    initializer = ReflexInitializer(context.home)
     initializer.determine_config_values()
     initializer.write_config_file()

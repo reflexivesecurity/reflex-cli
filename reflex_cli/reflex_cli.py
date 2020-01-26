@@ -12,7 +12,7 @@ class ReflexCli(click.MultiCommand):
     @staticmethod
     def is_command_file(filename):
         """Determines based on file name if command file."""
-        if filename.endswith(".py") and filename.startswith("cmd_"):
+        if filename.endswith(".py") and filename.startswith("command_"):
             return True
         return False
 
@@ -28,7 +28,7 @@ class ReflexCli(click.MultiCommand):
         try:
             if sys.version_info[0] == 2:
                 name = name.encode("ascii", "replace")
-            mod = __import__("reflex_cli.commands.cmd_" + name, None, None, ["cli"])
+            mod = __import__("reflex_cli.commands.command_" + name, None, None, ["cli"])
         except ImportError:
             return
         return mod.cli

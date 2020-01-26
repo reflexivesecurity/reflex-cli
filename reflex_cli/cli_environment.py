@@ -1,7 +1,5 @@
 """Class to create decorator for command classes."""
 import os
-import sys
-import click
 
 
 class CliEnvironment:

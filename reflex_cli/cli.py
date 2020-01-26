@@ -17,11 +17,11 @@ pass_environment = click.make_pass_decorator(CliEnvironment, ensure=True)
 )
 @click.option("-v", "--verbose", is_flag=True, help="Enables verbose mode.")
 @pass_environment
-def cli(ctx, verbose, home):
+def cli(context, verbose, home):
     """A reflex command line interface."""
-    ctx.verbose = verbose
+    context.verbose = verbose
     if home is not None:
-        ctx.home = home
+        context.home = home
 
 
 if __name__ == "__main__":
