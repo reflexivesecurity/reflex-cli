@@ -18,7 +18,7 @@ class ReflexInitializer:
         )
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates"),
-            autoescape=select_autoescape(["yaml"]),
+            autoescape=select_autoescape(["jinja2"]),
         )
 
     @staticmethod
@@ -47,7 +47,7 @@ class ReflexInitializer:
         )
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
         measures_dump = yaml.dump({"measures": self.configs["measures"]})
-        template = self.template_env.get_template("reflex.yaml")
+        template = self.template_env.get_template("reflex.yaml.jinja2")
         return template.render(
             default_email=default_notification_email_dump,
             providers=providers_dump,

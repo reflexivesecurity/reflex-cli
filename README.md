@@ -36,4 +36,3 @@ Note: This will also install dependencies specified in `setup.py`
 ```sh
 pip install -e .
 ```
-
