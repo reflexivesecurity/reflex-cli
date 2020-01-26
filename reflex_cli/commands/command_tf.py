@@ -18,4 +18,5 @@ def cli(tf_args):
     """
 
     tf_args_str = " ".join(tf_args)
-    subprocess.Popen(f"terraform {tf_args_str}", shell=True)
+    process = subprocess.Popen(f"terraform {tf_args_str}", shell=True)
+    process.wait()
