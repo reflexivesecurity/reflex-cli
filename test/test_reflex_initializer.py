@@ -3,9 +3,9 @@ import os
 from reflex_cli.reflex_initializer import ReflexInitializer
 
 
-
 class ReflexInitializerTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
+
     def setUp(self):
         self.initializer = ReflexInitializer(os.getcwd())
 

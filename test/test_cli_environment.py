@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import MagicMock
 import os
 from reflex_cli import cli_environment
+
 
 class CliEnvironmentTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
