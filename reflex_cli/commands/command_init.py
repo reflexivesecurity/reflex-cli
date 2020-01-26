@@ -4,7 +4,9 @@ from reflex_cli.cli import pass_environment
 from reflex_cli.reflex_initializer import ReflexInitializer
 
 
-@click.command("init", short_help="Runs `terraform init`")
+@click.command(
+    "init", short_help="Initializes a directory with a configuration file."
+)
 @pass_environment
 def cli(context):
     """Creates a new reflex ready directory structure."""

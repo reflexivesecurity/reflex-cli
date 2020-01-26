@@ -8,7 +8,7 @@ CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 
 
-@click.command("apply", short_help="Runs `terraform apply`")
+@click.command("build", short_help="Builds out tf files from config file.")
 @click.option(
     "-c",
     "--config",
@@ -19,7 +19,9 @@ OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 @click.option(
     "-o",
     "--output",
-    type=click.Path(exists=False, dir_okay=True, file_okay=False, resolve_path=True),
+    type=click.Path(
+        exists=False, dir_okay=True, file_okay=False, resolve_path=True
+    ),
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )

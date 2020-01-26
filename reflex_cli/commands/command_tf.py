@@ -3,7 +3,7 @@ import subprocess
 import click
 
 
-@click.command("tf", short_help="`terraform ...`")
+@click.command("tf", short_help="Alias to `terraform`.")
 @click.argument("tf_args", nargs=-1)
 def cli(tf_args):
     """
