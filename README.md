@@ -22,6 +22,33 @@ pip install reflex-cli
 reflex --help
 ```
 
+### Initialize reflex
+
+```sh
+reflex init
+```
+
+Launches a wizard to generate a `reflex.yaml` configuration file for use during a build
+of reflex.
+
+### Build reflex
+
+```sh
+reflex build
+```
+
+Take a local `reflex.yaml` and generate terraform templates based on the measures
+specified.
+
+### Deploy reflex
+
+```sh
+reflex tf [terraform_args]
+```
+
+From output directory of the build, use `reflex tf` to map to `terraform` commands
+(`apply`, `plan`).
+
 ## Development
 
 Install deveopment dependencies in `requirements.txt`.
