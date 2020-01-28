@@ -1,8 +1,11 @@
 """Holder of template generation logic"""
 import os
+import logging
 from pathlib import Path
 import jinja2
 from jinja2 import Environment, PackageLoader, select_autoescape
+
+LOGGER = logging.getLogger("reflex_cli")
 
 
 class TemplateGenerator:
@@ -50,8 +53,8 @@ class TemplateGenerator:
         try:
             template = self.template_env.get_template(template_name)
             rendered_template = template.render(email=self.default_email)
-            print(rendered_template)
+            LOGGER.info(rendered_template)
             return rendered_template
         except jinja2.exceptions.TemplateNotFound:
-            print(f"No template found for {template_name}")
+            LOGGER.info("No template found for %s", template_name)
             return None
