@@ -29,6 +29,7 @@ class TemplateGenerator:
         """Generates templates for every measure in configuration."""
         for measure in self.configuration["measures"]:
             template_name = self.determine_template_name(measure)
+            LOGGER.debug("Rendering template with name: %s", template_name)
             rendered_template = self.generate_template(template_name)
             if rendered_template:
                 self.write_template_file(template_name, rendered_template)
@@ -45,6 +46,7 @@ class TemplateGenerator:
     def write_template_file(self, template_name, rendered_template):
         """Writes output of rendering to file"""
         output_file = os.path.join(self.output_directory, template_name)
+        LOGGER.debug("Writing template file to: %s", output_file)
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
 

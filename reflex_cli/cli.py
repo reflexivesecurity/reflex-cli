@@ -8,7 +8,7 @@ from reflex_cli.reflex_cli import ReflexCli
 
 FORMAT = "%(message)s"
 logging.basicConfig(stream=sys.stdout, format=FORMAT, level=logging.INFO)
-logger = logging.getLogger("reflex_cli")
+LOGGER = logging.getLogger("reflex_cli")
 
 CONTEXT_SETTINGS = dict(auto_envvar_prefix="reflex")
 
@@ -27,9 +27,10 @@ def cli(context, verbose, home):
     """A reflex command line interface."""
     context.verbose = verbose
     if context.verbose:
-        logger.setLevel(logging.DEBUG)
+        LOGGER.setLevel(logging.DEBUG)
     if home is not None:
         context.home = home
+    LOGGER.debug("home set to: %s", context.home)
 
 
 if __name__ == "__main__":

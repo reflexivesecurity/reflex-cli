@@ -1,10 +1,15 @@
 """Parses reflex config file to be used by application."""
+import logging
 import os
 import yaml
 import pkg_resources
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-TEMPLATE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates"))
+TEMPLATE_FOLDER = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "templates")
+)
+
+LOGGER = logging.getLogger("reflex_cli")
 
 
 class ReflexInitializer:
@@ -30,11 +35,14 @@ class ReflexInitializer:
                 confirm = input(f"{filename}? (Yy/Nn):")
                 if confirm.lower() == "y":
                     possible_measures.append(filename[:-3])
+        LOGGER.debug("Measures selected for config: %s", possible_measures)
         return possible_measures
 
     def determine_config_values(self):
         """Outlines keys of config file and gathers values."""
-        self.configs["version"] = pkg_resources.require("reflex-cli")[0].version
+        package_object = pkg_resources.require("reflex-cli")[0]
+        self.configs["version"] = package_object.version
+        LOGGER.debug("Reflex version set to: %s", self.configs["version"])
         self.configs["default_notification_email"] = input("Default email:")
         self.configs["providers"] = ["aws"]
         self.configs["measures"] = self.query_possible_measures()
@@ -43,19 +51,26 @@ class ReflexInitializer:
         """Renders jinja2 template with yaml dumps."""
         version_dump = yaml.dump({"version": self.configs["version"]})
         default_notification_email_dump = yaml.dump(
-            {"default_notification_email": self.configs["default_notification_email"]}
+            {
+                "default_notification_email": self.configs[
+                    "default_notification_email"
+                ]
+            }
         )
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
         measures_dump = yaml.dump({"measures": self.configs["measures"]})
         template = self.template_env.get_template("reflex.yaml.jinja2")
-        return template.render(
+        rendered_template = template.render(
             default_email=default_notification_email_dump,
             providers=providers_dump,
             measures=measures_dump,
             version=version_dump,
         )
+        LOGGER.debug("Config template rendered as: %s", rendered_template)
+        return rendered_template
 
     def write_config_file(self):
         """Opens config file, dumps dict as yaml."""
+        LOGGER.debug("Writing config file to: %s", self.config_file)
         with open(self.config_file, "w") as config_file:
             config_file.write(self.render_template())
