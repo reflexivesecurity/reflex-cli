@@ -3,6 +3,7 @@ import logging
 import yaml
 
 LOGGER = logging.getLogger("reflex_cli")
+REQUIRED_KEYS = ["version"]
 
 
 class ConfigParser:
@@ -19,5 +20,14 @@ class ConfigParser:
             self.validate_config(configuration)
         return configuration
 
-    def validate_config(self, config):
+    @staticmethod
+    def validate_config(config):
         """Validates presence of keys and format of values"""
+        for key in REQUIRED_KEYS:
+            if key not in list(config):
+                raise ValueError(f"{key} was not found in reflex.yaml.")
+
+            if not config[key]:
+                raise ValueError(
+                    f"{key} was found to have no value in reflex.yaml"
+                )
