@@ -12,22 +12,32 @@ class ConfigParser:
     def __init__(self, config_file):
         self.config_file = config_file
 
+    def generate_valid_config(self):
+        """Entrypoint to generate and validate config"""
+        configuration = self.generate_config()
+        valid_config = self.validate_config(configuration)
+        if not valid_config:
+            raise SystemError(
+                f"Invalid configuration file format, config: {configuration}"
+            )
+        return configuration
+
     def generate_config(self):
-        """Opens config file, parses yaml, and validates contents."""
+        """Opens config file, parses yaml."""
         with open(self.config_file, "r") as config_file:
             configuration = yaml.safe_load(config_file)
             LOGGER.debug("Configuration dictionary: %s", configuration)
-            self.validate_config(configuration)
         return configuration
 
     @staticmethod
     def validate_config(config):
         """Validates presence of keys and format of values"""
+        valid = True
         for key in REQUIRED_KEYS:
             if key not in list(config):
-                raise ValueError(f"{key} was not found in reflex.yaml.")
-
-            if not config[key]:
-                raise ValueError(
-                    f"{key} was found to have no value in reflex.yaml"
-                )
+                LOGGER.info("Key %s was not found in reflex.yaml.", key)
+                valid = False
+            elif not config[key]:
+                LOGGER.info("Key %s has no value in reflex.yaml", key)
+                valid = False
+        return valid

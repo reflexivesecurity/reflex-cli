@@ -32,6 +32,6 @@ def cli(config, output):
     LOGGER.debug("Config file set to: %s", config)
     LOGGER.debug("Output directory set to: %s", output)
     configuration = ConfigParser(config)
-    config_dictionary = configuration.generate_config()
+    config_dictionary = configuration.generate_valid_config()
     generator = TemplateGenerator(config_dictionary, output)
     generator.create_templates()
