@@ -21,9 +21,7 @@ LOGGER = logging.getLogger("reflex_cli")
 @click.option(
     "-o",
     "--output",
-    type=click.Path(
-        exists=False, dir_okay=True, file_okay=False, resolve_path=True
-    ),
+    type=click.Path(exists=False, dir_okay=True, file_okay=False, resolve_path=True),
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )

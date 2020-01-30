@@ -5,9 +5,7 @@ import os
 import sys
 import click
 
-CMD_FOLDER = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "commands")
-)
+CMD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
 
 
 class ReflexCli(click.MultiCommand):
@@ -32,9 +30,7 @@ class ReflexCli(click.MultiCommand):
         try:
             if sys.version_info[0] == 2:
                 name = name.encode("ascii", "replace")
-            mod = __import__(
-                "reflex_cli.commands.command_" + name, None, None, ["cli"]
-            )
+            mod = __import__("reflex_cli.commands.command_" + name, None, None, ["cli"])
         except ImportError:
             return
         return mod.cli

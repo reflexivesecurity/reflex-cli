@@ -7,9 +7,7 @@ from reflex_cli.reflex_initializer import ReflexInitializer
 LOGGER = logging.getLogger("reflex_cli")
 
 
-@click.command(
-    "init", short_help="Initializes a directory with a configuration file."
-)
+@click.command("init", short_help="Initializes a directory with a configuration file.")
 @pass_environment
 def cli(context):
     """Creates a new reflex ready directory structure."""

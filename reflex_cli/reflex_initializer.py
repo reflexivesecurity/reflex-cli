@@ -5,9 +5,7 @@ import yaml
 import pkg_resources
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-TEMPLATE_FOLDER = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "templates")
-)
+TEMPLATE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates"))
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -51,11 +49,7 @@ class ReflexInitializer:
         """Renders jinja2 template with yaml dumps."""
         version_dump = yaml.dump({"version": self.configs["version"]})
         default_notification_email_dump = yaml.dump(
-            {
-                "default_notification_email": self.configs[
-                    "default_notification_email"
-                ]
-            }
+            {"default_notification_email": self.configs["default_notification_email"]}
         )
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
         measures_dump = yaml.dump({"measures": self.configs["measures"]})
