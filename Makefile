@@ -26,7 +26,7 @@ lint-fix: lint-black
 .PHONY: test
 test: test-coverage
 
-pre-commit: .git/hooks/pre-commit .pre-commit .pre-commit-config.yaml
+pre-commit: .pre-commit .pre-commit-config.yaml
 	# Installs .git/hooks/pre-commit
 	pre-commit install
 
