@@ -1,8 +1,13 @@
+# Terraform
 .terraform
 terraform.tfstate
 *.tfstate*
 terraform.tfvars
+
+# IDEs
 .idea
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -133,4 +138,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Reflex specific
 reflex_out
