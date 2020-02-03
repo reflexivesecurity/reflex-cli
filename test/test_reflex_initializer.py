@@ -1,5 +1,6 @@
-import unittest
 import os
+import unittest
+
 from reflex_cli.reflex_initializer import ReflexInitializer
 
 

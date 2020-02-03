@@ -1,5 +1,6 @@
-import unittest
 import os
+import unittest
+
 from reflex_cli.template_generator import TemplateGenerator
 
 EXAMPLE_CONFIG = {

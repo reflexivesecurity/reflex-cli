@@ -1,7 +1,9 @@
 """Build command takes in configuration file outputs infrastructure template"""
-import os
 import logging
+import os
+
 import click
+
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.template_generator import TemplateGenerator
 
