@@ -1,8 +1,10 @@
 """Parses reflex config file to be used by application."""
 import logging
 import os
-import yaml
+
 import pkg_resources
+
+import yaml
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 TEMPLATE_FOLDER = os.path.abspath(

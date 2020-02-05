@@ -1,6 +1,7 @@
 """Holder of template generation logic"""
-import os
 import logging
+import os
+
 import github
 
 LOGGER = logging.getLogger("reflex_cli")

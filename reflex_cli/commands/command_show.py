@@ -3,7 +3,9 @@ Show command is used for discovery of detective measures that you may
 want to include in your reflex configuration.
 """
 import logging
+
 import click
+
 from reflex_cli.measure_discoverer import MeasureDiscoverer
 
 LOGGER = logging.getLogger("reflex_cli")

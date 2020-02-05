@@ -1,7 +1,8 @@
-import unittest
 import os
-from reflex_cli.reflex_initializer import ReflexInitializer
+import unittest
 from unittest.mock import patch
+
+from reflex_cli.reflex_initializer import ReflexInitializer
 
 
 class ReflexInitializerTestCase(unittest.TestCase):
