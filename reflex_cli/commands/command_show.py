@@ -15,5 +15,6 @@ LOGGER = logging.getLogger("reflex_cli")
 def cli():
     """CLI entrypoint for show command."""
     discoverer = MeasureDiscoverer()
+    LOGGER.info("Collecting list of available measures...")
     discoverer.collect_measures()
     discoverer.display_discovered_measures()
