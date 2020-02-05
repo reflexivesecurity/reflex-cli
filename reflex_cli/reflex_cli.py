@@ -2,6 +2,7 @@
 # pylint: disable=arguments-differ
 # pylint: disable=unused-argument,inconsistent-return-statements
 import os
+
 import click
 
 CMD_FOLDER = os.path.abspath(

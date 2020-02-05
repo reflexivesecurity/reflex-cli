@@ -1,8 +1,9 @@
 import unittest
+from unittest.mock import patch
+
 import click
 
 from reflex_cli import reflex_cli
-from unittest.mock import patch
 
 
 class ReflexCliTestCase(unittest.TestCase):

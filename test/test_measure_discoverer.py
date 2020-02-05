@@ -1,6 +1,7 @@
 import unittest
-from reflex_cli.measure_discoverer import MeasureDiscoverer
 from unittest.mock import MagicMock
+
+from reflex_cli.measure_discoverer import MeasureDiscoverer
 
 
 class MeasureDiscovererTestCase(unittest.TestCase):
