@@ -1,4 +1,4 @@
-"""Entrypoint class for accumulating subcommands by project structurei."""
+"""Entrypoint class for accumulating subcommands by project structure."""
 # pylint: disable=arguments-differ
 # pylint: disable=unused-argument,inconsistent-return-statements
 import os
@@ -30,7 +30,7 @@ class ReflexCli(click.MultiCommand):
     def get_command(self, context, name):
         try:
             mod = __import__(
-                "reflex_cli.commands.command_" + name, None, None, ["cli"]
+                f"reflex_cli.commands.command_{name}", None, None, ["cli"]
             )
         except ImportError:
             return

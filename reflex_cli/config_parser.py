@@ -1,5 +1,6 @@
 """Parses reflex config file to be used by application."""
 import logging
+
 import yaml
 
 LOGGER = logging.getLogger("reflex_cli")
