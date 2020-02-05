@@ -12,7 +12,7 @@ FORMAT = "%(message)s"
 logging.basicConfig(stream=sys.stdout, format=FORMAT, level=logging.INFO)
 LOGGER = logging.getLogger("reflex_cli")
 
-CONTEXT_SETTINGS = dict(auto_envvar_prefix="reflex")
+CONTEXT_SETTINGS = {"auto_envvar_prefix": "reflex"}
 
 pass_environment = click.make_pass_decorator(CliEnvironment, ensure=True)
 
