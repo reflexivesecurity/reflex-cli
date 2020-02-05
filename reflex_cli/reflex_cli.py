@@ -2,8 +2,6 @@
 # pylint: disable=arguments-differ
 # pylint: disable=unused-argument,inconsistent-return-statements
 import os
-import sys
-
 import click
 
 CMD_FOLDER = os.path.abspath(
@@ -31,8 +29,6 @@ class ReflexCli(click.MultiCommand):
 
     def get_command(self, context, name):
         try:
-            if sys.version_info[0] == 2:
-                name = name.encode("ascii", "replace")
             mod = __import__(
                 f"reflex_cli.commands.command_{name}", None, None, ["cli"]
             )

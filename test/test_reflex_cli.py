@@ -1,6 +1,8 @@
 import unittest
+import click
 
 from reflex_cli import reflex_cli
+from unittest.mock import patch
 
 
 class ReflexCliTestCase(unittest.TestCase):
@@ -11,3 +13,18 @@ class ReflexCliTestCase(unittest.TestCase):
         test_cli = reflex_cli.ReflexCli()
         self.assertTrue(test_cli.is_command_file("command_test.py"))
         self.assertFalse(test_cli.is_command_file("comd_test.py"))
+
+    @patch("os.listdir")
+    def test_list_commands(self, mock):
+        mock.return_value = ["test"]
+        test_empty_cli = reflex_cli.ReflexCli()
+        self.assertEqual([], test_empty_cli.list_commands({}))
+
+        mock.return_value = ["command_test.py"]
+        self.assertEqual(["test"], test_empty_cli.list_commands({}))
+
+    def test_get_command(self):
+        test_cli_build_command = reflex_cli.ReflexCli()
+        build_cli = test_cli_build_command.get_command({}, "build")
+
+        self.assertTrue(isinstance(build_cli, click.core.Command))
