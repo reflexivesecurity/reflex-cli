@@ -13,7 +13,7 @@ class ConfigParser:
     def __init__(self, config_file):
         self.config_file = config_file
 
-    def generate_valid_config(self):
+    def parse_valid_config(self):
         """Entrypoint to generate and validate config"""
         configuration = self.generate_config()
         valid_config = self.validate_config(configuration)

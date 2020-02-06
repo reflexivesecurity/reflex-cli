@@ -3,6 +3,7 @@ import logging
 import os
 
 import click
+
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.template_generator import TemplateGenerator
 
@@ -33,7 +34,7 @@ def cli(config, output):
     LOGGER.debug("Config file set to: %s", config)
     LOGGER.debug("Output directory set to: %s", output)
     configuration = ConfigParser(config)
-    config_dictionary = configuration.generate_valid_config()
+    config_dictionary = configuration.parse_valid_config()
     generator = TemplateGenerator(config_dictionary, output)
     LOGGER.info("Creating Terraform files...")
     generator.create_templates()
