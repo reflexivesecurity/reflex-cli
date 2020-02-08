@@ -56,14 +56,14 @@ class ReflexInitializer:
         self.configs["version"] = package_object.version
         LOGGER.debug("Reflex version set to: %s", self.configs["version"])
 
-    def determine_config_values(self):
+    def determine_config_values(self):  # pragma: no cover
         """Outlines keys of config file and gathers values."""
         self.set_version()
         self.configs["default_email"] = self.get_input("Default email:")
         self.configs["providers"] = ["aws"]
         self.configs["measures"] = self.query_possible_measures()
 
-    def render_template(self):
+    def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
         version_dump = yaml.dump({"version": self.configs["version"]})
         default_notification_email_dump = yaml.dump(
@@ -82,7 +82,7 @@ class ReflexInitializer:
         LOGGER.debug("Config template rendered as: %s", rendered_template)
         return rendered_template
 
-    def write_config_file(self):
+    def write_config_file(self):  # pragma: no cover
         """Opens config file, dumps dict as yaml."""
         LOGGER.debug("Writing config file to: %s", self.config_file)
         with open(self.config_file, "w") as config_file:

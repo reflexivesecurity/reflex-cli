@@ -4,3 +4,4 @@ black
 jinja2
 pre-commit
 PyGithub
+coverage

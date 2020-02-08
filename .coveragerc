@@ -1,0 +1,7 @@
+[run]
+source = reflex_cli
+
+omit =
+    reflex_cli/commands/*
+
+    reflex_cli/cli.py

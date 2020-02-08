@@ -26,7 +26,7 @@ class TemplateGenerator:
         """Ensure that the path to the output directory exists."""
         Path(self.output_directory).mkdir(parents=True, exist_ok=True)
 
-    def create_templates(self):
+    def create_templates(self):  # pragma: no cover
         """Generates templates for every measure in configuration."""
         for measure in self.configuration["measures"]:
             template_name = self.determine_template_name(measure)
@@ -51,7 +51,7 @@ class TemplateGenerator:
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
 
-    def generate_template(self, template_name):
+    def generate_template(self, template_name):  # pragma: no cover
         """Creates tf output for every file in our template."""
         try:
             template = self.template_env.get_template(template_name)
