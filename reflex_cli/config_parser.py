@@ -12,16 +12,18 @@ class ConfigParser:
 
     def __init__(self, config_file):
         self.config_file = config_file
+        self.coniguration = {}
 
     def parse_valid_config(self):
         """Entrypoint to generate and validate config"""
-        configuration = self.generate_config()
-        valid_config = self.validate_config(configuration)
+        self.configuration = self.generate_config()
+        valid_config = self.validate_config(self.configuration)
         if not valid_config:
             raise SystemError(
-                f"Invalid configuration file format, config: {configuration}"
+                "Invalid configuration file format, config:"
+                + f" {self.configuration}"
             )
-        return configuration
+        return self.configuration
 
     def generate_config(self):
         """Opens config file, parses yaml."""
