@@ -66,15 +66,15 @@ class ReflexInitializer:
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
         version_dump = yaml.dump({"version": self.configs["version"]})
-        default_notification_email_dump = yaml.dump(
-            {"default_notification_email": self.configs["default_email"]}
+        default_email_dump = yaml.dump(
+            {"default_email": self.configs["default_email"]}
         )
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
         measures_dump = yaml.dump({"measures": self.configs["measures"]})
 
         template = self.template_env.get_template("reflex.yaml.jinja2")
         rendered_template = template.render(
-            default_email=default_notification_email_dump,
+            default_email=default_email_dump,
             providers=providers_dump,
             measures=measures_dump,
             version=version_dump,

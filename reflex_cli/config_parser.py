@@ -16,7 +16,9 @@ class ConfigParser:
 
     def parse_valid_config(self):
         """Entrypoint to generate and validate config"""
-        self.configuration = self.generate_config()
+        self.configuration = (  # pylint: disable=attribute-defined-outside-init
+            self.generate_config()
+        )
         valid_config = self.validate_config(self.configuration)
         if not valid_config:
             raise SystemError(

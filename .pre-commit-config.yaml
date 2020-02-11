@@ -18,11 +18,6 @@ repos:
     hooks:
       - id: black
         args: [--line-length=80]
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.9
-    hooks:
-      - id: flake8
-        additional_dependencies: [flake8-bugbear]
   - repo: https://github.com/prettier/prettier
     rev: 1.19.1
     hooks:
