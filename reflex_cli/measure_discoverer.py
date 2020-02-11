@@ -14,12 +14,8 @@ class MeasureDiscoverer:
         self.discovered_measures = {}
         self.github_organizations = ["cloudmitigator"]
 
-        if os.environ.get("REFLEX_GITHUB_TOKEN"):
-            self.github_client = github.Github(
-                os.environ.get("REFLEX_GITHUB_TOKEN")
-            )
-        else:
-            self.github_client = github.Github()
+        token = os.environ.get("REFLEX_GITHUB_TOKEN")
+        self.github_client = github.Github(token)
 
     def collect_measures(self):
         """Iterates over github org and collects repos that match rules."""
