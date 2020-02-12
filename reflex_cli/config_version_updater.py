@@ -61,8 +61,16 @@ class ConfigVersionUpdater:
 
     def get_remote_version(self, remote):
         """Calls github API for remote to get latest release."""
-        repo = self.github_client.get_repo(remote)
-        latest_release = repo.get_latest_release()
+        try:
+            repo = self.github_client.get_repo(remote)
+        except github.GithubException:
+            LOGGER.info("No remote resource found at github.com/%s", remote)
+            return None
+        try:
+            latest_release = repo.get_latest_release()
+        except github.GithubException:
+            LOGGER.info("No releases found for %s", remote)
+            return None
         return latest_release.tag_name
 
     @staticmethod
@@ -85,6 +93,9 @@ class ConfigVersionUpdater:
             measure = list(measure_dict)[0]
             current_version = self._find_measure_value(measure, "version")
             remote_version = remote_versions[measure]
+            if not remote_version:
+                LOGGER.info("No release information for %s. Skipping!", measure)
+                continue
             if current_version != remote_version:
                 if self.verify_upgrade_interest(
                     measure,  # pylint: disable=bad-continuation
