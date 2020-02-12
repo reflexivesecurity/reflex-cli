@@ -3,22 +3,16 @@ import logging
 import os
 
 import click
+
+from reflex_cli.cli import pass_environment
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.template_generator import TemplateGenerator
 
-CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 LOGGER = logging.getLogger("reflex_cli")
 
 
 @click.command("build", short_help="Builds out tf files from config file.")
-@click.option(
-    "-c",
-    "--config",
-    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
-    default=CONFIG_DEFAULT,
-    help="Configuration file for reflex",
-)
 @click.option(
     "-o",
     "--output",
@@ -28,12 +22,13 @@ LOGGER = logging.getLogger("reflex_cli")
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )
-def cli(config, output):
+@pass_environment
+def cli(context, output):
     """CLI entrypoint for build command."""
-    LOGGER.debug("Config file set to: %s", config)
+    LOGGER.debug("Config file set to: %s", context.config)
     LOGGER.debug("Output directory set to: %s", output)
-    configuration = ConfigParser(config)
-    config_dictionary = configuration.generate_valid_config()
+    configuration = ConfigParser(context.config)
+    config_dictionary = configuration.parse_valid_config()
     generator = TemplateGenerator(config_dictionary, output)
     LOGGER.info("Creating Terraform files...")
     generator.create_templates()
