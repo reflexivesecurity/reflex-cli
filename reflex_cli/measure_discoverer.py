@@ -1,6 +1,5 @@
 """Holder of template generation logic"""
 import logging
-import os
 
 from reflex_cli.reflex_github import ReflexGithub
 
@@ -36,7 +35,9 @@ class MeasureDiscoverer:
 
     def display_discovered_measures(self):
         """Method outputs measure information in a usable fashion"""
-        LOGGER.info("Rules discovered in %s Github organization.", "organization")
+        LOGGER.info(
+            "Rules discovered in %s Github organization.", "organization"
+        )
         LOGGER.info("-------------------------------------------")
         for measure in self.discovered_measures:
             LOGGER.info("%s: %s", measure.name, measure.description)
