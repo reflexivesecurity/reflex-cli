@@ -1,8 +1,7 @@
 """Holder of template generation logic"""
 import logging
-import os
 
-import github
+from reflex_cli.reflex_github import ReflexGithub
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -11,27 +10,22 @@ class MeasureDiscoverer:
     """Discovers measures by querying github remotes."""
 
     def __init__(self):
-        self.discovered_measures = {}
-        self.github_organizations = ["cloudmitigator"]
-
-        token = os.environ.get("REFLEX_GITHUB_TOKEN")
-        self.github_client = github.Github(token)
+        self.discovered_measures = []
 
     def collect_measures(self):
-        """Iterates over github org and collects repos that match rules."""
-        for organization in self.github_organizations:
-            LOGGER.debug("Collecting repos for %s", organization)
-            org_api = self.github_client.get_organization(organization)
-            rule_repositories = self.filter_reflex_repos(org_api)
-            self.discovered_measures[organization] = rule_repositories
+        """Collects a list of repos that match rules."""
+        repos = ReflexGithub().get_repos()
+        self.discovered_measures = self.filter_reflex_repos(repos)
 
-    def filter_reflex_repos(self, org_api):
-        """Determines if a repo name matches the rule convention naming."""
+    def filter_reflex_repos(self, repos):
+        """Determines if a repo name matches the rule naming convention."""
         filtered_repos = []
-        for repo in org_api.get_repos():
+
+        for repo in repos:
             LOGGER.debug("Checking repo for %s", repo.name)
             if self.is_rule_repository(repo.name):
                 filtered_repos.append(repo)
+
         return filtered_repos
 
     @staticmethod
@@ -41,10 +35,9 @@ class MeasureDiscoverer:
 
     def display_discovered_measures(self):
         """Method outputs measure information in a usable fashion"""
-        for organization in self.github_organizations:
-            LOGGER.info(
-                "Rules discovered in %s Github organization.", organization
-            )
-            LOGGER.info("-------------------------------------------")
-            for rule_repo in self.discovered_measures[organization]:
-                LOGGER.info("%s: %s", rule_repo.name, rule_repo.description)
+        LOGGER.info(
+            "Rules discovered in %s Github organization.", "organization"
+        )
+        LOGGER.info("-------------------------------------------")
+        for measure in self.discovered_measures:
+            LOGGER.info("%s: %s", measure.name, measure.description)

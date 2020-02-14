@@ -1,10 +1,9 @@
 """Parses reflex config file to be used by application."""
 import logging
-import os
 
-import github
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.reflex_initializer import ReflexInitializer
+from reflex_cli.reflex_github import ReflexGithub
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -13,9 +12,6 @@ class ConfigVersionUpdater:
     """Creates assets required to build a reflex deployment."""
 
     def __init__(self, config_file):
-
-        token = os.environ.get("REFLEX_GITHUB_TOKEN")
-        self.github_client = github.Github(token)
 
         self.config_file = config_file
         self.current_config = ConfigParser(
@@ -39,7 +35,7 @@ class ConfigVersionUpdater:
             if not remote_url:
                 remote_url = "https://github.com/cloudmitigator/" + measure
             LOGGER.debug("Measure: %s has remote: %s", measure, remote_url)
-            remote_versions[measure] = self.get_remote_version(
+            remote_versions[measure] = ReflexGithub().get_remote_version(
                 self._get_repo_format(remote_url)
             )
             LOGGER.debug(
@@ -58,20 +54,6 @@ class ConfigVersionUpdater:
         for measure in self.current_config["measures"]:
             if measure.get(measure_name):
                 measure[measure_name][key] = value
-
-    def get_remote_version(self, remote):
-        """Calls github API for remote to get latest release."""
-        try:
-            repo = self.github_client.get_repo(remote)
-        except github.GithubException:
-            LOGGER.info("No remote resource found at github.com/%s", remote)
-            return None
-        try:
-            latest_release = repo.get_latest_release()
-        except github.GithubException:
-            LOGGER.info("No releases found for %s", remote)
-            return None
-        return latest_release.tag_name
 
     @staticmethod
     def _get_repo_format(remote):
