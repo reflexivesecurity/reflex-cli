@@ -25,13 +25,6 @@ pass_environment = click.make_pass_decorator(CliEnvironment, ensure=True)
     type=click.Path(exists=True, file_okay=False, resolve_path=True),
     help="Changes the folder to operate on.",
 )
-@click.option(
-    "-c",
-    "--config",
-    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
-    default=CONFIG_DEFAULT,
-    help="Configuration file for reflex",
-)
 @click.option("-v", "--verbose", is_flag=True, help="Enables verbose mode.")
 @pass_environment
 def cli(context, verbose, config, home):
