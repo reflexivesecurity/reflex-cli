@@ -4,10 +4,10 @@ import os
 
 import click
 
-from reflex_cli.cli import pass_environment
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.template_generator import TemplateGenerator
 
+CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -22,12 +22,18 @@ LOGGER = logging.getLogger("reflex_cli")
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )
-@pass_environment
-def cli(context, output):
+@click.option(
+    "-c",
+    "--config",
+    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
+    default=CONFIG_DEFAULT,
+    help="Configuration file for reflex",
+)
+def cli(output, config):
     """CLI entrypoint for build command."""
-    LOGGER.debug("Config file set to: %s", context.config)
+    LOGGER.debug("Config file set to: %s", config)
     LOGGER.debug("Output directory set to: %s", output)
-    configuration = ConfigParser(context.config)
+    configuration = ConfigParser(config)
     config_dictionary = configuration.parse_valid_config()
     generator = TemplateGenerator(config_dictionary, output)
     LOGGER.info("Creating Terraform files...")
