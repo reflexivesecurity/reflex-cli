@@ -20,6 +20,7 @@ pass_environment = click.make_pass_decorator(CliEnvironment, ensure=True)
 
 
 @click.command(cls=ReflexCli, context_settings=CONTEXT_SETTINGS)
+@click.version_option()
 @click.option(
     "--home",
     type=click.Path(exists=True, file_okay=False, resolve_path=True),
