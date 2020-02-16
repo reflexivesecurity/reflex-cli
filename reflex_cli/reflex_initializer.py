@@ -49,6 +49,8 @@ class ReflexInitializer:
         discover_measures.collect_measures()
         discovered_measures = discover_measures.discovered_measures
         for measure in discovered_measures:
+            if measure.version is None:
+                continue
             verify_string = f"Add {measure.name} at version {measure.version}?"
             if self.get_input(verify_string + " (Yy/Nn):"):
                 possible_measures.append(
