@@ -28,9 +28,8 @@ pass_environment = click.make_pass_decorator(CliEnvironment, ensure=True)
 )
 @click.option("-v", "--verbose", is_flag=True, help="Enables verbose mode.")
 @pass_environment
-def cli(context, verbose, config, home):
+def cli(context, verbose, home):
     """A reflex command line interface."""
-    context.config = config
     context.verbose = verbose
     if context.verbose:
         LOGGER.setLevel(logging.DEBUG)

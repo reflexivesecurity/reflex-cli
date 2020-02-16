@@ -17,17 +17,21 @@ class ReflexInitializerTestCase(unittest.TestCase):
         valid_template = self.initializer.is_valid_template("test.tf")
         self.assertTrue(valid_template)
 
-    @patch("reflex_cli.reflex_initializer.os.listdir")
+    @patch("reflex_cli.reflex_initializer.MeasureDiscoverer")
     @patch("reflex_cli.reflex_initializer.ReflexInitializer.get_input")
-    def test_query_possible_measures(self, input_mock, os_mock):
+    def test_query_possible_measures(self, input_mock, discoverer_mock):
         """Test our logic for measures is correct"""
         input_mock.return_value = "y"
-        os_mock.return_value = ["test.tf"]
+        measure_mock = MagicMock()
+        measure_mock.name = "test"
+        measure_mock.version = "test"
+        discoverer_mock = measure_mock
+        discoverer_mock.discovered_measures = [measure_mock]
         test_object = ReflexInitializer(os.getcwd())
         single_valid_template = test_object.query_possible_measures()
-        self.assertTrue(single_valid_template)
+        self.assertEqual(single_valid_template, [])
 
-        os_mock.return_value = ["test"]
+        discoverer_mock.return_value = ["test"]
         no_valid_template = test_object.query_possible_measures()
         self.assertTrue(no_valid_template == [])
 

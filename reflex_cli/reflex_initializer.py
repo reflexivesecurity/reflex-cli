@@ -6,6 +6,7 @@ import pkg_resources
 
 import yaml
 from jinja2 import Environment, PackageLoader, select_autoescape
+from reflex_cli.measure_discoverer import MeasureDiscoverer
 
 TEMPLATE_FOLDER = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "templates")
@@ -44,9 +45,15 @@ class ReflexInitializer:
     def query_possible_measures(self):
         """Iterates over templates and gets confirmation per measure."""
         possible_measures = []
-        for filename in os.listdir(TEMPLATE_FOLDER):
-            if self.is_valid_template(filename):
-                possible_measures.append(filename[:-3])
+        discover_measures = MeasureDiscoverer()
+        discover_measures.collect_measures()
+        discovered_measures = discover_measures.discovered_measures
+        for measure in discovered_measures:
+            verify_string = f"Add {measure.name} at version {measure.version}?"
+            if self.get_input(verify_string + " (Yy/Nn):"):
+                possible_measures.append(
+                    {measure.name: {"version": measure.version}}
+                )
         LOGGER.debug("Measures selected for config: %s", possible_measures)
         return possible_measures
 
