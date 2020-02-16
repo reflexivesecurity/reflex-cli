@@ -19,16 +19,21 @@ class MeasureDiscovererTestCase(unittest.TestCase):
         self.assertTrue(self.discoverer.is_rule_repository("reflex-aws-test"))
         self.assertFalse(self.discoverer.is_rule_repository("aws-test"))
 
-    def test_filter_reflex_repos(self):
+    @patch("reflex_cli.reflex_github.ReflexGithub.get_remote_version")
+    def test_filter_reflex_repos(self, mock_remote):
+        mock_remote.return_value = "v0.0.0"
         repos = [self.repo_mock1, self.repo_mock2]
         filtered_repos = self.discoverer.filter_reflex_repos(repos)
         self.assertEqual(filtered_repos[0].name, "reflex-aws-test")
         self.assertEqual(len(filtered_repos), 1)
 
     @patch("reflex_cli.reflex_github.ReflexGithub.get_repos")
-    def test_collect_measures(self, mock_get_repos):
+    @patch("reflex_cli.reflex_github.ReflexGithub.get_remote_version")
+    def test_collect_measures(self, mock_get_remote_version, mock_get_repos):
+        test_discoverer = MeasureDiscoverer()
+        mock_get_remote_version.return_value = "v0.0.0"
         mock_get_repos.return_value = [self.repo_mock1, self.repo_mock2]
-        self.assertEqual(self.discoverer.discovered_measures, [])
+        self.assertEqual(test_discoverer.discovered_measures, [])
 
         mocked_measures = [self.repo_mock1]
         self.discoverer.collect_measures()

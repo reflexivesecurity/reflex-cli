@@ -24,8 +24,10 @@ class MeasureDiscoverer:
         for repo in repos:
             LOGGER.debug("Checking repo for %s", repo.name)
             if self.is_rule_repository(repo.name):
+                repo.version = ReflexGithub().get_remote_version(
+                    f"cloudmitigator/{repo.name}"
+                )
                 filtered_repos.append(repo)
-
         return filtered_repos
 
     @staticmethod
@@ -40,4 +42,9 @@ class MeasureDiscoverer:
         )
         LOGGER.info("-------------------------------------------")
         for measure in self.discovered_measures:
-            LOGGER.info("%s: %s", measure.name, measure.description)
+            LOGGER.info(
+                "%s (version: %s): %s",
+                measure.name,
+                measure.version,
+                measure.description,
+            )

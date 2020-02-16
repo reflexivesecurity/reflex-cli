@@ -2,14 +2,14 @@
 import logging
 
 from reflex_cli.config_parser import ConfigParser
-from reflex_cli.reflex_initializer import ReflexInitializer
 from reflex_cli.reflex_github import ReflexGithub
+from reflex_cli.reflex_initializer import ReflexInitializer
 
 LOGGER = logging.getLogger("reflex_cli")
 
 
 class ConfigVersionUpdater:
-    """Creates assets required to build a reflex deployment."""
+    """Checks remote sources for newer measure releases"""
 
     def __init__(self, config_file):
 

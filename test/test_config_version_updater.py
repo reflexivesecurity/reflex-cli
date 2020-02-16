@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest.mock import MagicMock, patch
 
 from reflex_cli.config_version_updater import ConfigVersionUpdater
 
@@ -49,14 +50,13 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
         )
         self.assertIsNone(bad_string)
 
-
-"""
-    def test_gather_latest_remote_versions(self):
+    @patch("reflex_cli.config_version_updater.ReflexGithub.get_remote_version")
+    def test_gather_latest_remote_versions(self, github_mock):
+        github_mock.return_value = "v0.0.1"
         latest_versions = (
             self.test_config_updater.gather_latest_remote_versions()
         )
-        measure_keys = self.test_config_updater.current_config["measures"]
-        print(measure_keys)
         self.assertTrue(isinstance(latest_versions, dict))
-        self.assertEqual(measure_keys, latest_versions.keys())
-"""
+        self.assertEqual(
+            latest_versions["aws-detect-root-user-activity"], "v0.0.1"
+        )

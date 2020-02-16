@@ -1,11 +1,12 @@
 import os
 import unittest
+from unittest.mock import MagicMock, patch
 
 from reflex_cli.template_generator import TemplateGenerator
 
 EXAMPLE_CONFIG = {
     "version": 0.1,
-    "default_notification_email": "john@example.com",
+    "default_email": "john@example.com",
     "providers": ["aws"],
     "measures": [
         "aws-detect-root-user-activity",
@@ -28,7 +29,20 @@ class TemplateGeneratorTestCase(unittest.TestCase):
     def test_determine_template_name(self):
         """Test our defaults for the environment are sane."""
         string_test = self.generator.determine_template_name("test_template")
-        self.assertEqual(string_test, "test_template.tf")
-        test_dict = {"test_template": {"one": "first"}}
+        self.assertIsNone(string_test)
+        test_dict = {"aws-detect-template": {"one": "first"}}
         dict_test = self.generator.determine_template_name(test_dict)
-        self.assertEqual(dict_test, "test_template.tf")
+        self.assertEqual(dict_test, "aws-detect.tf")
+
+    def test_generate_template(self):
+        get_template_mock = MagicMock()
+        render_mock = MagicMock()
+        render_mock.render.return_value = "Example"
+        get_template_mock.get_template.return_value = render_mock
+        self.generator.template_env = get_template_mock
+        self.assertEqual(
+            self.generator.generate_template(
+                "test", {"test": {"version": "0.0.0.1"}}
+            ),
+            "Example",
+        )
