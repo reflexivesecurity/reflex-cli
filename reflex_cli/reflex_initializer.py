@@ -34,14 +34,6 @@ class ReflexInitializer:
         """Helper method to return specific input call."""
         return input(message)
 
-    def is_valid_template(self, filename):
-        """Check if template has valid tf ending."""
-        if filename.endswith(".tf"):
-            confirm = self.get_input(f"{filename}? (Yy/Nn):")
-            if confirm.lower() == "y":
-                return True
-        return False
-
     def query_possible_measures(self):
         """Iterates over templates and gets confirmation per measure."""
         possible_measures = []
@@ -52,7 +44,7 @@ class ReflexInitializer:
             if measure.version is None:
                 continue
             verify_string = f"Add {measure.name} at version {measure.version}?"
-            if self.get_input(verify_string + " (Yy/Nn):"):
+            if self.get_input(verify_string + " (Yy/Nn):").lower() == "y":
                 possible_measures.append(
                     {measure.name: {"version": measure.version}}
                 )
