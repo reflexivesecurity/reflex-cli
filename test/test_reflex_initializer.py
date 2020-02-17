@@ -11,12 +11,6 @@ class ReflexInitializerTestCase(unittest.TestCase):
     def setUp(self):
         self.initializer = ReflexInitializer(os.getcwd())
 
-    @patch("reflex_cli.reflex_initializer.ReflexInitializer.get_input")
-    def test_is_valid_template(self, mock):
-        mock.return_value = "y"
-        valid_template = self.initializer.is_valid_template("test.tf")
-        self.assertTrue(valid_template)
-
     @patch("reflex_cli.reflex_initializer.MeasureDiscoverer")
     @patch("reflex_cli.reflex_initializer.ReflexInitializer.get_input")
     def test_query_possible_measures(self, input_mock, discoverer_mock):
