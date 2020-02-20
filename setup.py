@@ -1,10 +1,11 @@
-import os
 
+from cloudmitigator_semantic.git import GitActions
 from setuptools import setup
+current_version = GitActions().version.version
 
 setup(
     name="reflex-cli",
-    version=f"{os.environ['VERSION']}",
+    version=current_version,
     packages=["reflex_cli", "reflex_cli.commands"],
     package_data={"reflex_cli": ["templates/*"]},
     include_package_data=True,

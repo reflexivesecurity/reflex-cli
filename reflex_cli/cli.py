@@ -5,7 +5,6 @@ import os
 import sys
 
 import click
-
 from reflex_cli.cli_environment import CliEnvironment
 from reflex_cli.reflex_cli import ReflexCli
 
