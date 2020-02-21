@@ -1,0 +1,50 @@
+"""Holder of template generation logic"""
+import logging
+
+from reflex_cli.reflex_github import ReflexGithub
+
+LOGGER = logging.getLogger("reflex_cli")
+
+
+class MeasureDiscoverer:
+    """Discovers measures by querying github remotes."""
+
+    def __init__(self):
+        self.discovered_measures = []
+
+    def collect_measures(self):
+        """Collects a list of repos that match rules."""
+        repos = ReflexGithub().get_repos()
+        self.discovered_measures = self.filter_reflex_repos(repos)
+
+    def filter_reflex_repos(self, repos):
+        """Determines if a repo name matches the rule naming convention."""
+        filtered_repos = []
+
+        for repo in repos:
+            LOGGER.debug("Checking repo for %s", repo.name)
+            if self.is_rule_repository(repo.name):
+                repo.version = ReflexGithub().get_remote_version(
+                    f"cloudmitigator/{repo.name}"
+                )
+                filtered_repos.append(repo)
+        return filtered_repos
+
+    @staticmethod
+    def is_rule_repository(repo_name):
+        """Deterministic element for a repository to match a rule."""
+        return repo_name.startswith("reflex-aws")
+
+    def display_discovered_measures(self):
+        """Method outputs measure information in a usable fashion"""
+        LOGGER.info(
+            "Rules discovered in %s Github organization.", "organization"
+        )
+        LOGGER.info("-------------------------------------------")
+        for measure in self.discovered_measures:
+            LOGGER.info(
+                "%s (version: %s): %s",
+                measure.name,
+                measure.version,
+                measure.description,
+            )
