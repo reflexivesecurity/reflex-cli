@@ -99,7 +99,7 @@ class ConfigVersionUpdater:
 
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""
-        initializer = ReflexInitializer(self.config_file)
+        initializer = ReflexInitializer(self.config_file, False)
         initializer.config_file = self.config_file
         initializer.configs = self.current_config
         initializer.write_config_file()
