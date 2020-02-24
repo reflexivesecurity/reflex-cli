@@ -18,7 +18,8 @@ LOGGER = logging.getLogger("reflex_cli")
 class ReflexInitializer:
     """Creates assets required to build a reflex deployment."""
 
-    def __init__(self, home_directory):
+    def __init__(self, home_directory, select_all):
+        self.select_all = select_all
         self.home_directory = home_directory
         self.configs = {}
         self.config_file = os.path.abspath(
@@ -44,7 +45,15 @@ class ReflexInitializer:
             if measure.version is None:
                 continue
             verify_string = f"Add {measure.name} at version {measure.version}?"
-            if self.get_input(verify_string + " (Yy/Nn):").lower() == "y":
+
+            if self.select_all:
+                LOGGER.info(
+                    "Adding %s at version %s.", measure.name, measure.version
+                )
+                possible_measures.append(
+                    {measure.name: {"version": measure.version}}
+                )
+            elif self.get_input(verify_string + " (Yy/Nn):").lower() == "y":
                 possible_measures.append(
                     {measure.name: {"version": measure.version}}
                 )
@@ -60,7 +69,10 @@ class ReflexInitializer:
     def determine_config_values(self):  # pragma: no cover
         """Outlines keys of config file and gathers values."""
         self.set_version()
-        self.configs["default_email"] = self.get_input("Default email:")
+        if self.select_all:
+            self.configs["default_email"] = "placeholder@example.com"
+        else:
+            self.configs["default_email"] = self.get_input("Default email:")
         self.configs["providers"] = ["aws"]
         self.configs["measures"] = self.query_possible_measures()
 

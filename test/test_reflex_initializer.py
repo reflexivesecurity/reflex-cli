@@ -9,7 +9,7 @@ class ReflexInitializerTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
 
     def setUp(self):
-        self.initializer = ReflexInitializer(os.getcwd())
+        self.initializer = ReflexInitializer(os.getcwd(), False)
 
     @patch("reflex_cli.reflex_initializer.MeasureDiscoverer")
     @patch("reflex_cli.reflex_initializer.ReflexInitializer.get_input")
@@ -21,7 +21,7 @@ class ReflexInitializerTestCase(unittest.TestCase):
         measure_mock.version = "test"
         discoverer_mock = measure_mock
         discoverer_mock.discovered_measures = [measure_mock]
-        test_object = ReflexInitializer(os.getcwd())
+        test_object = ReflexInitializer(os.getcwd(), False)
         single_valid_template = test_object.query_possible_measures()
         self.assertEqual(single_valid_template, [])
 
@@ -31,7 +31,7 @@ class ReflexInitializerTestCase(unittest.TestCase):
 
     @patch("reflex_cli.reflex_initializer.pkg_resources")
     def test_set_version(self, pkg_mock):
-        test_object = ReflexInitializer(os.getcwd())
+        test_object = ReflexInitializer(os.getcwd(), False)
         version_mock = MagicMock()
         version_mock.version = "4.3.21"
         pkg_mock.require.return_value = [version_mock]
