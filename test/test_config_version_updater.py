@@ -10,7 +10,9 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
         self.test_config_file = os.path.abspath(
             os.path.join(os.path.dirname(__file__), "resources/reflex.yaml")
         )
-        self.test_config_updater = ConfigVersionUpdater(self.test_config_file)
+        self.test_config_updater = ConfigVersionUpdater(
+            self.test_config_file, False
+        )
 
     def test_collect_measures(self):
         current_measures = self.test_config_updater.current_measures

@@ -23,13 +23,20 @@ SHORT_UPGRADE_HELP = (
     "--config",
     type=click.Path(exists=True, dir_okay=False, resolve_path=True),
     default=CONFIG_DEFAULT,
-    help="Configuration file for reflex",
+    help="Configuration file for reflex.",
 )
-def cli(config):
+@click.option(
+    "-a",
+    "--all",
+    "select_all",
+    is_flag=True,
+    help="Chooses to upgrade all possible measures.",
+)
+def cli(select_all, config):
     """CLI entrypoint for upgrade command."""
     LOGGER.info(
         "Determining if upgrade is needed for reflex deploy at in: %s", config
     )
-    updater = ConfigVersionUpdater(config)
+    updater = ConfigVersionUpdater(config, select_all)
     updater.compare_current_rule_versions()
     updater.overwrite_reflex_config()

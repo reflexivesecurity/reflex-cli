@@ -11,8 +11,9 @@ LOGGER = logging.getLogger("reflex_cli")
 class ConfigVersionUpdater:
     """Checks remote sources for newer measure releases"""
 
-    def __init__(self, config_file):
+    def __init__(self, config_file, select_all):
 
+        self.select_all = select_all
         self.config_file = config_file
         self.current_config = ConfigParser(
             self.config_file
@@ -76,23 +77,24 @@ class ConfigVersionUpdater:
             current_version = self._find_measure_value(measure, "version")
             remote_version = remote_versions[measure]
             if not remote_version:
-                LOGGER.info("No release information for %s. Skipping!", measure)
+                LOGGER.debug(
+                    "No release information for %s. Skipping!", measure
+                )
                 continue
             if current_version != remote_version:
-                if self.verify_upgrade_interest(
-                    measure,  # pylint: disable=bad-continuation
-                    current_version,  # pylint: disable=bad-continuation
-                    remote_version,  # pylint: disable=bad-continuation
-                ):
+                LOGGER.info(
+                    "%s (current version: %s) has new release: %s.",
+                    measure,
+                    current_version,
+                    remote_version,
+                )
+                if self.select_all or self.verify_upgrade_interest():
                     self._set_measure_value(measure, "version", remote_version)
 
     @staticmethod
-    def verify_upgrade_interest(measure, current, remote):
+    def verify_upgrade_interest():
         """Prompts user whether or not they want to upgrade rule."""
-        verify = input(
-            "%s (current version: %s) has new release: %s. Upgrade? (y/n):"
-            % (measure, current, remote)
-        )
+        verify = input("Upgrade? (y/n):")
         return verify.lower() == "y"
 
     def overwrite_reflex_config(self):
