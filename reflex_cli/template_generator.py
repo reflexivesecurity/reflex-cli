@@ -6,7 +6,7 @@ from pathlib import Path
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 LOGGER = logging.getLogger("reflex_cli")
-
+DEFAULT_GITHUB_ORG = "cloudmitigator"
 
 class TemplateGenerator:
     """Generate a set of templates from a given config."""
@@ -58,11 +58,18 @@ class TemplateGenerator:
         """Creates tf output for every file in our template."""
         template = self.template_env.get_template(template_name)
         measure_name = list(measure)[0]
+
+        if "github_org" in measure[measure_name]:
+            github_org = measure[measure_name]["github_org"]
+        else:
+            github_org = DEFAULT_GITHUB_ORG
+
         rendered_template = template.render(
             module_name=measure_name,
             template_name=measure_name,
             email=self.default_email,
             version=measure[measure_name]["version"],
+            github_org=github_org
         )
         LOGGER.debug(rendered_template)
         return rendered_template
