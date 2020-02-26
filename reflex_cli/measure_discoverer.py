@@ -37,14 +37,13 @@ class MeasureDiscoverer:
 
     def display_discovered_measures(self):
         """Method outputs measure information in a usable fashion"""
-        LOGGER.info(
-            "Rules discovered in %s Github organization.", "organization"
-        )
+        LOGGER.info("Rules discovered in CloudMitigator Github organization.")
         LOGGER.info("-------------------------------------------")
         for measure in self.discovered_measures:
             LOGGER.info(
-                "%s (version: %s): %s",
+                "\033[4m%s\033[0m: \n\t\033[4mDescription\033[0m:"
+                " %s\n\t\033[4mLatest release\033[0m: %s\n",
                 measure.name,
-                measure.version,
                 measure.description,
+                measure.version,
             )
