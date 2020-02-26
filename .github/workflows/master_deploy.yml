@@ -38,6 +38,7 @@ jobs:
           coverage report --fail-under=75
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
