@@ -29,7 +29,6 @@ jobs:
       - name: Lint with pylint
         run: |
           pip install pylint
-
           pylint ./reflex_cli/
       - name: Test with unittest
         run: |
@@ -37,6 +36,11 @@ jobs:
       - name: Test coverage enforcement
         run: |
           coverage report --fail-under=75
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
