@@ -16,6 +16,7 @@ class MeasureDiscoverer:
         """Collects a list of repos that match rules."""
         repos = ReflexGithub().get_repos()
         self.discovered_measures = self.filter_reflex_repos(repos)
+        return self.discovered_measures
 
     def filter_reflex_repos(self, repos):
         """Determines if a repo name matches the rule naming convention."""
