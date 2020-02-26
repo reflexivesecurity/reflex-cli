@@ -28,11 +28,11 @@ class ReflexGithub:
         try:  # pragma: no cover
             repo = self.github_client.get_repo(remote)
         except github.GithubException:  # pragma: no cover
-            LOGGER.info("No remote resource found at github.com/%s", remote)
+            LOGGER.debug("No remote resource found at github.com/%s", remote)
             return None
         try:  # pragma: no cover
             latest_release = repo.get_latest_release()
         except github.GithubException:  # pragma: no cover
-            LOGGER.info("No releases found for %s", remote)
+            LOGGER.debug("No releases found for %s", remote)
             return None
         return latest_release.tag_name
