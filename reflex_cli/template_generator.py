@@ -22,12 +22,23 @@ class TemplateGenerator:
 
     def create_templates(self):  # pragma: no cover
         """Generates templates for every measure in configuration."""
+        self.create_provider_templates()
         for measure in self.configuration["measures"]:
             template_name = self.determine_template_name(measure)
             LOGGER.debug("Rendering template with name: %s", template_name)
             rendered_template = self.generate_template(template_name, measure)
             if rendered_template:
                 self.write_template_file(measure, rendered_template)
+
+    def create_provider_templates(self):  # pragma: no cover
+        """Creates a simpler provider output file in terraform."""
+        for provider in self.configuration["providers"]:
+            template = self.template_env.get_template("provider.tf")
+            rendered_template = template.render(
+                provider_name=list(provider)[0],
+                region_name=provider[list(provider)[0]]["region"],
+            )
+            self.write_template_file(["providers"], rendered_template)
 
     @staticmethod
     def determine_template_name(measure):
