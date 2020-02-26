@@ -22,8 +22,7 @@ class ConfigParser:
         valid_config = self.validate_config(self.configuration)
         if not valid_config:
             raise SystemError(
-                "Invalid configuration file format, config:"
-                + f" {self.configuration}"
+                f"Invalid configuration file format, config: {self.configuration}"
             )
         return self.configuration
 
@@ -38,11 +37,14 @@ class ConfigParser:
     def validate_config(config):
         """Validates presence of keys and format of values"""
         valid = True
+        config_list = list(config)
+
         for key in REQUIRED_KEYS:
-            if key not in list(config):
+            if key not in config_list:
                 LOGGER.info("Key %s was not found in reflex.yaml.", key)
                 valid = False
             elif not config[key]:
                 LOGGER.info("Key %s has no value in reflex.yaml", key)
                 valid = False
+
         return valid
