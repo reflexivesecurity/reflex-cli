@@ -18,7 +18,7 @@ class TemplateGenerator:
             loader=PackageLoader("reflex_cli", "templates"),
             autoescape=select_autoescape(["tf"]),
         )
-        self.default_email = self.configuration["default_email"]
+        self.default_email = self.configuration.get("default_email")
 
     def create_templates(self):  # pragma: no cover
         """Generates templates for every measure in configuration."""
@@ -64,7 +64,7 @@ class TemplateGenerator:
             email=self.default_email,
             version=measure[measure_name]["version"],
         )
-        LOGGER.info(rendered_template)
+        LOGGER.debug(rendered_template)
         return rendered_template
 
     def write_template_file(self, measure, rendered_template):
@@ -72,7 +72,7 @@ class TemplateGenerator:
         self._ensure_output_directory_exists()
         template_name = list(measure)[0] + ".tf"
         output_file = os.path.join(self.output_directory, template_name)
-        LOGGER.debug("Writing template file to: %s", output_file)
+        LOGGER.info("Creating %s", output_file)
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
 

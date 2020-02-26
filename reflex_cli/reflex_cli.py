@@ -24,7 +24,7 @@ class ReflexCli(click.MultiCommand):
         command_files = []
         for filename in os.listdir(CMD_FOLDER):
             if self.is_command_file(filename):
-                command_files.append(filename[8:-3])
+                command_files.append(filename[8:-3])  # Remove "command_" prefix and ".py" suffix
         command_files.sort()
         return command_files
 

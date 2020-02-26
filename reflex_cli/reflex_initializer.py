@@ -38,9 +38,8 @@ class ReflexInitializer:
     def query_possible_measures(self):
         """Iterates over templates and gets confirmation per measure."""
         possible_measures = []
-        discover_measures = MeasureDiscoverer()
-        discover_measures.collect_measures()
-        discovered_measures = discover_measures.discovered_measures
+        discovered_measures = MeasureDiscoverer().collect_measures()
+
         for measure in discovered_measures:
             if measure.version is None:
                 continue
