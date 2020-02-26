@@ -73,7 +73,10 @@ class ReflexInitializer:
             self.configs["default_email"] = "placeholder@example.com"
         else:
             self.configs["default_email"] = self.get_input("Default email:")
-        self.configs["providers"] = ["aws"]
+        region = os.environ.get("AWS_REGION")
+        if not region:
+            region = self.get_input("AWS Region:")
+        self.configs["providers"] = [{"aws": {"region": region}}]
         self.configs["measures"] = self.query_possible_measures()
 
     def render_template(self):  # pragma: no cover
