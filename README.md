@@ -40,6 +40,14 @@ reflex build
 Take a local `reflex.yaml` and generate terraform templates based on the measures
 specified.
 
+### Show rules
+
+```sh
+reflex show
+```
+
+Display discovered measures via the CLI.
+
 ### Deploy reflex
 
 ```sh
