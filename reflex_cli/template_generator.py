@@ -8,6 +8,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 LOGGER = logging.getLogger("reflex_cli")
 DEFAULT_GITHUB_ORG = "cloudmitigator"
 
+
 class TemplateGenerator:
     """Generate a set of templates from a given config."""
 
@@ -22,6 +23,7 @@ class TemplateGenerator:
 
     def create_templates(self):  # pragma: no cover
         """Generates templates for every measure in configuration."""
+        self.create_notification_template()
         self.create_provider_templates()
         for measure in self.configuration["measures"]:
             template_name = self.determine_template_name(measure)
@@ -29,6 +31,12 @@ class TemplateGenerator:
             rendered_template = self.generate_template(template_name, measure)
             if rendered_template:
                 self.write_template_file(measure, rendered_template)
+
+    def create_notification_template(self):  # pragma: no cover
+        """Generates template for central sns topic infrastructure."""
+        template = self.template_env.get_template("central-sns-topic.tf")
+        rendered_template = template.render(email=self.default_email)
+        self.write_template_file(["central-sns-topic"], rendered_template)
 
     def create_provider_templates(self):  # pragma: no cover
         """Creates a simpler provider output file in terraform."""
@@ -67,9 +75,8 @@ class TemplateGenerator:
         rendered_template = template.render(
             module_name=measure_name,
             template_name=measure_name,
-            email=self.default_email,
             version=measure[measure_name]["version"],
-            github_org=github_org
+            github_org=github_org,
         )
         LOGGER.debug(rendered_template)
         return rendered_template
