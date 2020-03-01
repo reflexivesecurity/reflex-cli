@@ -76,21 +76,51 @@ class ReflexInitializer:
         if not region:
             region = self.get_input("AWS Region:")
         self.configs["providers"] = [{"aws": {"region": region}}]
+        self.configs["backend"] = self.get_backend_configuration()
         self.configs["measures"] = self.query_possible_measures()
+
+    def get_backend_configuration(self):  # pragma: no cover
+        """Collects backend configuration information."""
+        backend_verify = self.get_input("Configure backend? (Yy/Nn): ")
+        if backend_verify.lower() != "y":
+            return ""
+        LOGGER.info(
+            "Collecting backend configuration. To see key value configuration,"
+            " check out https://www.terraform.io/docs/backends/index.html."
+        )
+        backend_type = self.get_input("Backend type?: ")
+        backend_config = {backend_type: self.collect_backend_key_values()}
+        return backend_config
+
+    def collect_backend_key_values(self):  # pragma: no cover
+        """Continually collects backend config key value pairs from user."""
+        more_config = True
+        key_value_array = []
+        while more_config:
+            config_key = self.get_input("Backend configuration key: ")
+            config_value = self.get_input("Backend configuration value: ")
+            key_value_array.append({config_key: config_value})
+            continue_config = self.get_input(
+                "Add more configurations? (Yy/Nn):"
+            )
+            more_config = continue_config.lower() == "y"
+        return key_value_array
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
-        version_dump = yaml.dump({"version": self.configs["version"]})
+        version_dump = yaml.dump({"version": ("%s" % self.configs["version"])})
         default_email_dump = yaml.dump(
             {"default_email": self.configs["default_email"]}
         )
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
         measures_dump = yaml.dump({"measures": self.configs["measures"]})
+        backend_dump = yaml.dump({"backend": self.configs["backend"]})
 
         template = self.template_env.get_template("reflex.yaml.jinja2")
         rendered_template = template.render(
             default_email=default_email_dump,
             providers=providers_dump,
+            backend=backend_dump,
             measures=measures_dump,
             version=version_dump,
         )

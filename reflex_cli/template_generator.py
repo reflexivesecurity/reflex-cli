@@ -25,6 +25,7 @@ class TemplateGenerator:
         """Generates templates for every measure in configuration."""
         self.create_notification_template()
         self.create_provider_templates()
+        self.create_backend_template()
         for measure in self.configuration["measures"]:
             template_name = self.determine_template_name(measure)
             LOGGER.debug("Rendering template with name: %s", template_name)
@@ -47,6 +48,19 @@ class TemplateGenerator:
                 region_name=provider[list(provider)[0]]["region"],
             )
             self.write_template_file(["providers"], rendered_template)
+
+    def create_backend_template(self):  # pragma: no cover
+        """Creates a simpler provider output file in terraform."""
+        if self.configuration["backend"]:
+            template = self.template_env.get_template("backend.tf")
+            backend_type = list(self.configuration["backend"])[0]
+            rendered_template = template.render(
+                backend_type=backend_type,
+                backend_config_array=self.configuration["backend"][
+                    backend_type
+                ],
+            )
+            self.write_template_file(["backend"], rendered_template)
 
     @staticmethod
     def determine_template_name(measure):
