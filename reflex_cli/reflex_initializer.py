@@ -62,7 +62,7 @@ class ReflexInitializer:
     def set_version(self):
         """Looks at package version of CLI to determine reflex version."""
         package_object = pkg_resources.require("reflex-cli")[0]
-        self.configs["version"] = float(package_object.version)
+        self.configs["version"] = package_object.version
         LOGGER.debug("Reflex version set to: %s", self.configs["version"])
 
     def determine_config_values(self):  # pragma: no cover
@@ -108,7 +108,7 @@ class ReflexInitializer:
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
-        version_dump = yaml.dump({"version": self.configs["version"]})
+        version_dump = yaml.dump({"version": ("%s" % self.configs["version"])})
         default_email_dump = yaml.dump(
             {"default_email": self.configs["default_email"]}
         )
