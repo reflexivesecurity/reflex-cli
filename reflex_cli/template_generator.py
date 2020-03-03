@@ -24,6 +24,7 @@ class TemplateGenerator:
     def create_templates(self):  # pragma: no cover
         """Generates templates for every measure in configuration."""
         self.create_notification_template()
+        self.create_reflex_kms_template()
         self.create_provider_templates()
         self.create_backend_template()
         for measure in self.configuration["measures"]:
@@ -38,6 +39,12 @@ class TemplateGenerator:
         template = self.template_env.get_template("central-sns-topic.tf")
         rendered_template = template.render(email=self.default_email)
         self.write_template_file(["central-sns-topic"], rendered_template)
+
+    def create_reflex_kms_template(self):  # pragma: no cover
+        """Generates template for central sns topic infrastructure."""
+        template = self.template_env.get_template("reflex-kms-key.tf")
+        rendered_template = template.render()
+        self.write_template_file(["reflex-kms-key"], rendered_template)
 
     def create_provider_templates(self):  # pragma: no cover
         """Creates a simpler provider output file in terraform."""
