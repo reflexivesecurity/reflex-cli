@@ -27,12 +27,7 @@ class TemplateGenerator:
         self.create_reflex_kms_template()
         self.create_provider_templates()
         self.create_backend_template()
-        for rule in self.configuration["rules"]:
-            template_name = self.determine_template_name(rule)
-            LOGGER.debug("Rendering template with name: %s", template_name)
-            rendered_template = self.generate_template(template_name, rule)
-            if rendered_template:
-                self.write_template_file(rule, rendered_template)
+        self.create_rule_templates()
 
     def create_notification_template(self):  # pragma: no cover
         """Generates template for central sns topic infrastructure."""
@@ -63,35 +58,23 @@ class TemplateGenerator:
             backend_type = list(self.configuration["backend"])[0]
             rendered_template = template.render(
                 backend_type=backend_type,
-                backend_config_array=self.configuration["backend"][
-                    backend_type
-                ],
+                backend_config_array=self.configuration["backend"][backend_type],
             )
             self.write_template_file(["backend"], rendered_template)
 
-    @staticmethod
-    def determine_template_name(rule):
-        """Inspects instance type of rule to determine file name."""
-        if isinstance(rule, str):
-            template_name = rule + ".tf"
-        elif isinstance(rule, dict):
-            template_name = list(rule)[0] + ".tf"
-
-        if "aws-detect" in template_name:
-            return "aws-detect.tf"
-        if "aws-enforce" in template_name:
-            return "aws-enforce.tf"
-        return None
+    def create_rule_templates(self):
+        """Creates tf file for each rule"""
+        for rule in self.configuration["rules"]:
+            rendered_template = self.generate_template("aws-rule.tf", rule)
+            if rendered_template:
+                self.write_template_file(rule, rendered_template)
 
     def generate_template(self, template_name, rule):  # pragma: no cover
         """Creates tf output for every file in our template."""
         template = self.template_env.get_template(template_name)
         rule_name = list(rule)[0]
 
-        if "github_org" in rule[rule_name]:
-            github_org = rule[rule_name]["github_org"]
-        else:
-            github_org = DEFAULT_GITHUB_ORG
+        github_org = rule[rule_name].get("github_org", DEFAULT_GITHUB_ORG)
 
         rendered_template = template.render(
             module_name=rule_name,
