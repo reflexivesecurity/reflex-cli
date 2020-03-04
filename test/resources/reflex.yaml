@@ -5,7 +5,7 @@ default_notification_email: "john@example.com"
 providers:
   - aws
 
-measures:
+rules:
   - aws-detect-root-user-activity:
       version: 0.0.1
   - aws-detect-deactivate-mfa:

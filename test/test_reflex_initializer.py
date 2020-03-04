@@ -11,22 +11,22 @@ class ReflexInitializerTestCase(unittest.TestCase):
     def setUp(self):
         self.initializer = ReflexInitializer(os.getcwd(), False)
 
-    @patch("reflex_cli.reflex_initializer.MeasureDiscoverer")
+    @patch("reflex_cli.reflex_initializer.RuleDiscoverer")
     @patch("reflex_cli.reflex_initializer.ReflexInitializer.get_input")
-    def test_query_possible_measures(self, input_mock, discoverer_mock):
-        """Test our logic for measures is correct"""
+    def test_query_possible_rules(self, input_mock, discoverer_mock):
+        """Test our logic for rules is correct"""
         input_mock.return_value = "y"
-        measure_mock = MagicMock()
-        measure_mock.name = "test"
-        measure_mock.version = "test"
-        discoverer_mock = measure_mock
-        discoverer_mock.discovered_measures = [measure_mock]
+        rule_mock = MagicMock()
+        rule_mock.name = "test"
+        rule_mock.version = "test"
+        discoverer_mock = rule_mock
+        discoverer_mock.discovered_rules = [rule_mock]
         test_object = ReflexInitializer(os.getcwd(), False)
-        single_valid_template = test_object.query_possible_measures()
+        single_valid_template = test_object.query_possible_rules()
         self.assertEqual(single_valid_template, [])
 
         discoverer_mock.return_value = ["test"]
-        no_valid_template = test_object.query_possible_measures()
+        no_valid_template = test_object.query_possible_rules()
         self.assertTrue(no_valid_template == [])
 
     @patch("reflex_cli.reflex_initializer.pkg_resources")
