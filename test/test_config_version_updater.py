@@ -14,30 +14,30 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
             self.test_config_file, False
         )
 
-    def test_collect_measures(self):
-        current_measures = self.test_config_updater.current_measures
-        self.assertTrue(isinstance(current_measures, list))
-        self.assertEqual("aws-detect-root-user-activity", current_measures[0])
+    def test_collect_rules(self):
+        current_rules = self.test_config_updater.current_rules
+        self.assertTrue(isinstance(current_rules, list))
+        self.assertEqual("aws-detect-root-user-activity", current_rules[0])
 
-    def test_find_measure_value(self):
-        real_value = self.test_config_updater._find_measure_value(
+    def test_find_rule_value(self):
+        real_value = self.test_config_updater._find_rule_value(
             "aws-detect-root-user-activity", "version"
         )
         self.assertEqual(real_value, "0.0.1")
-        no_value = self.test_config_updater._find_measure_value(
+        no_value = self.test_config_updater._find_rule_value(
             "aws-detect-root-user-activity", "empty"
         )
         self.assertIsNone(no_value)
 
-    def test_set_measure_value(self):
-        self.test_config_updater._set_measure_value(
+    def test_set_rule_value(self):
+        self.test_config_updater._set_rule_value(
             "aws-detect-root-user-activity", "version", "invalid"
         )
-        new_value = self.test_config_updater._find_measure_value(
+        new_value = self.test_config_updater._find_rule_value(
             "aws-detect-root-user-activity", "version"
         )
         self.assertEqual(new_value, "invalid")
-        self.test_config_updater._set_measure_value(
+        self.test_config_updater._set_rule_value(
             "aws-detect-root-user-activity", "version", "0.0.1"
         )
 

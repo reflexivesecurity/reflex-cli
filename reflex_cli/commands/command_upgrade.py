@@ -30,7 +30,7 @@ SHORT_UPGRADE_HELP = (
     "--all",
     "select_all",
     is_flag=True,
-    help="Chooses to upgrade all possible measures.",
+    help="Chooses to upgrade all possible rules.",
 )
 def cli(select_all, config):
     """CLI entrypoint for upgrade command."""

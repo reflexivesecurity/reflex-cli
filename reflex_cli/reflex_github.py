@@ -8,7 +8,7 @@ LOGGER = logging.getLogger("reflex_cli")
 
 
 class ReflexGithub:
-    """Discovers measures by querying github remotes."""
+    """Discovers rules by querying github remotes."""
 
     def __init__(self):
         self.github_organizations = ["cloudmitigator"]

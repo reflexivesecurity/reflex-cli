@@ -17,7 +17,7 @@ LOGGER = logging.getLogger("reflex_cli")
     "--all",
     "select_all",
     is_flag=True,
-    help="Chooses to add all possible measures to configuration.",
+    help="Chooses to add all possible rules to configuration.",
 )
 @pass_environment
 def cli(context, select_all):

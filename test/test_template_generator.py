@@ -8,7 +8,7 @@ EXAMPLE_CONFIG = {
     "version": 0.1,
     "default_email": "john@example.com",
     "providers": ["aws"],
-    "measures": [
+    "rules": [
         "aws-detect-root-user-activity",
         {"aws-detect-deactivate-mfa": {"email": "john.smith@example.com"}},
         "aws-enforce-no-public-ami",

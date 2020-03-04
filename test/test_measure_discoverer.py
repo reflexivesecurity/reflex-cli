@@ -1,14 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from reflex_cli.measure_discoverer import MeasureDiscoverer
+from reflex_cli.rule_discoverer import RuleDiscoverer
 
 
-class MeasureDiscovererTestCase(unittest.TestCase):
+class RuleDiscovererTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
 
     def setUp(self):
-        self.discoverer = MeasureDiscoverer()
+        self.discoverer = RuleDiscoverer()
         self.git_repos_mock = MagicMock()
         self.repo_mock1 = MagicMock()
         self.repo_mock1.name = "reflex-aws-test"
@@ -29,13 +29,13 @@ class MeasureDiscovererTestCase(unittest.TestCase):
 
     @patch("reflex_cli.reflex_github.ReflexGithub.get_repos")
     @patch("reflex_cli.reflex_github.ReflexGithub.get_remote_version")
-    def test_collect_measures(self, mock_get_remote_version, mock_get_repos):
-        test_discoverer = MeasureDiscoverer()
+    def test_collect_rules(self, mock_get_remote_version, mock_get_repos):
+        test_discoverer = RuleDiscoverer()
         mock_get_remote_version.return_value = "v0.0.0"
         mock_get_repos.return_value = [self.repo_mock1, self.repo_mock2]
-        self.assertEqual(test_discoverer.discovered_measures, [])
+        self.assertEqual(test_discoverer.discovered_rules, [])
 
-        mocked_measures = [self.repo_mock1]
-        self.discoverer.collect_measures()
+        mocked_rules = [self.repo_mock1]
+        self.discoverer.collect_rules()
 
-        self.assertEqual(self.discoverer.discovered_measures, mocked_measures)
+        self.assertEqual(self.discoverer.discovered_rules, mocked_rules)

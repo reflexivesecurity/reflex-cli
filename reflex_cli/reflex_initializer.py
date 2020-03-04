@@ -6,7 +6,7 @@ import pkg_resources
 
 import yaml
 from jinja2 import Environment, PackageLoader, select_autoescape
-from reflex_cli.measure_discoverer import MeasureDiscoverer
+from reflex_cli.rule_discoverer import RuleDiscoverer
 
 TEMPLATE_FOLDER = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "templates")
@@ -35,29 +35,23 @@ class ReflexInitializer:
         """Helper method to return specific input call."""
         return input(message)
 
-    def query_possible_measures(self):
-        """Iterates over templates and gets confirmation per measure."""
-        possible_measures = []
-        discovered_measures = MeasureDiscoverer().collect_measures()
+    def query_possible_rules(self):
+        """Iterates over templates and gets confirmation per rule."""
+        possible_rules = []
+        discovered_rules = RuleDiscoverer().collect_rules()
 
-        for measure in discovered_measures:
-            if measure.version is None:
+        for rule in discovered_rules:
+            if rule.version is None:
                 continue
-            verify_string = f"Add {measure.name} at version {measure.version}?"
+            verify_string = f"Add {rule.name} at version {rule.version}?"
 
             if self.select_all:
-                LOGGER.info(
-                    "Adding %s at version %s.", measure.name, measure.version
-                )
-                possible_measures.append(
-                    {measure.name: {"version": measure.version}}
-                )
+                LOGGER.info("Adding %s at version %s.", rule.name, rule.version)
+                possible_rules.append({rule.name: {"version": rule.version}})
             elif self.get_input(verify_string + " (Yy/Nn):").lower() == "y":
-                possible_measures.append(
-                    {measure.name: {"version": measure.version}}
-                )
-        LOGGER.debug("Measures selected for config: %s", possible_measures)
-        return possible_measures
+                possible_rules.append({rule.name: {"version": rule.version}})
+        LOGGER.debug("Rules selected for config: %s", possible_rules)
+        return possible_rules
 
     def set_version(self):
         """Looks at package version of CLI to determine reflex version."""
@@ -77,7 +71,7 @@ class ReflexInitializer:
             region = self.get_input("AWS Region:")
         self.configs["providers"] = [{"aws": {"region": region}}]
         self.configs["backend"] = self.get_backend_configuration()
-        self.configs["measures"] = self.query_possible_measures()
+        self.configs["rules"] = self.query_possible_rules()
 
     def get_backend_configuration(self):  # pragma: no cover
         """Collects backend configuration information."""
@@ -113,7 +107,7 @@ class ReflexInitializer:
             {"default_email": self.configs["default_email"]}
         )
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
-        measures_dump = yaml.dump({"measures": self.configs["measures"]})
+        rules_dump = yaml.dump({"rules": self.configs["rules"]})
         backend_dump = yaml.dump({"backend": self.configs["backend"]})
 
         template = self.template_env.get_template("reflex.yaml.jinja2")
@@ -121,7 +115,7 @@ class ReflexInitializer:
             default_email=default_email_dump,
             providers=providers_dump,
             backend=backend_dump,
-            measures=measures_dump,
+            rules=rules_dump,
             version=version_dump,
         )
         LOGGER.debug("Config template rendered as: %s", rendered_template)
