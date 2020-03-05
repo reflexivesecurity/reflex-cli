@@ -18,13 +18,10 @@ LOGGER = logging.getLogger("reflex_cli")
 class ReflexInitializer:
     """Creates assets required to build a reflex deployment."""
 
-    def __init__(self, home_directory, select_all):
+    def __init__(self, select_all, config_file):
         self.select_all = select_all
-        self.home_directory = home_directory
         self.configs = {}
-        self.config_file = os.path.abspath(
-            os.path.join(self.home_directory, "reflex.yaml")
-        )
+        self.config_file = config_file
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates"),
             autoescape=select_autoescape(["jinja2"]),
