@@ -32,19 +32,19 @@ class TemplateGenerator:
             LOGGER.debug("Rendering template with name: %s", template_name)
             rendered_template = self.generate_template(template_name, rule)
             if rendered_template:
-                self.write_template_file(rule, rendered_template)
+                self.build_output_file(rule, rendered_template)
 
     def create_notification_template(self):  # pragma: no cover
         """Generates template for central sns topic infrastructure."""
         template = self.template_env.get_template("central-sns-topic.tf")
         rendered_template = template.render(email=self.default_email)
-        self.write_template_file(["central-sns-topic"], rendered_template)
+        self.build_output_file(["central-sns-topic"], rendered_template)
 
     def create_reflex_kms_template(self):  # pragma: no cover
         """Generates template for central sns topic infrastructure."""
         template = self.template_env.get_template("reflex-kms-key.tf")
         rendered_template = template.render()
-        self.write_template_file(["reflex-kms-key"], rendered_template)
+        self.build_output_file(["reflex-kms-key"], rendered_template)
 
     def create_provider_templates(self):  # pragma: no cover
         """Creates a simpler provider output file in terraform."""
@@ -54,7 +54,7 @@ class TemplateGenerator:
                 provider_name=list(provider)[0],
                 region_name=provider[list(provider)[0]]["region"],
             )
-            self.write_template_file(["providers"], rendered_template)
+            self.build_output_file(["providers"], rendered_template)
 
     def create_backend_template(self):  # pragma: no cover
         """Creates a simpler provider output file in terraform."""
@@ -67,7 +67,7 @@ class TemplateGenerator:
                     backend_type
                 ],
             )
-            self.write_template_file(["backend"], rendered_template)
+            self.build_output_file(["backend"], rendered_template)
 
     @staticmethod
     def determine_template_name(rule):
@@ -102,15 +102,22 @@ class TemplateGenerator:
         LOGGER.debug(rendered_template)
         return rendered_template
 
-    def write_template_file(self, rule, rendered_template):
+    def build_template_names_from_rules(rules):
+        return list(rule)[0] + ".tf"
+
+    def build_output_file(self, rule, rendered_template):
+        """Build output file name to write rendering to file"""
+        template_name = self.build_template_names_from_rules(rules)
+        output_file = os.path.join(self.output_directory, template_name)
+        self.write_template_file(output_file, rendered_template)
+
+    def write_template_file(output_file, rendered_template): # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
-        template_name = list(rule)[0] + ".tf"
-        output_file = os.path.join(self.output_directory, template_name)
         LOGGER.info("Creating %s", output_file)
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
 
-    def _ensure_output_directory_exists(self):
+    def _ensure_output_directory_exists(self): # pragma: no cover
         """Ensure that the path to the output directory exists."""
         Path(self.output_directory).mkdir(parents=True, exist_ok=True)
