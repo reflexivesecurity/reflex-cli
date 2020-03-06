@@ -57,6 +57,7 @@ class ReflexInitializer:
         LOGGER.debug("Reflex version set to: %s", self.configs["version"])
 
     def set_global_values(self):
+        """Sets values for common configurations across guardrails."""
         self.configs["globals"] = {}
         if self.select_all:
             self.configs["globals"]["default_email"] = "placeholder@example.com"
