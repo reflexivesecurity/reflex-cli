@@ -56,13 +56,20 @@ class ReflexInitializer:
         self.configs["version"] = package_object.version
         LOGGER.debug("Reflex version set to: %s", self.configs["version"])
 
+    def set_global_values(self):
+        """Sets values for common configurations across guardrails."""
+        self.configs["globals"] = {}
+        if self.select_all:
+            self.configs["globals"]["default_email"] = "placeholder@example.com"
+        else:
+            self.configs["globals"]["default_email"] = self.get_input(
+                "Default email:"
+            )
+
     def determine_config_values(self):  # pragma: no cover
         """Outlines keys of config file and gathers values."""
         self.set_version()
-        if self.select_all:
-            self.configs["default_email"] = "placeholder@example.com"
-        else:
-            self.configs["default_email"] = self.get_input("Default email:")
+        self.set_global_values()
         region = os.environ.get("AWS_REGION")
         if not region:
             region = self.get_input("AWS Region:")
@@ -100,16 +107,14 @@ class ReflexInitializer:
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
         version_dump = yaml.dump({"version": ("%s" % self.configs["version"])})
-        default_email_dump = yaml.dump(
-            {"default_email": self.configs["default_email"]}
-        )
+        globals_dump = yaml.dump({"globals": self.configs["globals"]})
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
         rules_dump = yaml.dump({"rules": self.configs["rules"]})
         backend_dump = yaml.dump({"backend": self.configs["backend"]})
 
         template = self.template_env.get_template("reflex.yaml.jinja2")
         rendered_template = template.render(
-            default_email=default_email_dump,
+            global_configs=globals_dump,
             providers=providers_dump,
             backend=backend_dump,
             rules=rules_dump,
