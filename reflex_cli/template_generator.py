@@ -19,7 +19,7 @@ class TemplateGenerator:
             loader=PackageLoader("reflex_cli", "templates"),
             autoescape=select_autoescape(["tf"]),
         )
-        self.default_email = self.configuration.get("default_email")
+        self.default_email = self.configuration["globals"].get("default_email")
 
     def create_templates(self):  # pragma: no cover
         """Generates templates for every rule in configuration."""

@@ -6,7 +6,7 @@ from reflex_cli.template_generator import TemplateGenerator
 
 EXAMPLE_CONFIG = {
     "version": 0.1,
-    "default_email": "john@example.com",
+    "globals": {"default_email": "john@example.com"},
     "providers": ["aws"],
     "rules": [
         "aws-detect-root-user-activity",
