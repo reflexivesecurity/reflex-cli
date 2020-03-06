@@ -32,7 +32,8 @@ class RuleDiscoverer:
 
         return filtered_repos
 
-    def get_repo_versions(self, repos):
+    @staticmethod
+    def get_repo_versions(repos):
         """ Determines the version for each repo and appends it to the repo """
         processed_repos = []
 
@@ -45,7 +46,8 @@ class RuleDiscoverer:
 
         return processed_repos
 
-    def get_rule_modes(self, repos):
+    @staticmethod
+    def get_rule_modes(repos):
         """
         Determines if the rule is able to operate in "remediate" mode
 
