@@ -81,6 +81,7 @@ class TemplateGenerator:
             template_name=rule_name,
             version=rule[rule_name]["version"],
             github_org=github_org,
+            mode=rule[rule_name].get("mode")
         )
         LOGGER.debug(rendered_template)
         return rendered_template

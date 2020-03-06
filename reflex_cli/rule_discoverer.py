@@ -16,6 +16,9 @@ class RuleDiscoverer:
         """Collects a list of repos that match rules."""
         repos = ReflexGithub().get_repos()
         self.discovered_rules = self.filter_reflex_repos(repos)
+        self.discovered_rules = self.get_repo_versions(self.discovered_rules)
+        self.discovered_rules = self.get_rule_modes(self.discovered_rules)
+
         return self.discovered_rules
 
     def filter_reflex_repos(self, repos):
@@ -25,11 +28,41 @@ class RuleDiscoverer:
         for repo in repos:
             LOGGER.debug("Checking repo for %s", repo.name)
             if self.is_rule_repository(repo.name):
-                repo.version = ReflexGithub().get_remote_version(
-                    f"cloudmitigator/{repo.name}"
-                )
                 filtered_repos.append(repo)
+
         return filtered_repos
+
+    def get_repo_versions(self, repos):
+        """ Determines the version for each repo and appends it to the repo """
+        processed_repos = []
+
+        for repo in repos:
+            LOGGER.debug("Getting version for repo %s", repo.name)
+            repo.version = ReflexGithub().get_remote_version(
+                f"cloudmitigator/{repo.name}"
+            )
+            processed_repos.append(repo)
+
+        return processed_repos
+
+    def get_rule_modes(self, repos):
+        """
+        Determines if the rule is able to operate in "remediate" mode
+
+        If so it assigns a "mode" attribute with a value of "remediate"
+        """
+        processed_repos = []
+
+        for repo in repos:
+            LOGGER.debug("Getting mode for repo %s", repo.name)
+            mode = ReflexGithub().get_rule_mode(
+                f"cloudmitigator/{repo.name}"
+            )
+            if mode:
+                repo.mode = mode
+            processed_repos.append(repo)
+
+        return processed_repos
 
     @staticmethod
     def is_rule_repository(repo_name):
