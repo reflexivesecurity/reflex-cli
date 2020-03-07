@@ -16,7 +16,7 @@ class RuleDiscoverer:
     def __init__(self):
         self.discovered_rules = []
 
-    def collect_rules(self):
+    def collect_rules(self):  # pragma: no cover
         """Collects a list of repos that match rules."""
         raw_rules = self.pull_manifest_content()
         yaml_rules = yaml.load(raw_rules, Loader=yaml.SafeLoader)
@@ -34,12 +34,12 @@ class RuleDiscoverer:
         return rule_object_array
 
     @staticmethod
-    def pull_manifest_content():
+    def pull_manifest_content():  # pragma: no cover
         """Reaches out to manifest endpoint to gather rule information."""
         raw_rules_response = requests.get(RULE_MANIFEST_ENDPOINT)
         return raw_rules_response.content
 
-    def display_discovered_rules(self):
+    def display_discovered_rules(self):  # pragma: no cover
         """Method outputs rule information in a usable fashion"""
         LOGGER.info("Rules discovered in CloudMitigator Github organization.")
         LOGGER.info("-------------------------------------------")
