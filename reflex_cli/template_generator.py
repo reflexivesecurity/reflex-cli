@@ -27,12 +27,7 @@ class TemplateGenerator:
         self.create_reflex_kms_template()
         self.create_provider_templates()
         self.create_backend_template()
-        for rule in self.configuration["rules"]:
-            template_name = self.determine_template_name(rule)
-            LOGGER.debug("Rendering template with name: %s", template_name)
-            rendered_template = self.generate_template(template_name, rule)
-            if rendered_template:
-                self.build_output_file(rule, rendered_template)
+        self.create_rule_templates()
 
     def create_notification_template(self):  # pragma: no cover
         """Generates template for central sns topic infrastructure."""
@@ -69,55 +64,49 @@ class TemplateGenerator:
             )
             self.build_output_file(["backend"], rendered_template)
 
-    @staticmethod
-    def determine_template_name(rule):
-        """Inspects instance type of rule to determine file name."""
-        if isinstance(rule, str):
-            template_name = rule + ".tf"
-        elif isinstance(rule, dict):
-            template_name = list(rule)[0] + ".tf"
-
-        if "aws-detect" in template_name:
-            return "aws-detect.tf"
-        if "aws-enforce" in template_name:
-            return "aws-enforce.tf"
-        return None
+    def create_rule_templates(self):
+        """Creates tf file for each rule"""
+        for rule in self.configuration["rules"]:
+            rendered_template = self.generate_template("aws-rule.tf", rule)
+            if rendered_template:
+                self.write_template_file(rule, rendered_template)
 
     def generate_template(self, template_name, rule):  # pragma: no cover
         """Creates tf output for every file in our template."""
         template = self.template_env.get_template(template_name)
         rule_name = list(rule)[0]
 
-        if "github_org" in rule[rule_name]:
-            github_org = rule[rule_name]["github_org"]
-        else:
-            github_org = DEFAULT_GITHUB_ORG
+        github_org = rule[rule_name].get("github_org", DEFAULT_GITHUB_ORG)
 
         rendered_template = template.render(
             module_name=rule_name,
             template_name=rule_name,
             version=rule[rule_name]["version"],
             github_org=github_org,
+            configuration=rule[rule_name].get("configuration"),
         )
         LOGGER.debug(rendered_template)
         return rendered_template
 
+    @staticmethod
     def build_template_names_from_rules(rules):
-        return list(rule)[0] + ".tf"
+        return list(rules)[0] + ".tf"
 
-    def build_output_file(self, rule, rendered_template):
+    def build_output_file(self, rules, rendered_template):
         """Build output file name to write rendering to file"""
         template_name = self.build_template_names_from_rules(rules)
         output_file = os.path.join(self.output_directory, template_name)
         self.write_template_file(output_file, rendered_template)
 
-    def write_template_file(output_file, rendered_template): # pragma: no cover
+    def write_template_file(
+        self, output_file, rendered_template
+    ):  # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
         LOGGER.info("Creating %s", output_file)
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
 
-    def _ensure_output_directory_exists(self): # pragma: no cover
+    def _ensure_output_directory_exists(self):  # pragma: no cover
         """Ensure that the path to the output directory exists."""
         Path(self.output_directory).mkdir(parents=True, exist_ok=True)

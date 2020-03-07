@@ -26,14 +26,6 @@ class TemplateGeneratorTestCase(unittest.TestCase):
     def setUp(self):
         self.generator = TemplateGenerator(EXAMPLE_CONFIG, OUTPUT_DIRECTORY)
 
-    def test_determine_template_name(self):
-        """Test our defaults for the environment are sane."""
-        string_test = self.generator.determine_template_name("test_template")
-        self.assertIsNone(string_test)
-        test_dict = {"aws-detect-template": {"one": "first"}}
-        dict_test = self.generator.determine_template_name(test_dict)
-        self.assertEqual(dict_test, "aws-detect.tf")
-
     def test_generate_template(self):
         get_template_mock = MagicMock()
         render_mock = MagicMock()
@@ -46,12 +38,9 @@ class TemplateGeneratorTestCase(unittest.TestCase):
             ),
             "Example",
         )
-    
-    @patch("reflex_cli.template_generator.TemplateGenerator.write_template_file")
+
+    @patch(
+        "reflex_cli.template_generator.TemplateGenerator.write_template_file"
+    )
     def test_write_template_file(self, write_template_file_mock):
         write_template_file_mock.return_value = True
-        
-
-
-
-
