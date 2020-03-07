@@ -1,9 +1,13 @@
 """Holder of template generation logic"""
 import logging
 
-from reflex_cli.reflex_github import ReflexGithub
+import requests
+import yaml
+from reflex_cli.rule import Rule
 
 LOGGER = logging.getLogger("reflex_cli")
+
+RULE_MANIFEST_ENDPOINT = "http://manifest.cloudmitigator.com"
 
 
 class RuleDiscoverer:
@@ -12,66 +16,30 @@ class RuleDiscoverer:
     def __init__(self):
         self.discovered_rules = []
 
-    def collect_rules(self):
+    def collect_rules(self):  # pragma: no cover
         """Collects a list of repos that match rules."""
-        repos = ReflexGithub().get_repos()
-        self.discovered_rules = self.filter_reflex_repos(repos)
-        self.discovered_rules = self.get_repo_versions(self.discovered_rules)
-        self.discovered_rules = self.get_rule_modes(self.discovered_rules)
-
+        raw_rules = self.pull_manifest_content()
+        yaml_rules = yaml.load(raw_rules, Loader=yaml.SafeLoader)
+        self.discovered_rules = self.create_rule_list(yaml_rules["rules"])
         return self.discovered_rules
 
-    def filter_reflex_repos(self, repos):
-        """Determines if a repo name matches the rule naming convention."""
-        filtered_repos = []
-
-        for repo in repos:
-            LOGGER.debug("Checking repo for %s", repo.name)
-            if self.is_rule_repository(repo.name):
-                filtered_repos.append(repo)
-
-        return filtered_repos
+    @staticmethod
+    def create_rule_list(rule_array):
+        """Creates rule objects in a list for further ingestion."""
+        rule_object_array = []
+        for rule in rule_array:
+            rule_name = list(rule)[0]
+            new_rule = Rule(rule_name, rule[rule_name])
+            rule_object_array.append(new_rule)
+        return rule_object_array
 
     @staticmethod
-    def get_repo_versions(repos):
-        """ Determines the version for each repo and appends it to the repo """
-        processed_repos = []
+    def pull_manifest_content():  # pragma: no cover
+        """Reaches out to manifest endpoint to gather rule information."""
+        raw_rules_response = requests.get(RULE_MANIFEST_ENDPOINT)
+        return raw_rules_response.content
 
-        for repo in repos:
-            LOGGER.debug("Getting version for repo %s", repo.name)
-            repo.version = ReflexGithub().get_remote_version(
-                f"cloudmitigator/{repo.name}"
-            )
-            processed_repos.append(repo)
-
-        return processed_repos
-
-    @staticmethod
-    def get_rule_modes(repos):
-        """
-        Determines if the rule is able to operate in "remediate" mode
-
-        If so it assigns a "mode" attribute with a value of "remediate"
-        """
-        processed_repos = []
-
-        for repo in repos:
-            LOGGER.debug("Getting mode for repo %s", repo.name)
-            mode = ReflexGithub().get_rule_mode(
-                f"cloudmitigator/{repo.name}"
-            )
-            if mode:
-                repo.mode = mode
-            processed_repos.append(repo)
-
-        return processed_repos
-
-    @staticmethod
-    def is_rule_repository(repo_name):
-        """Deterministic element for a repository to match a rule."""
-        return repo_name.startswith("reflex-aws")
-
-    def display_discovered_rules(self):
+    def display_discovered_rules(self):  # pragma: no cover
         """Method outputs rule information in a usable fashion"""
         LOGGER.info("Rules discovered in CloudMitigator Github organization.")
         LOGGER.info("-------------------------------------------")
