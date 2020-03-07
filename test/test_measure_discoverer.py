@@ -9,33 +9,8 @@ class RuleDiscovererTestCase(unittest.TestCase):
 
     def setUp(self):
         self.discoverer = RuleDiscoverer()
-        self.git_repos_mock = MagicMock()
-        self.repo_mock1 = MagicMock()
-        self.repo_mock1.name = "reflex-aws-test"
-        self.repo_mock2 = MagicMock()
-        self.repo_mock2.name = "reflex-test"
 
-    def test_is_rule_repository(self):
-        self.assertTrue(self.discoverer.is_rule_repository("reflex-aws-test"))
-        self.assertFalse(self.discoverer.is_rule_repository("aws-test"))
-
-    @patch("reflex_cli.reflex_github.ReflexGithub.get_remote_version")
-    def test_filter_reflex_repos(self, mock_remote):
-        mock_remote.return_value = "v0.0.0"
-        repos = [self.repo_mock1, self.repo_mock2]
-        filtered_repos = self.discoverer.filter_reflex_repos(repos)
-        self.assertEqual(filtered_repos[0].name, "reflex-aws-test")
-        self.assertEqual(len(filtered_repos), 1)
-
-    @patch("reflex_cli.reflex_github.ReflexGithub.get_repos")
-    @patch("reflex_cli.reflex_github.ReflexGithub.get_remote_version")
-    def test_collect_rules(self, mock_get_remote_version, mock_get_repos):
-        test_discoverer = RuleDiscoverer()
-        mock_get_remote_version.return_value = "v0.0.0"
-        mock_get_repos.return_value = [self.repo_mock1, self.repo_mock2]
-        self.assertEqual(test_discoverer.discovered_rules, [])
-
-        mocked_rules = [self.repo_mock1]
-        self.discoverer.collect_rules()
-
-        self.assertEqual(self.discoverer.discovered_rules, mocked_rules)
+    def test_create_rule_list(self):
+        test_rules = [{"test-rule": {"description": "example"}}]
+        rule_objects = self.discoverer.create_rule_list(test_rules)
+        self.assertEqual(rule_objects[0].name, "test-rule")

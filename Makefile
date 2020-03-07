@@ -17,5 +17,8 @@ test: venv
 	coverage run -m unittest discover
 	coverage report
 
+lint: venv
+	pylint ./reflex_cli/
+
 build: venv
 	python setup.py install
