@@ -58,7 +58,9 @@ class TemplateGenerator:
             backend_type = list(self.configuration["backend"])[0]
             rendered_template = template.render(
                 backend_type=backend_type,
-                backend_config_array=self.configuration["backend"][backend_type],
+                backend_config_array=self.configuration["backend"][
+                    backend_type
+                ],
             )
             self.write_template_file(["backend"], rendered_template)
 
@@ -81,12 +83,12 @@ class TemplateGenerator:
             template_name=rule_name,
             version=rule[rule_name]["version"],
             github_org=github_org,
-            mode=rule[rule_name].get("mode")
+            configuration=rule[rule_name].get("configuration"),
         )
         LOGGER.debug(rendered_template)
         return rendered_template
 
-    def write_template_file(self, rule, rendered_template):
+    def write_template_file(self, rule, rendered_template):  # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
         template_name = list(rule)[0] + ".tf"
@@ -95,6 +97,6 @@ class TemplateGenerator:
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
 
-    def _ensure_output_directory_exists(self):
+    def _ensure_output_directory_exists(self):  # pragma: no cover
         """Ensure that the path to the output directory exists."""
         Path(self.output_directory).mkdir(parents=True, exist_ok=True)

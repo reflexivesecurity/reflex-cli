@@ -18,7 +18,7 @@ class ReflexGithub:
         token = os.environ.get("REFLEX_GITHUB_TOKEN")
         self.github_client = github.Github(token)
 
-    def get_repos(self):
+    def get_repos(self):  # pragma: no cover
         """Iterates over github org and collects repos that match rules."""
         for organization in self.github_organizations:  # pragma: no cover
             LOGGER.debug("Collecting repos for %s", organization)
@@ -39,7 +39,7 @@ class ReflexGithub:
             return None
         return latest_release.tag_name
 
-    def get_rule_mode(self, remote):
+    def get_rule_mode(self, remote):  # pragma: no cover
         """
         Calls GitHub API and determines if the specified rule has different modes
 
@@ -53,13 +53,16 @@ class ReflexGithub:
 
         try:
             contents = repo.get_contents("variables.tf")
-            content_string = base64.b64decode(contents.content).decode('ascii')
+            content_string = base64.b64decode(contents.content).decode("ascii")
             content_dict = hcl.loads(content_string)
             if "mode" in content_dict["variables"]:
                 LOGGER.debug("Found 'mode' variable in %s", remote)
                 return "remediate"
             return None
         except Exception as exception:  # pylint: disable=broad-except
-            LOGGER.warning("Something went wrong when trying to determine mode for %s", remote)
+            LOGGER.warning(
+                "Something went wrong when trying to determine mode for %s",
+                remote,
+            )
             LOGGER.exception(exception)
             return None
