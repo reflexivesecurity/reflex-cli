@@ -37,11 +37,14 @@ class UserInput:
             if self.select_all or self.verify_rule(rule):
                 LOGGER.info("Adding %s at version %s.", rule.name, rule.version)
                 if rule.configurables:
+                    configurable_array = []
+                    for config in rule.configurables:
+                        configurable_array.append({config: ""})
                     possible_rules.append(
                         {
                             rule.name: {
                                 "version": rule.version,
-                                "configuration": rule.configurables,
+                                "configuration": configurable_array,
                             }
                         }
                     )

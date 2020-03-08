@@ -53,7 +53,7 @@ class ReflexInitializer:
         self.configs["version"] = self.get_reflex_version()
         self.configs["globals"] = self.set_global_values()
         self.configs["providers"] = [
-            {"aws": {"region": self.user_input.get_region}}
+            {"aws": {"region": self.user_input.get_region()}}
         ]
         self.configs["backend"] = self.user_input.get_backend_configuration()
         self.configs["rules"] = self.query_possible_rules()

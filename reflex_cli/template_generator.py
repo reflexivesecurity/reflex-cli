@@ -69,7 +69,7 @@ class TemplateGenerator:
         for rule in self.configuration["rules"]:
             rendered_template = self.generate_template("aws-rule.tf", rule)
             if rendered_template:
-                self.write_template_file(rule, rendered_template)
+                self.build_output_file(rule, rendered_template)
 
     def generate_template(self, template_name, rule):  # pragma: no cover
         """Creates tf output for every file in our template."""
@@ -89,13 +89,13 @@ class TemplateGenerator:
         return rendered_template
 
     @staticmethod
-    def build_template_names_from_rules(rules):
+    def build_template_names_from_rule(rule):
         """Returns rule name with tf appended."""
-        return list(rules)[0] + ".tf"
+        return list(rule)[0] + ".tf"
 
-    def build_output_file(self, rules, rendered_template):
+    def build_output_file(self, rule, rendered_template):
         """Build output file name to write rendering to file"""
-        template_name = self.build_template_names_from_rules(rules)
+        template_name = self.build_template_names_from_rule(rule)
         output_file = os.path.join(self.output_directory, template_name)
         self.write_template_file(output_file, rendered_template)
 
