@@ -8,9 +8,7 @@ import yaml
 from jinja2 import Environment, PackageLoader, select_autoescape
 from reflex_cli.rule_discoverer import RuleDiscoverer
 
-TEMPLATE_FOLDER = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "templates")
-)
+TEMPLATE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates"))
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -42,11 +40,17 @@ class ReflexInitializer:
                 continue
             verify_string = f"Add {rule.name} at version {rule.version}?"
 
-            if self.select_all:
+            if (
+                self.select_all
+                or self.get_input(verify_string + " (Yy/Nn):").lower() == "y"
+            ):
                 LOGGER.info("Adding %s at version %s.", rule.name, rule.version)
-                possible_rules.append({rule.name: {"version": rule.version}})
-            elif self.get_input(verify_string + " (Yy/Nn):").lower() == "y":
-                possible_rules.append({rule.name: {"version": rule.version}})
+                if hasattr(rule, "mode"):
+                    possible_rules.append(
+                        {rule.name: {"version": rule.version, "mode": rule.mode}}
+                    )
+                else:
+                    possible_rules.append({rule.name: {"version": rule.version}})
         LOGGER.debug("Rules selected for config: %s", possible_rules)
         return possible_rules
 
@@ -98,9 +102,7 @@ class ReflexInitializer:
             config_key = self.get_input("Backend configuration key: ")
             config_value = self.get_input("Backend configuration value: ")
             key_value_array.append({config_key: config_value})
-            continue_config = self.get_input(
-                "Add more configurations? (Yy/Nn):"
-            )
+            continue_config = self.get_input("Add more configurations? (Yy/Nn):")
             more_config = continue_config.lower() == "y"
         return key_value_array
 
