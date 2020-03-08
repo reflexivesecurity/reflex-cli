@@ -38,3 +38,9 @@ class TemplateGeneratorTestCase(unittest.TestCase):
             ),
             "Example",
         )
+
+    @patch(
+        "reflex_cli.template_generator.TemplateGenerator.write_template_file"
+    )
+    def test_write_template_file(self, write_template_file_mock):
+        write_template_file_mock.return_value = True

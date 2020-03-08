@@ -12,7 +12,7 @@ class ReflexInitializerTestCase(unittest.TestCase):
         self.initializer = ReflexInitializer(False, os.getcwd())
 
     @patch("reflex_cli.reflex_initializer.RuleDiscoverer")
-    @patch("reflex_cli.reflex_initializer.ReflexInitializer.get_input")
+    @patch("reflex_cli.reflex_initializer.UserInput.get_input")
     def test_query_possible_rules(self, input_mock, discoverer_mock):
         """Test our logic for rules is correct"""
         input_mock.return_value = "y"
@@ -30,22 +30,19 @@ class ReflexInitializerTestCase(unittest.TestCase):
         self.assertTrue(no_valid_template == [])
 
     @patch("reflex_cli.reflex_initializer.pkg_resources")
-    def test_set_version(self, pkg_mock):
+    def test_get_reflex_version(self, pkg_mock):
         test_object = ReflexInitializer(False, os.getcwd())
         version_mock = MagicMock()
         version_mock.version = "4.3.21"
         pkg_mock.require.return_value = [version_mock]
-        test_object.set_version()
-        self.assertTrue(test_object.configs["version"] == "4.3.21")
+        self.assertTrue(test_object.get_reflex_version() == "4.3.21")
 
-    @patch("reflex_cli.reflex_initializer.ReflexInitializer.get_input")
+    @patch("reflex_cli.reflex_initializer.UserInput.collect_default_email")
     def test_set_global_values(self, input_mock):
         input_mock.return_value = "example@example.com"
         empty_initializer = ReflexInitializer(False, os.getcwd())
         self.assertTrue("globals" not in empty_initializer.configs.keys())
-        empty_initializer.set_global_values()
-        self.assertTrue("globals" in empty_initializer.configs.keys())
         self.assertEqual(
             "example@example.com",
-            empty_initializer.configs["globals"]["default_email"],
+            empty_initializer.set_global_values()["default_email"],
         )
