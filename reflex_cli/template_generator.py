@@ -90,6 +90,7 @@ class TemplateGenerator:
 
     @staticmethod
     def build_template_names_from_rules(rules):
+        """Returns rule name with tf appended."""
         return list(rules)[0] + ".tf"
 
     def build_output_file(self, rules, rendered_template):
