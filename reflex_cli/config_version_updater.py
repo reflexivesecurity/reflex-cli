@@ -4,6 +4,7 @@ import logging
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.reflex_github import ReflexGithub
 from reflex_cli.reflex_initializer import ReflexInitializer
+from reflex_cli.user_input import UserInput
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -13,6 +14,7 @@ class ConfigVersionUpdater:
 
     def __init__(self, config_file, select_all):
 
+        self.user_input = UserInput(select_all)
         self.select_all = select_all
         self.config_file = config_file
         self.current_config = ConfigParser(
@@ -84,7 +86,7 @@ class ConfigVersionUpdater:
                     current_version,
                     remote_version,
                 )
-                if self.select_all or self.verify_upgrade_interest():
+                if self.user_input.verify_upgrade_interest():
                     self._set_rule_value(rule, "version", remote_version)
 
     @staticmethod

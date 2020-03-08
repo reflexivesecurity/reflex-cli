@@ -7,8 +7,11 @@ import pkg_resources
 import yaml
 from jinja2 import Environment, PackageLoader, select_autoescape
 from reflex_cli.rule_discoverer import RuleDiscoverer
+from reflex_cli.user_input import UserInput
 
-TEMPLATE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates"))
+TEMPLATE_FOLDER = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "templates")
+)
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -17,7 +20,7 @@ class ReflexInitializer:
     """Creates assets required to build a reflex deployment."""
 
     def __init__(self, select_all, config_file):
-        self.select_all = select_all
+        self.user_input = UserInput(select_all)
         self.configs = {}
         self.config_file = config_file
         self.template_env = Environment(
@@ -25,86 +28,35 @@ class ReflexInitializer:
             autoescape=select_autoescape(["jinja2"]),
         )
 
-    @staticmethod
-    def get_input(message):
-        """Helper method to return specific input call."""
-        return input(message)
-
     def query_possible_rules(self):
         """Iterates over templates and gets confirmation per rule."""
-        possible_rules = []
         discovered_rules = RuleDiscoverer().collect_rules()
-
-        for rule in discovered_rules:
-            if rule.version is None:
-                continue
-            verify_string = f"Add {rule.name} at version {rule.version}?"
-
-            if (
-                self.select_all
-                or self.get_input(verify_string + " (Yy/Nn):").lower() == "y"
-            ):
-                LOGGER.info("Adding %s at version %s.", rule.name, rule.version)
-                if hasattr(rule, "mode"):
-                    possible_rules.append(
-                        {rule.name: {"version": rule.version, "mode": rule.mode}}
-                    )
-                else:
-                    possible_rules.append({rule.name: {"version": rule.version}})
+        possible_rules = self.user_input.get_rule_input(discovered_rules)
         LOGGER.debug("Rules selected for config: %s", possible_rules)
         return possible_rules
 
-    def set_version(self):
+    @staticmethod
+    def get_reflex_version():
         """Looks at package version of CLI to determine reflex version."""
         package_object = pkg_resources.require("reflex-cli")[0]
-        self.configs["version"] = package_object.version
-        LOGGER.debug("Reflex version set to: %s", self.configs["version"])
+        LOGGER.debug("Reflex version found as: %s", package_object.version)
+        return package_object.version
 
     def set_global_values(self):
         """Sets values for common configurations across guardrails."""
-        self.configs["globals"] = {}
-        if self.select_all:
-            self.configs["globals"]["default_email"] = "placeholder@example.com"
-        else:
-            self.configs["globals"]["default_email"] = self.get_input(
-                "Default email:"
-            )
+        global_dict = {}
+        global_dict["default_email"] = self.user_input.collect_default_email()
+        return global_dict
 
     def determine_config_values(self):  # pragma: no cover
         """Outlines keys of config file and gathers values."""
-        self.set_version()
-        self.set_global_values()
-        region = os.environ.get("AWS_REGION")
-        if not region:
-            region = self.get_input("AWS Region:")
-        self.configs["providers"] = [{"aws": {"region": region}}]
-        self.configs["backend"] = self.get_backend_configuration()
+        self.configs["version"] = self.get_reflex_version()
+        self.configs["globals"] = self.set_global_values()
+        self.configs["providers"] = [
+            {"aws": {"region": self.user_input.get_region}}
+        ]
+        self.configs["backend"] = self.user_input.get_backend_configuration()
         self.configs["rules"] = self.query_possible_rules()
-
-    def get_backend_configuration(self):  # pragma: no cover
-        """Collects backend configuration information."""
-        backend_verify = self.get_input("Configure backend? (Yy/Nn): ")
-        if backend_verify.lower() != "y":
-            return ""
-        LOGGER.info(
-            "Collecting backend configuration. To see key value configuration,"
-            " check out https://www.terraform.io/docs/backends/index.html."
-        )
-        backend_type = self.get_input("Backend type?: ")
-        backend_config = {backend_type: self.collect_backend_key_values()}
-        return backend_config
-
-    def collect_backend_key_values(self):  # pragma: no cover
-        """Continually collects backend config key value pairs from user."""
-        more_config = True
-        key_value_array = []
-        while more_config:
-            config_key = self.get_input("Backend configuration key: ")
-            config_value = self.get_input("Backend configuration value: ")
-            key_value_array.append({config_key: config_value})
-            continue_config = self.get_input("Add more configurations? (Yy/Nn):")
-            more_config = continue_config.lower() == "y"
-        return key_value_array
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
