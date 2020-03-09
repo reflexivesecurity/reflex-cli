@@ -20,10 +20,14 @@ class ReflexGithub:
 
     def get_repos(self):  # pragma: no cover
         """Iterates over github org and collects repos that match rules."""
+        repositories = []
+
         for organization in self.github_organizations:  # pragma: no cover
             LOGGER.debug("Collecting repos for %s", organization)
             org_api = self.github_client.get_organization(organization)
-            return org_api.get_repos()
+            repositories += org_api.get_repos()
+
+        return repositories
 
     def get_remote_version(self, remote):
         """Calls github API for remote to get latest release."""
