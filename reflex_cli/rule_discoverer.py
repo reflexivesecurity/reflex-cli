@@ -1,5 +1,6 @@
 """Holder of template generation logic"""
 import logging
+import sys
 
 import requests
 import yaml
@@ -36,7 +37,13 @@ class RuleDiscoverer:
     @staticmethod
     def pull_manifest_content():  # pragma: no cover
         """Reaches out to manifest endpoint to gather rule information."""
-        raw_rules_response = requests.get(RULE_MANIFEST_ENDPOINT)
+        try:
+            raw_rules_response = requests.get(RULE_MANIFEST_ENDPOINT)
+        except requests.ConnectionError:
+            LOGGER.error(
+                "A connection error occurred. Check your internet connection and try again."
+            )
+            sys.exit(1)
         return raw_rules_response.content
 
     def display_discovered_rules(self):  # pragma: no cover
