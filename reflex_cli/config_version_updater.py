@@ -16,89 +16,61 @@ class ConfigVersionUpdater:
     def __init__(self, config_file, select_all):
 
         self.user_input = UserInput(select_all)
-        self.select_all = select_all
         self.config_file = config_file
-        self.current_config = ConfigParser(
-            self.config_file
-        ).parse_valid_config()
-        self.current_rules = self._collect_rules()
-
-    def _collect_rules(self):
-        """Pulls out all rule names for a config file."""
-        rule_list = []
-        for rule in self.current_config["rules"]:
-            rule_list.append(list(rule)[0])
-        return rule_list
+        self.current_config = ConfigParser(self.config_file)
+        self.current_config.parse_valid_config()
 
     def gather_latest_remote_versions(self):
         """Reaches out to urls to get tag information per rule."""
         manifest_rules = RuleDiscoverer().collect_rules()
         remote_versions = {}
-        for rule_dict in self.current_config["rules"]:
-            rule = list(rule_dict)[0]
-            remote_url = self._find_rule_value(rule, "url")
+        for rule in self.current_config.rule_list:
+            remote_url = self._find_rule_value(rule.name, "url")
             if not remote_url:
                 for manifest_rule in manifest_rules:
                     if manifest_rule.name == rule:
-                        remote_versions[rule] = manifest_rule.version
+                        remote_versions[rule.name] = manifest_rule.version
             else:
                 LOGGER.debug("Rule: %s has remote: %s", rule, remote_url)
-                remote_versions[rule] = ReflexGithub().get_remote_version(
-                    self._get_repo_format(remote_url)
+                remote_versions[rule.name] = ReflexGithub().get_remote_version(
+                    ReflexGithub.get_repo_format(remote_url)
                 )
             LOGGER.debug("rule has remote version: %s", remote_versions[rule])
         return remote_versions
 
     def _find_rule_value(self, rule_name, key):
-        for rule in self.current_config["rules"]:
+        for rule in self.current_config.raw_configuration["rules"]:
             if rule.get(rule_name):
                 return rule.get(rule_name).get(key)
         return None
 
     def _set_rule_value(self, rule_name, key, value):
         """Overwrites existing key with value."""
-        for rule in self.current_config["rules"]:
+        for rule in self.current_config.raw_configuration["rules"]:
             if rule.get(rule_name):
                 rule[rule_name][key] = value
-
-    @staticmethod
-    def _get_repo_format(remote):
-        """Takes in a repo URL and returns its repo format."""
-        org_repo_string = None
-        github_string = remote.find("github.com/")
-        if github_string > 0:
-            org_repo_string = "/".join(
-                remote[github_string + 11 :].split("/")  # noqa: E203
-            )
-        LOGGER.debug("Found repo string to be: %s", org_repo_string)
-        return org_repo_string
 
     def compare_current_rule_versions(self):
         """Iterates over all rules and compares rules with remote versions."""
         LOGGER.debug("Comparing current rule versions.")
         remote_versions = self.gather_latest_remote_versions()
-        for rule_dict in self.current_config["rules"]:
-            rule = list(rule_dict)[0]
-            current_version = self._find_rule_value(rule, "version")
-            remote_version = remote_versions[rule]
+        for rule in self.current_config.rule_list:
+            current_version = self._find_rule_value(rule.name, "version")
+            remote_version = remote_versions[rule.name]
             if not remote_version:
-                LOGGER.debug("No release information for %s. Skipping!", rule)
+                LOGGER.debug(
+                    "No release information for %s. Skipping!", rule.name
+                )
                 continue
             if current_version != remote_version:
                 LOGGER.info(
                     "%s (current version: %s) has new release: %s.",
-                    rule,
+                    rule.name,
                     current_version,
                     remote_version,
                 )
                 if self.user_input.verify_upgrade_interest():
                     self._set_rule_value(rule, "version", remote_version)
-
-    @staticmethod
-    def verify_upgrade_interest():
-        """Prompts user whether or not they want to upgrade rule."""
-        verify = input("Upgrade? (y/n):")
-        return verify.lower() == "y"
 
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""

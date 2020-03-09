@@ -12,7 +12,8 @@ class ConfigParserTestCase(unittest.TestCase):
         self.test_config = config_parser.ConfigParser(self.test_config_file)
 
     def test_generate_config_returns_dictionary(self):
-        self.assertTrue(isinstance(self.test_config.generate_config(), dict))
+        self.test_config.parse_valid_config()
+        self.assertTrue(isinstance(self.test_config.raw_configuration, dict))
 
     def test_validate_config(self):
         empty_config = {}
@@ -21,5 +22,7 @@ class ConfigParserTestCase(unittest.TestCase):
         config_key_no_value = {"version": None}
         self.assertFalse(self.test_config.validate_config(config_key_no_value))
 
-        test_config_dict = self.test_config.generate_config()
-        self.assertTrue(self.test_config.validate_config(test_config_dict))
+        self.test_config.parse_valid_config()
+        self.assertTrue(
+            self.test_config.validate_config(self.test_config.raw_configuration)
+        )

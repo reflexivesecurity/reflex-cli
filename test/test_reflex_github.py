@@ -7,6 +7,17 @@ from reflex_cli.reflex_github import ReflexGithub
 class ReflexGithubTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
 
+    def test_get_repo_format(self):
+        repo_string = ReflexGithub.get_repo_format(
+            "http://github.com/test/repository"
+        )
+        self.assertEqual(repo_string, "test/repository")
+
+        bad_string = ReflexGithub.get_repo_format(
+            "http://githb.com/test/repository"
+        )
+        self.assertIsNone(bad_string)
+
     # def setUp(self):
     #     self.client = ReflexGithub()
 

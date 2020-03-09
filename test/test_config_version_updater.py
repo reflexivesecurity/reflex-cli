@@ -14,11 +14,6 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
             self.test_config_file, False
         )
 
-    def test_collect_rules(self):
-        current_rules = self.test_config_updater.current_rules
-        self.assertTrue(isinstance(current_rules, list))
-        self.assertEqual("aws-detect-root-user-activity", current_rules[0])
-
     def test_find_rule_value(self):
         real_value = self.test_config_updater._find_rule_value(
             "aws-detect-root-user-activity", "version"
@@ -40,17 +35,6 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
         self.test_config_updater._set_rule_value(
             "aws-detect-root-user-activity", "version", "0.0.1"
         )
-
-    def test_get_repo_format(self):
-        repo_string = self.test_config_updater._get_repo_format(
-            "http://github.com/test/repository"
-        )
-        self.assertEqual(repo_string, "test/repository")
-
-        bad_string = self.test_config_updater._get_repo_format(
-            "http://githb.com/test/repository"
-        )
-        self.assertIsNone(bad_string)
 
 
 #

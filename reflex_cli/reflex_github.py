@@ -66,3 +66,15 @@ class ReflexGithub:
             )
             LOGGER.exception(exception)
             return None
+
+    @staticmethod
+    def get_repo_format(remote):
+        """Takes in a repo URL and returns its repo format."""
+        org_repo_string = None
+        github_string = remote.find("github.com/")
+        if github_string > 0:
+            org_repo_string = "/".join(
+                remote[github_string + 11 :].split("/")  # noqa: E203
+            )
+        LOGGER.debug("Found repo string to be: %s", org_repo_string)
+        return org_repo_string
