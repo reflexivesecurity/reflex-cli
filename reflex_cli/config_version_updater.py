@@ -28,14 +28,16 @@ class ConfigVersionUpdater:
             remote_url = self._find_rule_value(rule.name, "url")
             if not remote_url:
                 for manifest_rule in manifest_rules:
-                    if manifest_rule.name == rule:
+                    if manifest_rule.name == rule.name:
                         remote_versions[rule.name] = manifest_rule.version
             else:
                 LOGGER.debug("Rule: %s has remote: %s", rule, remote_url)
                 remote_versions[rule.name] = ReflexGithub().get_remote_version(
                     ReflexGithub.get_repo_format(remote_url)
                 )
-            LOGGER.debug("rule has remote version: %s", remote_versions[rule])
+            LOGGER.debug(
+                "rule has remote version: %s", remote_versions[rule.name]
+            )
         return remote_versions
 
     def _find_rule_value(self, rule_name, key):
@@ -70,11 +72,11 @@ class ConfigVersionUpdater:
                     remote_version,
                 )
                 if self.user_input.verify_upgrade_interest():
-                    self._set_rule_value(rule, "version", remote_version)
+                    self._set_rule_value(rule.name, "version", remote_version)
 
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""
         initializer = ReflexInitializer(self.config_file, False)
         initializer.config_file = self.config_file
-        initializer.configs = self.current_config
+        initializer.configs = self.current_config.raw_configuration
         initializer.write_config_file()
