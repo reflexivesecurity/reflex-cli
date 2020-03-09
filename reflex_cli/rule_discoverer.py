@@ -5,7 +5,6 @@ import sys
 import requests
 import yaml
 from reflex_cli.rule import Rule
-from requests import ConnectionError
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -40,7 +39,7 @@ class RuleDiscoverer:
         """Reaches out to manifest endpoint to gather rule information."""
         try:
             raw_rules_response = requests.get(RULE_MANIFEST_ENDPOINT)
-        except ConnectionError:
+        except requests.ConnectionError:
             LOGGER.error(
                 "A connection error occurred. Check your internet connection and try again."
             )
