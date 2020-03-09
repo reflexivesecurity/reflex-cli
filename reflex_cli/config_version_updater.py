@@ -4,6 +4,7 @@ import logging
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.reflex_github import ReflexGithub
 from reflex_cli.reflex_initializer import ReflexInitializer
+from reflex_cli.rule_discoverer import RuleDiscoverer
 from reflex_cli.user_input import UserInput
 
 LOGGER = logging.getLogger("reflex_cli")
@@ -31,16 +32,20 @@ class ConfigVersionUpdater:
 
     def gather_latest_remote_versions(self):
         """Reaches out to urls to get tag information per rule."""
+        manifest_rules = RuleDiscoverer().collect_rules()
         remote_versions = {}
         for rule_dict in self.current_config["rules"]:
             rule = list(rule_dict)[0]
             remote_url = self._find_rule_value(rule, "url")
             if not remote_url:
-                remote_url = "https://github.com/cloudmitigator/" + rule
-            LOGGER.debug("Rule: %s has remote: %s", rule, remote_url)
-            remote_versions[rule] = ReflexGithub().get_remote_version(
-                self._get_repo_format(remote_url)
-            )
+                for manifest_rule in manifest_rules:
+                    if manifest_rule.name == rule:
+                        remote_versions[rule] = manifest_rule.version
+            else:
+                LOGGER.debug("Rule: %s has remote: %s", rule, remote_url)
+                remote_versions[rule] = ReflexGithub().get_remote_version(
+                    self._get_repo_format(remote_url)
+                )
             LOGGER.debug("rule has remote version: %s", remote_versions[rule])
         return remote_versions
 
