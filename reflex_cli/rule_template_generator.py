@@ -13,7 +13,9 @@ DEFAULT_GITHUB_ORG = "cloudmitigator"
 class RuleTemplateGenerator:
     """Generate a set of templates from a given config."""
 
-    def __init__(self, output_directory, github_org_name, rule_name, class_name, mode):
+    def __init__(
+        self, output_directory, github_org_name, rule_name, class_name, mode
+    ):  # pylint: disable=too-many-arguments
         self.output_directory = output_directory
         self.github_org_name = github_org_name
         self.rule_name = rule_name
@@ -102,15 +104,15 @@ class RuleTemplateGenerator:
         rendered_template = template.render(
             rule_name=self.rule_name, rule_class_name=self.class_name, mode=self.mode
         )
-        output_file = os.path.join(self.output_directory, f"{self.rule_name.replace('-', '_')}.tf")
+        output_file = os.path.join(
+            self.output_directory, f"{self.rule_name.replace('-', '_')}.tf"
+        )
         self.write_template_file(output_file, rendered_template)
 
     def create_variables_terraform_template(self):  # pragma: no cover
         """Creates tf output for every file in our template."""
         template = self.template_env.get_template("variables.tf")
-        rendered_template = template.render(
-            mode=self.mode
-        )
+        rendered_template = template.render(mode=self.mode)
         output_file = os.path.join(self.output_directory, "variables.tf")
         self.write_template_file(output_file, rendered_template)
 

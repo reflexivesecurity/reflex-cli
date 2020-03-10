@@ -7,7 +7,6 @@ import os
 import click
 
 from reflex_cli.rule_template_generator import RuleTemplateGenerator
-from reflex_cli.user_input import UserInput
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_GITHUB_ORG = "cloudmitigator"
