@@ -7,13 +7,13 @@ providers:
 
 rules:
   - aws-detect-root-user-activity:
-      version: 0.0.1
+      version: v0.0.1
   - aws-detect-deactivate-mfa:
-      version: 0.0.1
+      version: v0.0.1
       email: "john.smith@example.com"
   - aws-enforce-no-public-ami:
-      version: 0.0.1
+      version: v0.0.1
   - aws-enforce-s3-encryption:
-      version: 0.0.1
+      version: v0.0.1
   - aws-detect-pants-on-fire:
       url: "github.com/example/pants-on-fire"
