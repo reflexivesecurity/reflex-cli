@@ -1,6 +1,6 @@
 import os
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, call
 
 from reflex_cli.template_generator import TemplateGenerator
 
@@ -42,5 +42,14 @@ class TemplateGeneratorTestCase(unittest.TestCase):
     @patch(
         "reflex_cli.template_generator.TemplateGenerator.write_template_file"
     )
-    def test_write_template_file(self, write_template_file_mock):
+    def test_build_output_file(self, write_template_file_mock):
         write_template_file_mock.return_value = True
+
+    @patch("reflex_cli.template_generator.Path", spec=True)
+    def test_ensure_output_directory_exists(self, pathlib_mock):
+        self.generator._ensure_output_directory_exists()
+        pathlib_mock.assert_called_with(OUTPUT_DIRECTORY)
+        calls = [call().mkdir(parents=True, exist_ok=True)]
+        print(pathlib_mock.__dict__)
+        pathlib_mock.assert_has_calls(calls)
+    

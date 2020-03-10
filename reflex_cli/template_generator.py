@@ -101,7 +101,7 @@ class TemplateGenerator:
 
     def write_template_file(
         self, output_file, rendered_template
-    ):  # pragma: no cover
+    ):
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
         LOGGER.info("Creating %s", output_file)
@@ -110,4 +110,5 @@ class TemplateGenerator:
 
     def _ensure_output_directory_exists(self):  # pragma: no cover
         """Ensure that the path to the output directory exists."""
-        Path(self.output_directory).mkdir(parents=True, exist_ok=True)
+        path = Path(self.output_directory)
+        path.mkdir(parents=True, exist_ok=True)
