@@ -96,7 +96,7 @@ class RuleTemplateGenerator:
         output_file = os.path.join(self.output_directory, "README.md")
         self.write_template_file(output_file, rendered_template)
 
-    def create_rule_terraform_template(self):
+    def create_rule_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
         template = self.template_env.get_template("rule_module.tf")
         rendered_template = template.render(
@@ -105,7 +105,7 @@ class RuleTemplateGenerator:
         output_file = os.path.join(self.output_directory, f"{self.rule_name.replace('-', '_')}.tf")
         self.write_template_file(output_file, rendered_template)
 
-    def create_variables_terraform_template(self):
+    def create_variables_terraform_template(self):  # pragma: no cover
         """Creates tf output for every file in our template."""
         template = self.template_env.get_template("variables.tf")
         rendered_template = template.render(
@@ -113,17 +113,6 @@ class RuleTemplateGenerator:
         )
         output_file = os.path.join(self.output_directory, "variables.tf")
         self.write_template_file(output_file, rendered_template)
-
-    # @staticmethod
-    # def build_template_names_from_rule(rule):
-    #     """Returns rule name with tf appended."""
-    #     return list(rule)[0] + ".tf"
-
-    # def build_output_file(self, rule, rendered_template):
-    #     """Build output file name to write rendering to file"""
-    #     template_name = self.build_template_names_from_rule(rule)
-    #     output_file = os.path.join(self.output_directory, template_name)
-    #     self.write_template_file(output_file, rendered_template)
 
     def write_template_file(self, output_file, rendered_template):  # pragma: no cover
         """Writes output of rendering to file"""
