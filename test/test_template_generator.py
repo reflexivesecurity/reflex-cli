@@ -50,6 +50,5 @@ class TemplateGeneratorTestCase(unittest.TestCase):
         self.generator._ensure_output_directory_exists()
         pathlib_mock.assert_called_with(OUTPUT_DIRECTORY)
         calls = [call().mkdir(parents=True, exist_ok=True)]
-        print(pathlib_mock.__dict__)
         pathlib_mock.assert_has_calls(calls)
     
