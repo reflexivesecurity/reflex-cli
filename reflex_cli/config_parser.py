@@ -5,7 +5,7 @@ import yaml
 from reflex_cli.rule import Rule
 
 LOGGER = logging.getLogger("reflex_cli")
-REQUIRED_KEYS = ["version"]
+REQUIRED_KEYS = ["cli_version"]
 
 
 class ConfigParser:

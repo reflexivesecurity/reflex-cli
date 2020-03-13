@@ -32,13 +32,18 @@ class TemplateGenerator:
     def create_notification_template(self):  # pragma: no cover
         """Generates template for central sns topic infrastructure."""
         template = self.template_env.get_template("central-sns-topic.tf")
-        rendered_template = template.render(email=self.default_email)
+        rendered_template = template.render(
+            email=self.default_email,
+            engine_version=self.configuration["engine_version"],
+        )
         self.build_output_file(["central-sns-topic"], rendered_template)
 
     def create_reflex_kms_template(self):  # pragma: no cover
         """Generates template for central sns topic infrastructure."""
         template = self.template_env.get_template("reflex-kms-key.tf")
-        rendered_template = template.render()
+        rendered_template = template.render(
+            engine_version=self.configuration["engine_version"]
+        )
         self.build_output_file(["reflex-kms-key"], rendered_template)
 
     def create_provider_templates(self):  # pragma: no cover
