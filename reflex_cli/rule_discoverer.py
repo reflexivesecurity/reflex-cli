@@ -16,13 +16,21 @@ class RuleDiscoverer:
 
     def __init__(self):
         self.discovered_rules = []
+        self.manifest_content = self.pull_manifest_content()
+        self.yaml_content = yaml.load(
+            self.manifest_content, Loader=yaml.SafeLoader
+        )
 
     def collect_rules(self):  # pragma: no cover
         """Collects a list of repos that match rules."""
-        raw_rules = self.pull_manifest_content()
-        yaml_rules = yaml.load(raw_rules, Loader=yaml.SafeLoader)
-        self.discovered_rules = self.create_rule_list(yaml_rules["rules"])
+        self.discovered_rules = self.create_rule_list(
+            self.yaml_content["rules"]
+        )
         return self.discovered_rules
+
+    def collect_engine(self):
+        """Collects engine configuration from manifest content"""
+        return self.yaml_content["engine"]
 
     @staticmethod
     def create_rule_list(rule_array):

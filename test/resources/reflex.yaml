@@ -1,4 +1,4 @@
-version: 0.1
+cli_version: 0.1
 
 default_notification_email: "john@example.com"
 

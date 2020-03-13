@@ -23,6 +23,7 @@ class ReflexInitializer:
         self.user_input = UserInput(select_all)
         self.configs = {}
         self.config_file = config_file
+        self.rule_discoverer = RuleDiscoverer()
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates"),
             autoescape=select_autoescape(["jinja2"]),
@@ -30,7 +31,7 @@ class ReflexInitializer:
 
     def query_possible_rules(self):
         """Iterates over templates and gets confirmation per rule."""
-        discovered_rules = RuleDiscoverer().collect_rules()
+        discovered_rules = self.rule_discoverer.collect_rules()
         possible_rules = self.user_input.get_rule_input(discovered_rules)
         LOGGER.debug("Rules selected for config: %s", possible_rules)
         return possible_rules
@@ -42,6 +43,11 @@ class ReflexInitializer:
         LOGGER.debug("Reflex version found as: %s", package_object.version)
         return package_object.version
 
+    def get_engine_version(self):
+        """Pulls the engine version information from discoverer."""
+        engine_dictionary = self.rule_discoverer.collect_engine()
+        return engine_dictionary["reflex-engine"]["version"]
+
     def set_global_values(self):
         """Sets values for common configurations across guardrails."""
         global_dict = {}
@@ -50,7 +56,8 @@ class ReflexInitializer:
 
     def determine_config_values(self):  # pragma: no cover
         """Outlines keys of config file and gathers values."""
-        self.configs["version"] = self.get_reflex_version()
+        self.configs["cli_version"] = self.get_reflex_version()
+        self.configs["engine_version"] = self.get_engine_version()
         self.configs["globals"] = self.set_global_values()
         self.configs["providers"] = [
             {"aws": {"region": self.user_input.get_region()}}
@@ -60,7 +67,12 @@ class ReflexInitializer:
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
-        version_dump = yaml.dump({"version": ("%s" % self.configs["version"])})
+        version_dump = yaml.dump(
+            {"cli_version": ("%s" % self.configs["cli_version"])}
+        )
+        engine_dump = yaml.dump(
+            {"engine_version": ("%s" % self.configs["engine_version"])}
+        )
         globals_dump = yaml.dump({"globals": self.configs["globals"]})
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
         rules_dump = yaml.dump({"rules": self.configs["rules"]})
@@ -73,6 +85,7 @@ class ReflexInitializer:
             backend=backend_dump,
             rules=rules_dump,
             version=version_dump,
+            engine=engine_dump,
         )
         LOGGER.debug("Config template rendered as: %s", rendered_template)
         return rendered_template
