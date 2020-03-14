@@ -9,7 +9,6 @@ from ruamel.yaml.comments import CommentedMap
 from jinja2 import Environment, PackageLoader, select_autoescape
 from reflex_cli.rule_discoverer import RuleDiscoverer
 from reflex_cli.user_input import UserInput
-from collections import OrderedDict
 
 TEMPLATE_FOLDER = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "templates")
