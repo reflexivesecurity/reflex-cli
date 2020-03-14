@@ -6,3 +6,4 @@ pre-commit
 PyGithub
 coverage
 pyhcl
+ruamel.yaml
