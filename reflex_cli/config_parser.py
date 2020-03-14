@@ -1,7 +1,7 @@
 """Parses reflex config file to be used by application."""
 import logging
 
-import yaml
+import ruamel.yaml as yaml
 from reflex_cli.rule import Rule
 
 LOGGER = logging.getLogger("reflex_cli")
@@ -40,7 +40,8 @@ class ConfigParser:
     def parse_yaml_config(self):
         """Opens config file, parses yaml."""
         with open(self.config_file, "r") as config_file:
-            configuration = yaml.safe_load(config_file)
+            configuration = yaml.load(config_file,
+                                      Loader=yaml.RoundTripLoader)
             LOGGER.debug("Configuration dictionary: %s", configuration)
         return configuration
 

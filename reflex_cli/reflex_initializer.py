@@ -4,10 +4,12 @@ import os
 
 import pkg_resources
 
-import yaml
+import ruamel.yaml as yaml
+from ruamel.yaml.comments import CommentedMap
 from jinja2 import Environment, PackageLoader, select_autoescape
 from reflex_cli.rule_discoverer import RuleDiscoverer
 from reflex_cli.user_input import UserInput
+from collections import OrderedDict
 
 TEMPLATE_FOLDER = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "templates")
@@ -67,28 +69,18 @@ class ReflexInitializer:
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
-        version_dump = yaml.dump(
-            {"cli_version": ("%s" % self.configs["cli_version"])}
-        )
-        engine_dump = yaml.dump(
-            {"engine_version": ("%s" % self.configs["engine_version"])}
-        )
-        globals_dump = yaml.dump({"globals": self.configs["globals"]})
-        providers_dump = yaml.dump({"providers": self.configs["providers"]})
-        rules_dump = yaml.dump({"rules": self.configs["rules"]})
-        backend_dump = yaml.dump({"backend": self.configs["backend"]})
 
-        template = self.template_env.get_template("reflex.yaml.jinja2")
-        rendered_template = template.render(
-            global_configs=globals_dump,
-            providers=providers_dump,
-            backend=backend_dump,
-            rules=rules_dump,
-            version=version_dump,
-            engine=engine_dump,
-        )
-        LOGGER.debug("Config template rendered as: %s", rendered_template)
-        return rendered_template
+        pre_rendered_yaml = CommentedMap()
+        pre_rendered_yaml["cli_version"] = self.configs["cli_version"]
+        pre_rendered_yaml["engine_version"] = self.configs["engine_version"]
+        pre_rendered_yaml["globals"] = self.configs["globals"]
+        pre_rendered_yaml["providers"] = self.configs["providers"]
+        pre_rendered_yaml["rules"] = self.configs["rules"]
+        pre_rendered_yaml["backend"] = self.configs["backend"]
+        LOGGER.debug("Config template rendered as: %s", pre_rendered_yaml)
+        new_rendered_template = yaml.dump(pre_rendered_yaml,
+                                          Dumper=yaml.RoundTripDumper)
+        return new_rendered_template
 
     def write_config_file(self):  # pragma: no cover
         """Opens config file, dumps dict as yaml."""

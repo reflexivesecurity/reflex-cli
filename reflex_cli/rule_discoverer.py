@@ -66,3 +66,4 @@ class RuleDiscoverer:
                 rule.description,
                 rule.version,
             )
+
