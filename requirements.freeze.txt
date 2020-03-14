@@ -34,3 +34,4 @@ urllib3==1.25.8
 virtualenv==16.7.9
 wrapt==1.11.2
 zipp==2.1.0
+ruamel.yaml==0.16.10
