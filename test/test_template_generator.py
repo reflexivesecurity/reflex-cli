@@ -44,11 +44,3 @@ class TemplateGeneratorTestCase(unittest.TestCase):
     )
     def test_write_template_file(self, write_template_file_mock):
         write_template_file_mock.return_value = True
-
-    @patch("reflex_cli.template_generator.Path", spec=True)
-    def test_ensure_output_directory_exists(self, pathlib_mock):
-        self.generator._ensure_output_directory_exists()
-        pathlib_mock.assert_called_with('/home/mschappacher/PycharmProjects/reflex-cli/test')
-        calls = [call().mkdir(parents=True, exist_ok=True)]
-        pathlib_mock.assert_has_calls(calls)
-
