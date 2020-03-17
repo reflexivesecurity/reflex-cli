@@ -37,8 +37,8 @@ DEFAULT_GITHUB_ORG = "cloudmitigator"
     "-m",
     "--mode",
     type=str,
-    help="The mode for your rule. Options: NOTIFY | REMEDIATE",
-    prompt="The mode for your rule. [NOTIFY | REMEDIATE]",
+    help="The mode for your rule. Options: DETECT | REMEDIATE",
+    prompt="The mode for your rule. [DETECT | REMEDIATE]",
 )
 def cli(output, rule_name, class_name, mode):
     """CLI entrypoint for create command."""
