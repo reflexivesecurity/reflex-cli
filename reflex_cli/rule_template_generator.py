@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from jinja2 import Environment, PackageLoader, select_autoescape
+from reflex_cli.rule_discoverer import RuleDiscoverer
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_GITHUB_ORG = "cloudmitigator"
@@ -41,7 +42,9 @@ class RuleTemplateGenerator:
     def create_directories(self):  # pragma: no cover
         """ Creates required directories for outputting templates """
         try:
-            os.makedirs(os.path.join(self.output_directory, ".github/workflows/"))
+            os.makedirs(
+                os.path.join(self.output_directory, ".github/workflows/")
+            )
             os.makedirs(os.path.join(self.output_directory, "source"))
         except FileExistsError:
             LOGGER.error(
@@ -52,7 +55,9 @@ class RuleTemplateGenerator:
 
     def create_workflow_template(self):  # pragma: no cover
         """ Generates template for GitHub release file """
-        template = self.template_env.get_template(".github/workflows/release.yaml")
+        template = self.template_env.get_template(
+            ".github/workflows/release.yaml"
+        )
         rendered_template = template.render()
         output_file = os.path.join(
             self.output_directory, ".github/workflows/release.yaml"
@@ -64,7 +69,8 @@ class RuleTemplateGenerator:
         template = self.template_env.get_template("source/rule.py.jinja2")
         rendered_template = template.render(rule_class_name=self.class_name)
         output_file = os.path.join(
-            self.output_directory, f"source/{self.rule_name.replace('-', '_')}.py"
+            self.output_directory,
+            f"source/{self.rule_name.replace('-', '_')}.py",
         )
         self.write_template_file(output_file, rendered_template)
 
@@ -72,7 +78,9 @@ class RuleTemplateGenerator:
         """ Generates template for requirements.txt """
         template = self.template_env.get_template("source/requirements.txt")
         rendered_template = template.render()
-        output_file = os.path.join(self.output_directory, "source/requirements.txt")
+        output_file = os.path.join(
+            self.output_directory, "source/requirements.txt"
+        )
         self.write_template_file(output_file, rendered_template)
 
     def create_gitignore_template(self):  # pragma: no cover
@@ -100,9 +108,13 @@ class RuleTemplateGenerator:
 
     def create_rule_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
+        engine_version = self.get_engine_version()
         template = self.template_env.get_template("rule_module.tf")
         rendered_template = template.render(
-            rule_name=self.rule_name, rule_class_name=self.class_name, mode=self.mode
+            rule_name=self.rule_name,
+            rule_class_name=self.class_name,
+            mode=self.mode,
+            engine_version=engine_version,
         )
         output_file = os.path.join(
             self.output_directory, f"{self.rule_name.replace('-', '_')}.tf"
@@ -116,12 +128,21 @@ class RuleTemplateGenerator:
         output_file = os.path.join(self.output_directory, "variables.tf")
         self.write_template_file(output_file, rendered_template)
 
-    def write_template_file(self, output_file, rendered_template):  # pragma: no cover
+    def write_template_file(
+        self, output_file, rendered_template
+    ):  # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
         LOGGER.info("Creating %s", output_file)
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
+
+    @staticmethod
+    def get_engine_version():
+        """ Pulls current engine version from manifest."""
+        measure_manifest = RuleDiscoverer()
+        engine_dictionary = measure_manifest.collect_engine()
+        return engine_dictionary["reflex-engine"]["version"]
 
     def _ensure_output_directory_exists(self):  # pragma: no cover
         """Ensure that the path to the output directory exists."""

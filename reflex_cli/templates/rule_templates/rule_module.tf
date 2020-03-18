@@ -1,5 +1,5 @@
 module "{{ rule_name.replace('-','_') }}" {
-  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda"
+  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref={{ engine_version }}"
   rule_name        = "{{ rule_class_name }}"
   rule_description = "TODO: Provide rule description"
 
