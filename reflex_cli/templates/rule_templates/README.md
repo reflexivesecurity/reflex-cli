@@ -6,7 +6,7 @@ To use this rule either add it to your `reflex.yaml` configuration file:
 ```
 rules:
   - {{ rule_name }}:
-      email: "example@example.com"
+      version: latest
 ```
 
 or add it directly to your Terraform:  
@@ -15,7 +15,6 @@ or add it directly to your Terraform:
 
 module "{{ rule_name }}" {
   source           = "github.com/{{ github_org_name }}/{{ rule_name }}"
-  email            = "example@example.com"
 }
 
 ...
