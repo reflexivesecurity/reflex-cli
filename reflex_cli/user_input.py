@@ -39,7 +39,7 @@ class UserInput:
                 if rule.configurables:
                     configurable_array = []
                     for config in rule.configurables:
-                        configurable_array.append({config: ""})
+                        configurable_array.append(config)
                     possible_rules.append(
                         {
                             rule.name: {
