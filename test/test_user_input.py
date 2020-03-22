@@ -60,14 +60,7 @@ class UserInputTestCase(unittest.TestCase):
         test3.configurables = ["mode"]
 
         self.assertEqual(
-            [
-                {
-                    "first": {
-                        "version": "example",
-                        "configuration": [{"mode": ""}],
-                    }
-                }
-            ],
+            [{"first": {"version": "example", "configuration": ["mode"]}}],
             self.user_input.get_rule_input([test3]),
         )
 
