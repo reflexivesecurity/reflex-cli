@@ -3,10 +3,18 @@ module "{{module_name}}" {
   sns_topic_arn     = module.central-sns-topic.arn
   reflex_kms_key_id = module.reflex-kms-key.key_id
 {%- if configuration -%}
-{%- for configurable in configuration -%}
-  {%- for key in configurable %}
-  {{key}}              = "{{configurable[key]}}"
-{%- endfor %}
-{%- endfor %}
+  {%- for configurable in configuration -%}
+    {%- for key, value in configurable.items() %}
+      {%- if value is mapping %}
+  {{key}}              = {
+    {%- for map_key, map_value in value.items() %}
+    {{map_key}}: {{map_value}}
+    {%- endfor %}
+  }
+      {%- else %}
+  {{key}}              = "{{value}}"
+      {%- endif %}
+    {%- endfor %}
+  {%- endfor %}
 {%- endif %}
 }
