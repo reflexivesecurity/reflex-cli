@@ -32,6 +32,9 @@ class {{ rule_class_name }}(AWSRule):
         """
         # TODO: Implement a check for determining if the resource is compliant
 
+
+{%- if mode.lower() == "remediate" %}
+
     def remediate(self):
         """
         Fix the non-compliant resource so it conforms to the rule
@@ -39,6 +42,7 @@ class {{ rule_class_name }}(AWSRule):
         # TODO (Optional): Fix the non-compliant resource. This only needs to 
         # be implemented for rules that remediate non-compliant resources.
         # Purely detective rules can omit this function.
+{%- endif %}
 
     def get_remediation_message(self):
         """ Returns a message about the remediation action that occurred """

@@ -67,7 +67,7 @@ class RuleTemplateGenerator:
     def create_source_template(self):  # pragma: no cover
         """ Generates template for rule source code """
         template = self.template_env.get_template("source/rule.py.jinja2")
-        rendered_template = template.render(rule_class_name=self.class_name)
+        rendered_template = template.render(rule_class_name=self.class_name, mode=self.mode)
         output_file = os.path.join(
             self.output_directory,
             f"source/{self.rule_name.replace('-', '_')}.py",
