@@ -59,7 +59,7 @@ class RuleDiscoverer:
         LOGGER.info("Rules discovered in CloudMitigator Github organization.")
         LOGGER.info("-------------------------------------------")
         for rule in self.discovered_rules:
-            if version:
+            if rule.version:
                 LOGGER.info(
                     "\033[4m%s\033[0m: \n\t\033[4mDescription\033[0m:"
                     " %s\n\t\033[4mLatest release\033[0m: %s\n",
