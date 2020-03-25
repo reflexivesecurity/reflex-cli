@@ -32,7 +32,9 @@ class {{ rule_class_name }}(AWSRule):
         """
         # TODO: Implement a check for determining if the resource is compliant
 
-{% if mode.lower() == "remediate" -%}
+
+{%- if mode.lower() == "remediate" %}
+
     def remediate(self):
         """
         Fix the non-compliant resource so it conforms to the rule
