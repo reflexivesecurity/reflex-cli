@@ -15,6 +15,8 @@ TEMPLATE_FOLDER = os.path.abspath(
 
 LOGGER = logging.getLogger("reflex_cli")
 
+REFLEX_PREFIX = "reflex-aws-"
+
 
 class ReflexInitializer:
     """Creates assets required to build a reflex deployment."""
@@ -39,10 +41,11 @@ class ReflexInitializer:
 
     @staticmethod
     def strip_rule_common_names(rule_array):
+        """Takes in array of rules and strips out common repo prefix."""
         stripped_array = []
         for rule in rule_array:
             rule_key = list(rule.keys())[0]
-            stripped_key = rule_key.replace("reflex-aws-", "")
+            stripped_key = rule_key.replace(REFLEX_PREFIX, "")
             new_rule = {stripped_key: rule[rule_key]}
             stripped_array.append(new_rule)
         return stripped_array
