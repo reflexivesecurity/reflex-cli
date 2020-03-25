@@ -31,7 +31,7 @@ class ConfigParser:
     def create_rule_list(self):
         """Creates rule objects in a list for further ingestion."""
         rule_object_array = []
-        for rule in self.raw_configuration["rules"]:
+        for rule in self.raw_configuration["rules"]["aws"]:
             rule_name = list(rule)[0]
             new_rule = Rule(rule_name, rule[rule_name])
             rule_object_array.append(new_rule)

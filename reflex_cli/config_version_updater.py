@@ -41,14 +41,14 @@ class ConfigVersionUpdater:
         return remote_versions
 
     def _find_rule_value(self, rule_name, key):
-        for rule in self.current_config.raw_configuration["rules"]:
+        for rule in self.current_config.raw_configuration["rules"]["aws"]:
             if rule.get(rule_name):
                 return rule.get(rule_name).get(key)
         return None
 
     def _set_rule_value(self, rule_name, key, value):
         """Overwrites existing key with value."""
-        for rule in self.current_config.raw_configuration["rules"]:
+        for rule in self.current_config.raw_configuration["rules"]["aws"]:
             if rule.get(rule_name):
                 rule[rule_name][key] = value
 

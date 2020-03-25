@@ -6,14 +6,15 @@ providers:
   - aws
 
 rules:
-  - aws-detect-root-user-activity:
-      version: v0.0.1
-  - aws-detect-deactivate-mfa:
-      version: v0.0.1
-      email: "john.smith@example.com"
-  - aws-enforce-no-public-ami:
-      version: v0.0.1
-  - aws-enforce-s3-encryption:
-      version: v0.0.1
-  - aws-detect-pants-on-fire:
-      url: "github.com/example/pants-on-fire"
+  aws:
+    - aws-detect-root-user-activity:
+        version: v0.0.1
+    - aws-detect-deactivate-mfa:
+        version: v0.0.1
+        email: "john.smith@example.com"
+    - aws-enforce-no-public-ami:
+        version: v0.0.1
+    - aws-enforce-s3-encryption:
+        version: v0.0.1
+    - aws-detect-pants-on-fire:
+        url: "github.com/example/pants-on-fire"

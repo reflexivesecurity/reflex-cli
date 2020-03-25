@@ -71,7 +71,7 @@ class TemplateGenerator:
 
     def create_rule_templates(self):
         """Creates tf file for each rule"""
-        for rule in self.configuration["rules"]:
+        for rule in self.configuration["rules"]["aws"]:
             rendered_template = self.generate_template("aws-rule.tf", rule)
             if rendered_template:
                 self.build_output_file(rule, rendered_template)
@@ -82,10 +82,14 @@ class TemplateGenerator:
         rule_name = list(rule)[0]
 
         github_org = rule[rule_name].get("github_org", DEFAULT_GITHUB_ORG)
+        if github_org == DEFAULT_GITHUB_ORG:
+            repo_name = f"reflex-aws-{rule_name}"
+        else:
+            repo_name = rule_name
 
         rendered_template = template.render(
             module_name=rule_name,
-            template_name=rule_name,
+            template_name=repo_name,
             version=rule[rule_name]["version"],
             github_org=github_org,
             configuration=rule[rule_name].get("configuration"),
