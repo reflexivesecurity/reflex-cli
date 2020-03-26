@@ -15,6 +15,8 @@ TEMPLATE_FOLDER = os.path.abspath(
 
 LOGGER = logging.getLogger("reflex_cli")
 
+REFLEX_PREFIX = "reflex-aws-"
+
 
 class ReflexInitializer:
     """Creates assets required to build a reflex deployment."""
@@ -32,9 +34,21 @@ class ReflexInitializer:
     def query_possible_rules(self):
         """Iterates over templates and gets confirmation per rule."""
         discovered_rules = self.rule_discoverer.collect_rules()
-        possible_rules = self.user_input.get_rule_input(discovered_rules)
-        LOGGER.debug("Rules selected for config: %s", possible_rules)
+        raw_rules = self.user_input.get_rule_input(discovered_rules)
+        LOGGER.debug("Rules selected for config: %s", raw_rules)
+        possible_rules = self.strip_rule_common_names(raw_rules)
         return possible_rules
+
+    @staticmethod
+    def strip_rule_common_names(rule_array):
+        """Takes in array of rules and strips out common repo prefix."""
+        stripped_array = []
+        for rule in rule_array:
+            rule_key = list(rule.keys())[0]
+            stripped_key = rule_key.replace(REFLEX_PREFIX, "")
+            new_rule = {stripped_key: rule[rule_key]}
+            stripped_array.append(new_rule)
+        return stripped_array
 
     @staticmethod
     def get_reflex_version():
@@ -75,7 +89,7 @@ class ReflexInitializer:
         )
         globals_dump = yaml.dump({"globals": self.configs["globals"]})
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
-        rules_dump = yaml.dump({"rules": self.configs["rules"]})
+        rules_dump = yaml.dump({"rules": {"aws": self.configs["rules"]}})
         backend_dump = yaml.dump({"backend": self.configs["backend"]})
 
         template = self.template_env.get_template("reflex.yaml.jinja2")

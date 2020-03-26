@@ -37,6 +37,23 @@ class ReflexInitializerTestCase(unittest.TestCase):
         pkg_mock.require.return_value = [version_mock]
         self.assertTrue(test_object.get_reflex_version() == "4.3.21")
 
+    def test_strip_rule_common_names(self):
+        example_rule_array = [
+            {"reflex-aws-test": {"example": "example1"}},
+            {"reflex-aws-example": "value"},
+            {"non-reflex": "value"},
+        ]
+        desired_rule_array = [
+            {"test": {"example": "example1"}},
+            {"example": "value"},
+            {"non-reflex": "value"},
+        ]
+        processed_array = self.initializer.strip_rule_common_names(
+            example_rule_array
+        )
+        self.assertNotEqual(example_rule_array, processed_array)
+        self.assertEqual(processed_array, desired_rule_array)
+
     @patch("reflex_cli.reflex_initializer.UserInput.collect_default_email")
     def test_set_global_values(self, input_mock):
         input_mock.return_value = "example@example.com"
