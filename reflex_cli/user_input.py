@@ -39,6 +39,9 @@ class UserInput:
                 if rule.configurables:
                     configurable_array = []
                     for config in rule.configurables:
+                        LOGGER.debug(
+                            "Adding element %s to config array.", config
+                        )
                         configurable_array.append(config)
                     possible_rules.append(
                         {
