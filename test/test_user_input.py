@@ -60,8 +60,25 @@ class UserInputTestCase(unittest.TestCase):
         test3.configurables = ["mode"]
 
         self.assertEqual(
-            [{"first": {"version": "example", "configuration": ["mode"]}}],
+            [{"first": {"version": "example", "configuration": {"mode": ""}}}],
             self.user_input.get_rule_input([test3]),
+        )
+
+        test4 = MagicMock()
+        test4.name = "first"
+        test4.version = "example"
+        test4.configurables = [{"mode": "detect"}]
+
+        self.assertEqual(
+            [
+                {
+                    "first": {
+                        "version": "example",
+                        "configuration": {"mode": "detect"},
+                    }
+                }
+            ],
+            self.user_input.get_rule_input([test4]),
         )
 
     @patch("reflex_cli.user_input.UserInput.get_input")
