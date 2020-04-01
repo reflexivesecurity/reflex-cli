@@ -101,7 +101,7 @@ class UserInputTestCase(unittest.TestCase):
     def test_get_region(self, input_mock):
         """Test our logic for rules is correct"""
         input_mock.return_value = "us-east-1"
-        all_input = UserInput(True)
+        all_input = UserInput(False)
         self.assertIsNone(all_input.get_region())
         self.assertEqual("us-east-1", self.user_input.get_region())
 
