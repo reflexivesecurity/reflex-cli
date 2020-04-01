@@ -21,8 +21,8 @@ REFLEX_PREFIX = "reflex-aws-"
 class ReflexInitializer:
     """Creates assets required to build a reflex deployment."""
 
-    def __init__(self, select_all, config_file):
-        self.user_input = UserInput(select_all)
+    def __init__(self, interactive, config_file):
+        self.user_input = UserInput(interactive)
         self.configs = {}
         self.config_file = config_file
         self.rule_discoverer = RuleDiscoverer()
