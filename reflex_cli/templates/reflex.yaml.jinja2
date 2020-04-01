@@ -1,12 +1,29 @@
 ---
+# Reflex CLI version
+
 {{ version | safe }}
+
+# Reflex engine version
 
 {{ engine | safe }}
 
+# Values for common configurations across reflex
+
 {{ global_configs | safe }}
+
+# Terraform backend configuration (optional)
+# Example format:
+# backend:
+#   s3:
+#   - bucket: terraform-bucket
+#   - key: test-reflex-state
 
 {{ backend | safe }}
 
+# Terraform provider configuration
+
 {{ providers | safe }}
+
+# List of selected reflex rules
 
 {{ rules | safe }}
