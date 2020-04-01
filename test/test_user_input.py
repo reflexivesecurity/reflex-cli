@@ -9,18 +9,18 @@ class UserInputTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
 
     def setUp(self):
-        self.user_input = UserInput(False)
+        self.user_input = UserInput(True)
 
     @patch("reflex_cli.user_input.UserInput.get_input")
     def test_collect_default_email(self, input_mock):
         """Test our logic for rules is correct"""
         input_mock.return_value = "example@example.com"
-        select_all_input = UserInput(True)
+        select_all_input = UserInput(False)
         self.assertEqual(
             "placeholder@example.com", select_all_input.collect_default_email()
         )
 
-        no_select_all_input = UserInput(False)
+        no_select_all_input = UserInput(True)
         self.assertEqual(
             "example@example.com", no_select_all_input.collect_default_email()
         )
@@ -101,7 +101,7 @@ class UserInputTestCase(unittest.TestCase):
     def test_get_region(self, input_mock):
         """Test our logic for rules is correct"""
         input_mock.return_value = "us-east-1"
-        all_input = UserInput(True)
+        all_input = UserInput(False)
         self.assertIsNone(all_input.get_region())
         self.assertEqual("us-east-1", self.user_input.get_region())
 
@@ -109,6 +109,6 @@ class UserInputTestCase(unittest.TestCase):
     def test_verify_upgrade_interested(self, input_mock):
         """Test our logic for rules is correct"""
         input_mock.return_value = "Y"
-        all_input = UserInput(True)
+        all_input = UserInput(False)
         self.assertFalse(all_input.verify_upgrade_interest())
         self.assertTrue(self.user_input.verify_upgrade_interest())

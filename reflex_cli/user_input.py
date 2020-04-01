@@ -8,8 +8,8 @@ LOGGER = logging.getLogger("reflex_cli")
 class UserInput:
     """Class for handling user input."""
 
-    def __init__(self, select_all):
-        self.select_all = select_all
+    def __init__(self, interactive):
+        self.interactive = interactive
 
     @staticmethod
     def get_input(message):  # pragma: no cover
@@ -18,7 +18,7 @@ class UserInput:
 
     def collect_default_email(self):
         """Collects default email address from user."""
-        if self.select_all:
+        if not self.interactive:
             return "placeholder@example.com"
         return self.get_input("Default email:")
 
@@ -34,7 +34,7 @@ class UserInput:
         for rule in discovered_rules:
             if rule.version is None:
                 continue
-            if self.select_all or self.verify_rule(rule):
+            if not self.interactive or self.verify_rule(rule):
                 LOGGER.info("Adding %s at version %s.", rule.name, rule.version)
                 if rule.configurables:
                     configurable_dict = {}
@@ -77,7 +77,7 @@ class UserInput:
 
     def get_backend_configuration(self):  # pragma: no cover
         """Collects backend configuration information."""
-        if not self.select_all:
+        if self.interactive:
             backend_verify = self.get_input("Configure backend? (Yy/Nn): ")
             if backend_verify.lower() != "y":
                 return ""
@@ -93,13 +93,13 @@ class UserInput:
     def get_region(self):
         """Either sets region via environment variable or input."""
         region = os.environ.get("AWS_REGION")
-        if not region and not self.select_all:
+        if not region and self.interactive:
             region = self.get_input("AWS Region:")
         return region
 
     def verify_upgrade_interest(self):
         """Prompts user whether or not they want to upgrade rule."""
-        if not self.select_all:
+        if self.interactive:
             verify = self.get_input("Upgrade? (y/n):")
             return verify.lower() == "y"
         return False

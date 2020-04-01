@@ -14,11 +14,12 @@ CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
     "init", short_help="Initializes a directory with a configuration file."
 )
 @click.option(
-    "-a",
-    "--all",
-    "select_all",
+    "-i",
+    "--interactive",
+    "interactive",
     is_flag=True,
-    help="Chooses to add all possible rules to configuration.",
+    default=False,
+    help="Prompt user for decision on which individual rules to add to configuration file.",
 )
 @click.option(
     "-c",
@@ -27,10 +28,10 @@ CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
     default=CONFIG_DEFAULT,
     help="Configuration file for reflex",
 )
-def cli(select_all, config):
+def cli(interactive, config):
     """Creates a new reflex ready directory structure."""
     LOGGER.debug("Initializing reflex directory in: %s", config)
     LOGGER.info("Generating reflex.yaml config file in: %s", config)
-    initializer = ReflexInitializer(select_all, config)
+    initializer = ReflexInitializer(interactive, config)
     initializer.determine_config_values()
     initializer.write_config_file()
