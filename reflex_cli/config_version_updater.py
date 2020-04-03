@@ -15,7 +15,7 @@ class ConfigVersionUpdater:
 
     def __init__(self, config_file, select_all):
 
-        self.user_input = UserInput(select_all != True)
+        self.user_input = UserInput(not select_all)
         self.config_file = config_file
         self.current_config = ConfigParser(self.config_file)
         self.current_config.parse_valid_config()
