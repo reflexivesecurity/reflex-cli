@@ -27,8 +27,9 @@ class ConfigVersionUpdater:
         for rule in self.current_config.rule_list:
             remote_url = self._find_rule_value(rule.name, "url")
             if not remote_url:
+                cleaned_rule_name = f"reflex-aws-{rule.name}"
                 for manifest_rule in manifest_rules:
-                    if manifest_rule.name == rule.name:
+                    if manifest_rule.name == cleaned_rule_name:
                         remote_versions[rule.name] = manifest_rule.version
             else:
                 LOGGER.debug("Rule: %s has remote: %s", rule, remote_url)
@@ -76,7 +77,7 @@ class ConfigVersionUpdater:
 
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""
-        initializer = ReflexInitializer(self.config_file, False)
+        initializer = ReflexInitializer(False, self.config_file)
         initializer.config_file = self.config_file
         initializer.configs = self.current_config.raw_configuration
         initializer.write_config_file()

@@ -77,7 +77,7 @@ class ReflexInitializer:
             {"aws": {"region": self.user_input.get_region()}}
         ]
         self.configs["backend"] = self.user_input.get_backend_configuration()
-        self.configs["rules"] = self.query_possible_rules()
+        self.configs["rules"] = {"aws": self.query_possible_rules()}
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
@@ -89,7 +89,7 @@ class ReflexInitializer:
         )
         globals_dump = yaml.dump({"globals": self.configs["globals"]})
         providers_dump = yaml.dump({"providers": self.configs["providers"]})
-        rules_dump = yaml.dump({"rules": {"aws": self.configs["rules"]}})
+        rules_dump = yaml.dump({"rules": self.configs["rules"]})
         backend_dump = yaml.dump({"backend": self.configs["backend"]})
 
         template = self.template_env.get_template("reflex.yaml.jinja2")
