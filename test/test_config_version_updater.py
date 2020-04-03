@@ -41,7 +41,10 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
         rule_list_mock = MagicMock()
         rule_list_mock.name = "aws-detect-root-user-activity"
         rule_list_mock.version = "v0.0.1"
-        rule_mock.return_value = [rule_list_mock]
+        collect_rule_mock = MagicMock()
+        collect_rule_mock.name = "reflex-aws-aws-detect-root-user-activity"
+        collect_rule_mock.version = "v0.0.1"
+        rule_mock.return_value = [collect_rule_mock]
         self.test_config_updater.current_config.rule_list = [rule_list_mock]
         latest_versions = (
             self.test_config_updater.gather_latest_remote_versions()
