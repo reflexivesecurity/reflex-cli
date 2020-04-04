@@ -13,7 +13,11 @@ LOGGER = logging.getLogger("reflex_cli")
 
 @click.command("show", short_help="Shows possible reflex rules.")
 def cli():
-    """CLI entrypoint for show command."""
+    """
+    Displays the currently supported common rules provided by reflex.
+
+    Requires access to reflex's internal system manifest at manifest.cloudmitigator.com.
+    """
     discoverer = RuleDiscoverer()
     LOGGER.info("Collecting list of available rules...")
     discoverer.collect_rules()

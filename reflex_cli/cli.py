@@ -29,7 +29,13 @@ pass_environment = click.make_pass_decorator(CliEnvironment, ensure=True)
 @click.option("-v", "--verbose", is_flag=True, help="Enables verbose mode.")
 @pass_environment
 def cli(context, verbose, home):
-    """A reflex command line interface."""
+    """
+    CLI interface for building infrastructure to deploy the reflex cloud security framework.
+
+    To learn more about reflex, check out https://docs.cloudmitigator.com.
+
+    Get started by building a configuration file with `reflex init`.
+    """
     context.verbose = verbose
     if context.verbose:
         LOGGER.setLevel(logging.DEBUG)

@@ -1,4 +1,5 @@
 """Build command takes in configuration file outputs infrastructure template"""
+# pylint: disable=line-too-long
 import logging
 import os
 
@@ -30,7 +31,11 @@ LOGGER = logging.getLogger("reflex_cli")
     help="Configuration file for reflex",
 )
 def cli(output, config):
-    """CLI entrypoint for build command."""
+    """
+    Builds terraform output files for reflex infrastructure based upon input configuration file.
+
+    By default, build looks for configuration in a local reflex.yaml and outputs built infrastructure to a reflex_out directory.
+    """
     LOGGER.debug("Config file set to: %s", config)
     LOGGER.debug("Output directory set to: %s", output)
     configuration = ConfigParser(config)

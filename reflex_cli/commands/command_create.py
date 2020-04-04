@@ -16,7 +16,9 @@ DEFAULT_GITHUB_ORG = "cloudmitigator"
 @click.option(
     "-o",
     "--output",
-    type=click.Path(exists=False, dir_okay=True, file_okay=False, resolve_path=True),
+    type=click.Path(
+        exists=False, dir_okay=True, file_okay=False, resolve_path=True
+    ),
     help="Output directory for this reflex rule",
 )
 @click.option(
@@ -41,7 +43,11 @@ DEFAULT_GITHUB_ORG = "cloudmitigator"
     prompt="The mode for your rule. [DETECT | REMEDIATE]",
 )
 def cli(output, rule_name, class_name, mode):
-    """CLI entrypoint for create command."""
+    """
+    Creates a skeleton rule directory to enable the faster creation of custom reflex rules.
+
+    For further information on creating rules for reflex, check out https://docs.cloudmitigator.com.
+    """
     if output:
         output_directory = os.path.abspath(os.path.join(os.getcwd(), output))
     else:
