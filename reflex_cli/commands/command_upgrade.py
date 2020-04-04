@@ -33,7 +33,11 @@ SHORT_UPGRADE_HELP = (
     help="Chooses to upgrade all possible rules.",
 )
 def cli(select_all, config):
-    """CLI entrypoint for upgrade command."""
+    """
+    Compares a local configuration file with external version information to allow users to upgrade rule versions automatically within their configuration.
+
+    By default, configuration file name is set to be reflex.yaml.
+    """
     LOGGER.info(
         "Determining if upgrade is needed for reflex deploy at in: %s", config
     )

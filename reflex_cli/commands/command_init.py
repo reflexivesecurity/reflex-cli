@@ -29,7 +29,11 @@ CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
     help="Configuration file for reflex",
 )
 def cli(interactive, config):
-    """Creates a new reflex ready directory structure."""
+    """
+    Generates a reflex configuration yaml file to be later used to build reflex infrastructure.
+
+    Default configuration file name is reflex.yaml
+    """
     LOGGER.debug("Initializing reflex directory in: %s", config)
     LOGGER.info("Generating reflex.yaml config file in: %s", config)
     initializer = ReflexInitializer(interactive, config)
