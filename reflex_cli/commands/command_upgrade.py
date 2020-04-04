@@ -2,6 +2,7 @@
 Upgrade command evaluates a current set of templates and
 checks whether or not the deployed version could be updated.
 """
+# pylint: disable=line-too-long
 import logging
 import os
 

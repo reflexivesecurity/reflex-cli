@@ -1,4 +1,5 @@
 """Build command takes in configuration file outputs infrastructure template"""
+# pylint: disable=line-too-long
 import logging
 import os
 
