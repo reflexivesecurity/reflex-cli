@@ -107,5 +107,10 @@ class ReflexInitializer:
     def write_config_file(self):  # pragma: no cover
         """Opens config file, dumps dict as yaml."""
         LOGGER.debug("Writing config file to: %s", self.config_file)
-        with open(self.config_file, "w") as config_file:
-            config_file.write(self.render_template())
+        if os.path.exists(self.config_file):
+            write_file = self.user_input.ask_to_overwrite(self.config_file)
+        else:
+            write_file = True
+        if write_file:
+            with open(self.config_file, "w") as config_file:
+                config_file.write(self.render_template())
