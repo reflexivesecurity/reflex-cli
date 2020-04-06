@@ -49,7 +49,9 @@ def cli(rule, select_all, config):
     )
     updater = ConfigVersionUpdater(config, select_all)
     if rule:
-        updater.compare_current_rule_version(rule)
+        update_requested = updater.compare_current_rule_version(rule)
     else:
-        updater.compare_current_rule_versions()
-    updater.overwrite_reflex_config()
+        update_requested = updater.compare_current_rule_versions()
+    print(f"update requested: {update_requested}")
+    if update_requested:
+        updater.overwrite_reflex_config()

@@ -56,6 +56,7 @@ class ConfigVersionUpdater:
     def compare_current_rule_versions(self):
         """Iterates over all rules and compares rules with remote versions."""
         LOGGER.debug("Comparing current rule versions.")
+        update_requested = False
         remote_versions = self.gather_latest_remote_versions()
         for rule in self.current_config.rule_list:
             current_version = self._find_rule_value(rule.name, "version")
@@ -73,20 +74,25 @@ class ConfigVersionUpdater:
                     remote_version,
                 )
                 if self.user_input.verify_upgrade_interest():
+                    update_requested = True
                     self._set_rule_value(rule.name, "version", remote_version)
+        return update_requested
 
     def compare_current_rule_version(self, rule_name):
         """ Check single rule version and compare it to remote version."""
+        update_requested = False
+        rule_found = False
         remote_versions = self.gather_latest_remote_versions()
         for rule in self.current_config.rule_list:
             if rule.name == rule_name:
+                rule_found = True
                 current_version = self._find_rule_value(rule.name, "version")
                 remote_version = remote_versions[rule.name]
                 if not remote_version:
                     LOGGER.info(
                         "No release information for %s. Skipping!", rule.name
                     )
-                    return
+                    return update_requested
                 if current_version != remote_version:
                     LOGGER.info(
                         "%s (current version: %s) has new release: %s.",
@@ -95,17 +101,20 @@ class ConfigVersionUpdater:
                         remote_version,
                     )
                     if self.user_input.verify_upgrade_interest():
+                        update_requested = True
                         self._set_rule_value(rule.name, "version", remote_version)
-                    return
+                    return update_requested
                 LOGGER.info(
                     "%s rule does not have a new release.",
                     rule.name
                 )
-                return
-        LOGGER.info(
-            "Rule with name %s does not exist, please check the spelling.",
-            rule_name
-        )
+                return update_requested
+        if not rule_found:
+            LOGGER.info(
+                "Rule with name %s does not exist, please check the spelling.",
+                rule_name
+            )
+        return update_requested
 
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""
