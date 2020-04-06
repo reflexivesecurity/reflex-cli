@@ -75,6 +75,38 @@ class ConfigVersionUpdater:
                 if self.user_input.verify_upgrade_interest():
                     self._set_rule_value(rule.name, "version", remote_version)
 
+    def compare_current_rule_version(self, rule_name):
+        """ Check single rule version and compare it to remote version."""
+        remote_versions = self.gather_latest_remote_versions()
+        for rule in self.current_config.rule_list:
+            if rule.name == rule_name:
+                current_version = self._find_rule_value(rule.name, "version")
+                remote_version = remote_versions[rule.name]
+                if not remote_version:
+                    LOGGER.info(
+                        "No release information for %s. Skipping!", rule.name
+                    )
+                    return
+                if current_version != remote_version:
+                    LOGGER.info(
+                        "%s (current version: %s) has new release: %s.",
+                        rule.name,
+                        current_version,
+                        remote_version,
+                    )
+                    if self.user_input.verify_upgrade_interest():
+                        self._set_rule_value(rule.name, "version", remote_version)
+                    return
+                LOGGER.info(
+                    "%s rule does not have a new release.",
+                    rule.name
+                )
+                return
+        LOGGER.info(
+            "Rule with name %s does not exist, please check the spelling.",
+            rule_name
+        )
+
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""
         initializer = ReflexInitializer(False, self.config_file)
