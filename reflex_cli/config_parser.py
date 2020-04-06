@@ -1,11 +1,21 @@
 """Parses reflex config file to be used by application."""
 import logging
 
+# pylint: disable=wrong-import-order
 import yaml
 from reflex_cli.rule import Rule
+from yaml.constructor import SafeConstructor
 
 LOGGER = logging.getLogger("reflex_cli")
 REQUIRED_KEYS = ["cli_version"]
+
+
+def add_bool(self, node):
+    """Allows bools to be set as strings."""
+    return self.construct_scalar(node)
+
+
+SafeConstructor.add_constructor("tag:yaml.org,2002:bool", add_bool)
 
 
 class ConfigParser:
