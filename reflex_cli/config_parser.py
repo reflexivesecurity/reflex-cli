@@ -1,6 +1,7 @@
 """Parses reflex config file to be used by application."""
 import logging
 
+# pylint: disable=wrong-import-order
 import yaml
 from reflex_cli.rule import Rule
 from yaml.constructor import SafeConstructor
