@@ -33,7 +33,12 @@ SHORT_UPGRADE_HELP = (
     is_flag=True,
     help="Chooses to upgrade all possible rules.",
 )
-def cli(select_all, config):
+@click.option(
+    "-r",
+    "--rule",
+    help="Specify a rule that you would like to upgrade."
+)
+def cli(rule, select_all, config):
     """
     Compares a local configuration file with external version information to allow users to upgrade rule versions automatically within their configuration.
 
@@ -43,5 +48,8 @@ def cli(select_all, config):
         "Determining if upgrade is needed for reflex deploy at in: %s", config
     )
     updater = ConfigVersionUpdater(config, select_all)
-    updater.compare_current_rule_versions()
+    if rule:
+        updater.compare_current_rule_version(rule)
+    else:
+        updater.compare_current_rule_versions()
     updater.overwrite_reflex_config()
