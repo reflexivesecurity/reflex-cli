@@ -15,7 +15,7 @@ module "{{module_name}}" {
 
     {%- else %}
 
-  {{key}} = {{value}}
+  {{key}} = "{{value}}"
 
     {%- endif %}
   {%- endfor %}
