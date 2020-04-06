@@ -97,6 +97,14 @@ class UserInput:
             region = self.get_input("AWS Region:")
         return region
 
+    def ask_to_overwrite(self, file_path):
+        """Asks user whether to allow overwrite file. """
+        prompt_string = (
+            f"Configuration file found at {file_path}, overwrite? (y/n) [n]: "
+        )
+        overwrite_prompt = self.get_input(prompt_string)
+        return overwrite_prompt.lower() == "y"
+
     def verify_upgrade_interest(self):
         """Prompts user whether or not they want to upgrade rule."""
         if self.interactive:
