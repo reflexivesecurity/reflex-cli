@@ -1,5 +1,6 @@
 """Parses reflex config file to be used by application."""
 import logging
+import sys
 
 # pylint: disable=wrong-import-order
 import yaml
@@ -41,11 +42,18 @@ class ConfigParser:
     def create_rule_list(self):
         """Creates rule objects in a list for further ingestion."""
         rule_object_array = []
-        for rule in self.raw_configuration["rules"]["aws"]:
-            rule_name = list(rule)[0]
-            new_rule = Rule(rule_name, rule[rule_name])
-            rule_object_array.append(new_rule)
-        return rule_object_array
+        try:
+            for rule in self.raw_configuration["rules"]["aws"]:
+                rule_name = list(rule)[0]
+                new_rule = Rule(rule_name, rule[rule_name])
+                rule_object_array.append(new_rule)
+            return rule_object_array
+        except KeyError:
+            print(
+                "Parsing config failed: Incorrect configuration"
+                f" rule structure in {self.config_file}"
+            )
+            sys.exit(155)
 
     def parse_yaml_config(self):
         """Opens config file, parses yaml."""

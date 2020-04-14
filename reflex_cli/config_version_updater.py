@@ -102,17 +102,16 @@ class ConfigVersionUpdater:
                     )
                     if self.user_input.verify_upgrade_interest():
                         update_requested = True
-                        self._set_rule_value(rule.name, "version", remote_version)
+                        self._set_rule_value(
+                            rule.name, "version", remote_version
+                        )
                     return update_requested
-                LOGGER.info(
-                    "%s rule does not have a new release.",
-                    rule.name
-                )
+                LOGGER.info("%s rule does not have a new release.", rule.name)
                 return update_requested
         if not rule_found:
             LOGGER.info(
                 "Rule with name %s does not exist, please check the spelling.",
-                rule_name
+                rule_name,
             )
         return update_requested
 
