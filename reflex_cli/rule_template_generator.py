@@ -56,7 +56,7 @@ class RuleTemplateGenerator:
     def create_workflow_template(self):  # pragma: no cover
         """ Generates template for GitHub release file """
         template = self.template_env.get_template(
-            ".github/workflows/release.yaml"
+            ".github/workflows/release.yaml.jinja2"
         )
         rendered_template = template.render()
         output_file = os.path.join(
@@ -67,7 +67,9 @@ class RuleTemplateGenerator:
     def create_source_template(self):  # pragma: no cover
         """ Generates template for rule source code """
         template = self.template_env.get_template("source/rule.py.jinja2")
-        rendered_template = template.render(rule_class_name=self.class_name, mode=self.mode)
+        rendered_template = template.render(
+            rule_class_name=self.class_name, mode=self.mode
+        )
         output_file = os.path.join(
             self.output_directory,
             f"source/{self.rule_name.replace('-', '_')}.py",

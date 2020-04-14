@@ -29,7 +29,7 @@ jobs:
             echo ::set-env name=EGG::$(ls dist)
             echo ::set-env name=RELEASE_BODY::$(semantic release-body)
         fi
-        
+
     - name: Create Release
       if: env.VERSION_CHANGED
       id: create_release

@@ -34,9 +34,7 @@ SHORT_UPGRADE_HELP = (
     help="Chooses to upgrade all possible rules.",
 )
 @click.option(
-    "-r",
-    "--rule",
-    help="Specify a rule that you would like to upgrade."
+    "-r", "--rule", help="Specify a rule that you would like to upgrade."
 )
 def cli(rule, select_all, config):
     """

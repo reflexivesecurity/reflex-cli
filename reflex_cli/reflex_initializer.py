@@ -1,11 +1,11 @@
 """Parses reflex config file to be used by application."""
 import logging
 import os
-import yaml
-from jinja2 import Environment, PackageLoader, select_autoescape
 
 import pkg_resources
 
+import yaml
+from jinja2 import Environment, PackageLoader, select_autoescape
 from reflex_cli.rule_discoverer import RuleDiscoverer
 from reflex_cli.user_input import UserInput
 
