@@ -1,5 +1,6 @@
 """Parses reflex config file to be used by application."""
 import logging
+import sys
 
 # pylint: disable=wrong-import-order
 import yaml
@@ -7,7 +8,13 @@ from reflex_cli.rule import Rule
 from yaml.constructor import SafeConstructor
 
 LOGGER = logging.getLogger("reflex_cli")
-REQUIRED_KEYS = ["cli_version"]
+REQUIRED_KEYS = [
+    "cli_version",
+    "globals",
+    "rules",
+    "providers",
+    "engine_version",
+]
 
 
 def add_bool(self, node):
@@ -34,18 +41,26 @@ class ConfigParser:
         self.rule_list = self.create_rule_list()
         valid_config = self.validate_config(self.raw_configuration)
         if not valid_config:
-            raise SystemError(
-                f"Invalid configuration file format, config: {self.raw_configuration}"
+            print(
+                f"Invalid configuration file format found at {self.config_file}"
             )
+            sys.exit(55)
 
     def create_rule_list(self):
         """Creates rule objects in a list for further ingestion."""
         rule_object_array = []
-        for rule in self.raw_configuration["rules"]["aws"]:
-            rule_name = list(rule)[0]
-            new_rule = Rule(rule_name, rule[rule_name])
-            rule_object_array.append(new_rule)
-        return rule_object_array
+        try:
+            for rule in self.raw_configuration["rules"]["aws"]:
+                rule_name = list(rule)[0]
+                new_rule = Rule(rule_name, rule[rule_name])
+                rule_object_array.append(new_rule)
+            return rule_object_array
+        except KeyError:
+            print(
+                "Parsing config failed: Incorrect configuration"
+                f" rule structure in {self.config_file}"
+            )
+            sys.exit(55)
 
     def parse_yaml_config(self):
         """Opens config file, parses yaml."""
@@ -67,5 +82,4 @@ class ConfigParser:
             elif not config[key]:
                 LOGGER.info("Key %s has no value in reflex.yaml", key)
                 valid = False
-
         return valid

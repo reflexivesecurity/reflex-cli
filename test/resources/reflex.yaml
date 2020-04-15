@@ -1,9 +1,15 @@
 cli_version: 0.1
 
-default_notification_email: "john@example.com"
+engine_version: v0.5.7
+
+globals:
+  default_email: "john@example.com"
+
+backend: null
 
 providers:
-  - aws
+  - aws:
+      region: us-east-1
 
 rules:
   aws:
