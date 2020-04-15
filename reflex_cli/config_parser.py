@@ -8,7 +8,13 @@ from reflex_cli.rule import Rule
 from yaml.constructor import SafeConstructor
 
 LOGGER = logging.getLogger("reflex_cli")
-REQUIRED_KEYS = ["cli_version"]
+REQUIRED_KEYS = [
+    "cli_version",
+    "globals",
+    "rules",
+    "providers",
+    "engine_version",
+]
 
 
 def add_bool(self, node):
@@ -35,9 +41,10 @@ class ConfigParser:
         self.rule_list = self.create_rule_list()
         valid_config = self.validate_config(self.raw_configuration)
         if not valid_config:
-            raise SystemError(
-                f"Invalid configuration file format, config: {self.raw_configuration}"
+            print(
+                f"Invalid configuration file format found at {self.config_file}"
             )
+            sys.exit(55)
 
     def create_rule_list(self):
         """Creates rule objects in a list for further ingestion."""
@@ -53,7 +60,7 @@ class ConfigParser:
                 "Parsing config failed: Incorrect configuration"
                 f" rule structure in {self.config_file}"
             )
-            sys.exit(155)
+            sys.exit(55)
 
     def parse_yaml_config(self):
         """Opens config file, parses yaml."""
@@ -75,5 +82,4 @@ class ConfigParser:
             elif not config[key]:
                 LOGGER.info("Key %s has no value in reflex.yaml", key)
                 valid = False
-
         return valid
