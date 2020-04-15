@@ -41,8 +41,9 @@ class ConfigParser:
         self.rule_list = self.create_rule_list()
         valid_config = self.validate_config(self.raw_configuration)
         if not valid_config:
-            print(
-                f"Invalid configuration file format found at {self.config_file}"
+            LOGGER.info(
+                "Invalid configuration file format found at %s",
+                self.config_file,
             )
             sys.exit(55)
 
@@ -56,9 +57,10 @@ class ConfigParser:
                 rule_object_array.append(new_rule)
             return rule_object_array
         except KeyError:
-            print(
+            LOGGER.info(
                 "Parsing config failed: Incorrect configuration"
-                f" rule structure in {self.config_file}"
+                " rule structure in %s",
+                self.config_file,
             )
             sys.exit(55)
 
