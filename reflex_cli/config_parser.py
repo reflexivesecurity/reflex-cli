@@ -82,7 +82,7 @@ class ConfigParser:
             if key not in config_list:
                 LOGGER.info("Key %s was not found in reflex.yaml.", key)
                 valid = False
-            elif not config[key]:
+            elif not config[key] and key != "backend":
                 LOGGER.info("Key %s has no value in reflex.yaml", key)
                 valid = False
         return valid
