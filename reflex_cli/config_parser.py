@@ -13,6 +13,7 @@ REQUIRED_KEYS = [
     "globals",
     "rules",
     "providers",
+    "backend",
     "engine_version",
 ]
 
