@@ -13,6 +13,9 @@ module "{{module_name}}" {
       {%- endfor %}
   }
 
+    {%- elif value is iterable %}
+      {{key}} = {{value | safe}}
+
     {%- else %}
 
   {{key}} = "{{value}}"
