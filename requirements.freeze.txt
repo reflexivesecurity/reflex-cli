@@ -31,6 +31,6 @@ six==1.14.0
 toml==0.10.0
 typed-ast==1.4.1
 urllib3==1.25.8
-virtualenv==16.7.9
+virtualenv==20.0.19
 wrapt==1.11.2
 zipp==3.1.0
