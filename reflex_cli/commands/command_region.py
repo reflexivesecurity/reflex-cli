@@ -29,9 +29,14 @@ LOGGER = logging.getLogger("reflex_cli")
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )
-@click.option("-r", "--region", help="Region to forward to central region.")
 @click.option(
-    "-q", "--central-sqs-arn", help="SQS queue arn in central region."
+    "-r", "--region", help="Region to forward to central region.", required=True
+)
+@click.option(
+    "-q",
+    "--central-sqs-arn",
+    help="SQS queue arn in central region.",
+    required=True,
 )
 @click.option(
     "-c",
