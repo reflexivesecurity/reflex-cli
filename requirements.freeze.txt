@@ -25,7 +25,7 @@ pyhcl==0.4.0
 PyJWT==1.7.1
 pylint==2.4.4
 PyYAML==5.3.1
-regex==2020.1.8
+regex==2020.5.7
 requests==2.22.0
 six==1.14.0
 toml==0.10.0
