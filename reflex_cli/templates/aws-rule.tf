@@ -14,7 +14,7 @@ module "{{module_name}}" {
   }
 
     {%- elif value is iterable %}
-      {{key}} = {{value | safe}}
+      {{key}} = "{{value | safe}}"
 
     {%- else %}
 
