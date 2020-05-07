@@ -89,6 +89,7 @@ class TemplateGenerator:
 
         rendered_template = template.render(
             module_name=rule_name,
+            cwe_module_name=f"{rule_name}-cwe",
             template_name=repo_name,
             version=rule[rule_name]["version"],
             github_org=github_org,
