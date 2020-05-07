@@ -12,13 +12,10 @@ DEFAULT_GITHUB_ORG = "cloudmitigator"
 class RegionTemplateGenerator:
     """Generate a set of templates from a given config."""
 
-    def __init__(
-        self, configuration, output_directory, region, central_sqs_arn
-    ):
+    def __init__(self, configuration, output_directory, region):
         self.configuration = configuration
         self.output_directory = output_directory
         self.region = region
-        self.central_sqs_arn = central_sqs_arn
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates"),
             autoescape=select_autoescape(["tf"]),
@@ -66,14 +63,16 @@ class RegionTemplateGenerator:
             repo_name = f"reflex-aws-{rule_name}"
         else:
             repo_name = rule_name
-
+        name_list = [item.capitalize() for item in rule_name.split("-")]
+        camel_name = "".join(name_list)
         rendered_template = template.render(
             module_name=rule_name + self.region,
             template_name=repo_name,
             version=rule[rule_name]["version"],
             engine_version=self.configuration["engine_version"],
             github_org=github_org,
-            central_sqs_arn=self.central_sqs_arn,
+            central_region=self.configuration["providers"][0]["aws"]["region"],
+            queue_name=camel_name,
             configuration=rule[rule_name].get("configuration"),
         )
         LOGGER.debug(rendered_template)

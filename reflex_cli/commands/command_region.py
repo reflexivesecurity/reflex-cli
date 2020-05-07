@@ -30,12 +30,9 @@ LOGGER = logging.getLogger("reflex_cli")
     help="Output directory for reflex",
 )
 @click.option(
-    "-r", "--region", help="Region to forward to central region.", required=True
-)
-@click.option(
-    "-q",
-    "--central-sqs-arn",
-    help="SQS queue arn in central region.",
+    "-r",
+    "--region",
+    help="Region to deploy central forwarding infrastructure.",
     required=True,
 )
 @click.option(
@@ -45,7 +42,7 @@ LOGGER = logging.getLogger("reflex_cli")
     default=CONFIG_DEFAULT,
     help="Configuration file for reflex",
 )
-def cli(output, region, central_sqs_arn, config):
+def cli(output, region, config):
     """
     Builds terraform output for multi-region support of reflex in AWS.
 
@@ -58,7 +55,7 @@ def cli(output, region, central_sqs_arn, config):
     if output == OUTPUT_DEFAULT:
         output = OUTPUT_DEFAULT + "_" + region.replace("-", "_")
     generator = RegionTemplateGenerator(
-        configuration.raw_configuration, output, region, central_sqs_arn
+        configuration.raw_configuration, output, region
     )
     LOGGER.info("Creating Terraform files...")
     generator.create_templates()

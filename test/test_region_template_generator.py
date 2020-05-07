@@ -8,7 +8,7 @@ EXAMPLE_CONFIG = {
     "version": 0.1,
     "engine_version": "0.2.55",
     "globals": {"default_email": "john@example.com"},
-    "providers": ["aws"],
+    "providers": [{"aws": {"region": "us-east-1"}}],
     "rules": [
         "aws-detect-root-user-activity",
         {"aws-detect-deactivate-mfa": {"email": "john.smith@example.com"}},
@@ -26,7 +26,7 @@ class TemplateGeneratorTestCase(unittest.TestCase):
 
     def setUp(self):
         self.generator = RegionTemplateGenerator(
-            EXAMPLE_CONFIG, OUTPUT_DIRECTORY, "us-east-2", "arn:aws:sqs:test"
+            EXAMPLE_CONFIG, OUTPUT_DIRECTORY, "us-east-2"
         )
 
     def test_generate_template(self):
