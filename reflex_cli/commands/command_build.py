@@ -6,8 +6,10 @@ import os
 import click
 
 from reflex_cli.config_parser import ConfigParser
+from reflex_cli.region_template_generator import RegionTemplateGenerator
 from reflex_cli.template_generator import TemplateGenerator
 
+REGION_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_region"))
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 LOGGER = logging.getLogger("reflex_cli")
@@ -43,3 +45,12 @@ def cli(output, config):
     generator = TemplateGenerator(configuration.raw_configuration, output)
     LOGGER.info("Creating Terraform files...")
     generator.create_templates()
+    aws_provider = configuration.raw_configuration["providers"][0]["aws"]
+    if aws_provider.get("forwarding_regions"):
+        for region in aws_provider.get("forwarding_regions"):
+            output_file = REGION_DEFAULT + "_" + region.replace("-", "_")
+            generator = RegionTemplateGenerator(
+                configuration.raw_configuration, output_file, region
+            )
+            LOGGER.info("Creating Terraform files...")
+            generator.create_templates()
