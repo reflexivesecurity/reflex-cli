@@ -98,9 +98,11 @@ class UserInputTestCase(unittest.TestCase):
         self.assertEqual(backend_config, {"y": [{"bucket": "s3-bucket"}]})
 
     @patch("reflex_cli.user_input.UserInput.get_input")
-    def test_get_region(self, input_mock):
+    @patch("os.environ.get")
+    def test_get_region(self, environment_variables, input_mock):
         """Test our logic for rules is correct"""
         input_mock.return_value = "us-east-1"
+        environment_variables.return_value = None
         all_input = UserInput(False)
         self.assertIsNone(all_input.get_region())
         self.assertEqual("us-east-1", self.user_input.get_region())
