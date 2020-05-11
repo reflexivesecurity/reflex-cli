@@ -1,5 +1,11 @@
+module "{{cwe_module_name}}" {
+  source            = "git::https://github.com/{{github_org}}/{{template_name}}.git//terraform/cwe?ref={{version}}"
+}
+
 module "{{module_name}}" {
-  source            = "git::https://github.com/{{github_org}}/{{template_name}}.git?ref={{version}}"
+  source            = "git::https://github.com/{{github_org}}/{{template_name}}.git//terraform/sqs_lambda?ref={{version}}"
+  cloudwatch_event_rule_id = module.{{cwe_module_name}}.id
+  cloudwatch_event_rule_arn = module.{{cwe_module_name}}.arn
   sns_topic_arn     = module.central-sns-topic.arn
   reflex_kms_key_id = module.reflex-kms-key.key_id
 
@@ -14,7 +20,7 @@ module "{{module_name}}" {
   }
 
     {%- elif value is iterable %}
-      {{key}} = {{value | safe}}
+      {{key}} = "{{value | safe}}"
 
     {%- else %}
 
