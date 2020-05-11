@@ -8,7 +8,7 @@ cfgv==2.0.1
 chardet==3.0.4
 Click==7.0
 coverage==5.1
-Deprecated==1.2.7
+Deprecated==1.2.9
 identify==1.4.15
 distlib==0.3.0
 filelock==3.0.12
