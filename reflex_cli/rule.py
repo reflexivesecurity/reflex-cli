@@ -1,6 +1,11 @@
 """Properties for our Rule object in the CLI."""
 
-DEFAULT_VARIABLES = ["sns_topic_arn", "reflex_kms_key_id"]
+DEFAULT_VARIABLES = [
+    "sns_topic_arn",
+    "reflex_kms_key_id",
+    "cloudwatch_event_rule_id",
+    "cloudwatch_event_rule_arn",
+]
 
 
 class Rule:
