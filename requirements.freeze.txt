@@ -33,7 +33,7 @@ PyYAML==5.3.1
 regex==2020.1.8
 requests==2.23.0
 six==1.14.0
-toml==0.10.0
+toml==0.10.1
 typed-ast==1.4.1
 urllib3==1.25.8
 virtualenv==20.0.19
