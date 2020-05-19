@@ -7,7 +7,14 @@ setup(
     version=f"{os.environ['VERSION']}",
     packages=["reflex_cli", "reflex_cli.commands"],
     include_package_data=True,
-    install_requires=["click", "jinja2", "pyyaml", "pygithub"],
+    install_requires=[
+        "click",
+        "jinja2",
+        "pyyaml",
+        "requests",
+        "pyhcl",
+        "pyinquirer",
+    ],
     entry_points="""
         [console_scripts]
         reflex=reflex_cli.cli:cli
