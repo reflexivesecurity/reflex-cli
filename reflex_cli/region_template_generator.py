@@ -66,7 +66,7 @@ class RegionTemplateGenerator:
         name_list = [item.capitalize() for item in rule_name.split("-")]
         camel_name = "".join(name_list)
         rendered_template = template.render(
-            module_name=rule_name + self.region,
+            module_name=f"{rule_name}-{self.region}",
             template_name=repo_name,
             version=rule[rule_name]["version"],
             engine_version=self.configuration["engine_version"],
