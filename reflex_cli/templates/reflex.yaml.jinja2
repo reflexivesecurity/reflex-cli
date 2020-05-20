@@ -16,14 +16,29 @@
 # backend:
 #   s3:
 #   - bucket: terraform-bucket
-#   - key: test-reflex-state
+#   - key: reflex-state
 
 {{ backend | safe }}
 
 # Terraform provider configuration
+# Example format
+# providers:
+# - aws:
+#    region: us-east-1
+#    forwarding_regions:
+#      - us-east-2
+#      - eu-west-1
 
 {{ providers | safe }}
 
 # List of selected reflex rules
+# Example format
+# rules:
+#   aws:
+#   - s3-bucket-not-encrypted:
+#       configuration:
+#         mode: detect
+#       version: v0.6.0
 
 {{ rules | safe }}
+
