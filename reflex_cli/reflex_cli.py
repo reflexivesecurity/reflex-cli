@@ -1,6 +1,7 @@
 """Entrypoint class for accumulating subcommands by project structure."""
 # pylint: disable=arguments-differ
 # pylint: disable=unused-argument,inconsistent-return-statements
+import logging
 import os
 
 import click
@@ -36,5 +37,6 @@ class ReflexCli(click.MultiCommand):
                 f"reflex_cli.commands.command_{name}", None, None, ["cli"]
             )
         except ImportError:
-            return
+            logging.error("Failed to import reflex_cli.commands.command_%s", name)
+            raise
         return mod.cli
