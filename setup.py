@@ -14,6 +14,7 @@ setup(
         "requests",
         "pyhcl",
         "pyinquirer",
+        "pygithub",
     ],
     entry_points="""
         [console_scripts]
