@@ -76,12 +76,3 @@ jobs:
           body: ${{ env.RELEASE_BODY }}
           draft: false
           prerelease: false
-      - name: Build and publish
-        if: env.VERSION_CHANGED
-        env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |
-          export VERSION=${{ env.VERSION }}
-          python setup.py sdist bdist_wheel
-          twine upload dist/*
