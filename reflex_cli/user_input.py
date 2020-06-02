@@ -2,6 +2,8 @@
 import logging
 import os
 
+from PyInquirer import prompt
+
 LOGGER = logging.getLogger("reflex_cli")
 
 
@@ -99,11 +101,16 @@ class UserInput:
 
     def ask_to_overwrite(self, file_path):
         """Asks user whether to allow overwrite file. """
-        prompt_string = (
-            f"Configuration file found at {file_path}, overwrite? (y/n) [n]: "
-        )
-        overwrite_prompt = self.get_input(prompt_string)
-        return overwrite_prompt.lower() == "y"
+        configuration_overwrite = [
+            {
+                "type": "confirm",
+                "message": f"Configuration file found at {file_path}, overwrite?",
+                "name": "overwrite_configuration",
+                "default": False,
+            }
+        ]
+        overwrite = prompt(configuration_overwrite)
+        return overwrite["overwrite_configuration"]
 
     def verify_upgrade_interest(self):
         """Prompts user whether or not they want to upgrade rule."""
