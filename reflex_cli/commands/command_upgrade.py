@@ -16,6 +16,8 @@ CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 SHORT_UPGRADE_HELP = (
     "Evaluates existing reflex deployment for possible upgrades."
 )
+BOLD = "\033[1m"
+ENDC = "\033[0m"
 
 
 @click.command("upgrade", short_help=SHORT_UPGRADE_HELP)
@@ -43,7 +45,10 @@ def cli(rule, select_all, config):
     By default, configuration file name is set to be reflex.yaml.
     """
     LOGGER.info(
-        "Determining if upgrade is needed for reflex deploy at in: %s", config
+        "%s⏫ Determining if upgrade is needed for reflex deploy at in: %s%s",
+        BOLD,
+        config,
+        ENDC,
     )
     updater = ConfigVersionUpdater(config, select_all)
     if rule:

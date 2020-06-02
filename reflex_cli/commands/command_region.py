@@ -14,6 +14,8 @@ from reflex_cli.region_template_generator import RegionTemplateGenerator
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_region"))
 LOGGER = logging.getLogger("reflex_cli")
+BOLD = "\033[1m"
+ENDC = "\033[0m"
 
 
 @click.command(
@@ -57,5 +59,10 @@ def cli(output, region, config):
     generator = RegionTemplateGenerator(
         configuration.raw_configuration, output, region
     )
-    LOGGER.info("Creating Terraform files...")
+    LOGGER.info(
+        "✍  %s Writing regional terraform files for %s ... %s",
+        BOLD,
+        region,
+        ENDC,
+    )
     generator.create_templates()

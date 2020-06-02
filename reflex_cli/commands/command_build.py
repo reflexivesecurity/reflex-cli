@@ -15,6 +15,8 @@ CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 LOGGER = logging.getLogger("reflex_cli")
 PLACEHOLDER_EMAIL = "placeholder@example.com"
+BOLD = "\033[1m"
+ENDC = "\033[0m"
 
 
 @click.command("build", short_help="Builds out tf files from config file.")
@@ -68,7 +70,7 @@ def cli(output, config):
             email = prompt(email_form)["default_email"]
             configuration.raw_configuration["globals"]["default_email"] = email
     generator = TemplateGenerator(configuration.raw_configuration, output)
-    LOGGER.info("Creating Terraform files...")
+    LOGGER.info("✍  %s Writing terraform output files ...%s", BOLD, ENDC)
     generator.create_templates()
     aws_provider = configuration.raw_configuration["providers"][0]["aws"]
     if aws_provider.get("forwarding_regions"):
@@ -77,5 +79,7 @@ def cli(output, config):
             generator = RegionTemplateGenerator(
                 configuration.raw_configuration, output_file, region
             )
-            LOGGER.info("Creating Terraform files...")
+            LOGGER.info(
+                "✍  %s Writing terraform output files ...%s", BOLD, ENDC
+            )
             generator.create_templates()

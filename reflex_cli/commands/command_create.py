@@ -10,6 +10,8 @@ from reflex_cli.rule_template_generator import RuleTemplateGenerator
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_GITHUB_ORG = "cloudmitigator"
+BOLD = "\033[1m"
+ENDC = "\033[0m"
 
 
 @click.command("create", short_help="Create a new reflex rule.")
@@ -61,5 +63,5 @@ def cli(output, rule_name, class_name, mode):
         class_name=class_name,
         mode=mode,
     )
-    LOGGER.info("Generating rule files...")
+    LOGGER.info("%s🎨 Generating custom rule template files...%s", BOLD, ENDC)
     template_generator.create_templates()

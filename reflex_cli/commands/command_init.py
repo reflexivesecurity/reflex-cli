@@ -8,6 +8,8 @@ from reflex_cli.reflex_initializer import ReflexInitializer
 
 LOGGER = logging.getLogger("reflex_cli")
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
+BOLD = "\033[1m"
+ENDC = "\033[0m"
 
 
 @click.command(
@@ -35,7 +37,9 @@ def cli(interactive, config):
     Default configuration file name is reflex.yaml
     """
     LOGGER.debug("Initializing reflex directory in: %s", config)
-    LOGGER.info("Generating reflex.yaml config file in: %s", config)
+    LOGGER.info(
+        "%s📝 Generating reflex.yaml config file in: %s%s", BOLD, config, ENDC
+    )
     initializer = ReflexInitializer(interactive, config)
     initializer.determine_config_values()
     initializer.write_config_file()

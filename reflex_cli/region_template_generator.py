@@ -7,6 +7,8 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 
 LOGGER = logging.getLogger("reflex_cli")
 DEFAULT_GITHUB_ORG = "cloudmitigator"
+BOLD = "\033[1m"
+ENDC = "\033[0m"
 
 
 class RegionTemplateGenerator:
@@ -94,7 +96,9 @@ class RegionTemplateGenerator:
     ):  # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
-        LOGGER.info("Creating %s", output_file)
+        LOGGER.info(
+            "📃 Writing terraform file to: %s%s%s", BOLD, output_file, ENDC
+        )
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
 

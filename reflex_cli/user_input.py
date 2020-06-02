@@ -5,6 +5,14 @@ import os
 from PyInquirer import prompt
 
 LOGGER = logging.getLogger("reflex_cli")
+HEADER = "\033[95m"
+OKBLUE = "\033[94m"
+OKGREEN = "\033[92m"
+WARNING = "\033[93m"
+FAIL = "\033[91m"
+ENDC = "\033[0m"
+BOLD = "\033[1m"
+UNDERLINE = "\033[4m"
 
 
 class UserInput:
@@ -37,7 +45,16 @@ class UserInput:
             if rule.version is None:
                 continue
             if not self.interactive or self.verify_rule(rule):
-                LOGGER.info("Adding %s at version %s.", rule.name, rule.version)
+                LOGGER.info(
+                    "✅ Adding %s%s%s%s at version %s%s%s",
+                    OKGREEN,
+                    BOLD,
+                    rule.name,
+                    ENDC,
+                    OKBLUE,
+                    rule.version,
+                    ENDC,
+                )
                 if rule.configurables:
                     configurable_dict = {}
                     for config in rule.configurables:
@@ -99,7 +116,8 @@ class UserInput:
             region = self.get_input("AWS Region:")
         return region
 
-    def ask_to_overwrite(self, file_path):
+    @staticmethod
+    def ask_to_overwrite(file_path):
         """Asks user whether to allow overwrite file. """
         configuration_overwrite = [
             {

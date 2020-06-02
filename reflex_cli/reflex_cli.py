@@ -37,6 +37,8 @@ class ReflexCli(click.MultiCommand):
                 f"reflex_cli.commands.command_{name}", None, None, ["cli"]
             )
         except ImportError:
-            logging.error("Failed to import reflex_cli.commands.command_%s", name)
+            logging.error(
+                "Failed to import reflex_cli.commands.command_%s", name
+            )
             raise
         return mod.cli
