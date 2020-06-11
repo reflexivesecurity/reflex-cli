@@ -36,7 +36,9 @@ class RuleTemplateGenerator:
         self.create_gitignore_template()
         self.create_license_template()
         self.create_readme_template()
-        self.create_rule_terraform_template()
+        self.create_cwe_terraform_template()
+        self.create_cwe_output_template()
+        self.create_sqs_lambda_terraform_template()
         self.create_variables_terraform_template()
 
     def create_directories(self):  # pragma: no cover
@@ -108,10 +110,31 @@ class RuleTemplateGenerator:
         output_file = os.path.join(self.output_directory, "README.md")
         self.write_template_file(output_file, rendered_template)
 
-    def create_rule_terraform_template(self):  # pragma: no cover
+    def create_cwe_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
         engine_version = self.get_engine_version()
-        template = self.template_env.get_template("rule_module.tf")
+        template = self.template_env.get_template("cwe.tf")
+        rendered_template = template.render(
+            rule_class_name=self.class_name, engine_version=engine_version
+        )
+        output_file = os.path.join(
+            self.output_directory, "terraform/cwe/cwe.tf"
+        )
+        self.write_template_file(output_file, rendered_template)
+
+    def create_cwe_output_template(self):  # pragma: no cover
+        """ Generates a .tf module for our rule """
+        template = self.template_env.get_template("output.tf")
+        rendered_template = template.render()
+        output_file = os.path.join(
+            self.output_directory, "terraform/cwe/output.tf"
+        )
+        self.write_template_file(output_file, rendered_template)
+
+    def create_sqs_lambda_terraform_template(self):  # pragma: no cover
+        """ Generates a .tf module for our rule """
+        engine_version = self.get_engine_version()
+        template = self.template_env.get_template("sqs_lambda.tf")
         rendered_template = template.render(
             rule_name=self.rule_name,
             rule_class_name=self.class_name,
@@ -119,7 +142,7 @@ class RuleTemplateGenerator:
             engine_version=engine_version,
         )
         output_file = os.path.join(
-            self.output_directory, f"{self.rule_name.replace('-', '_')}.tf"
+            self.output_directory, "terraform/sqs_lambda/sqs_lambda.tf"
         )
         self.write_template_file(output_file, rendered_template)
 
@@ -127,7 +150,9 @@ class RuleTemplateGenerator:
         """Creates tf output for every file in our template."""
         template = self.template_env.get_template("variables.tf")
         rendered_template = template.render(mode=self.mode)
-        output_file = os.path.join(self.output_directory, "variables.tf")
+        output_file = os.path.join(
+            self.output_directory, "terraform/sqs_lambda/variables.tf"
+        )
         self.write_template_file(output_file, rendered_template)
 
     def write_template_file(
@@ -149,3 +174,12 @@ class RuleTemplateGenerator:
     def _ensure_output_directory_exists(self):  # pragma: no cover
         """Ensure that the path to the output directory exists."""
         Path(self.output_directory).mkdir(parents=True, exist_ok=True)
+        Path(self.output_directory + "/terraform").mkdir(
+            parents=True, exist_ok=True
+        )
+        Path(self.output_directory + "/terraform/cwe").mkdir(
+            parents=True, exist_ok=True
+        )
+        Path(self.output_directory + "/terraform/sqs_lambda").mkdir(
+            parents=True, exist_ok=True
+        )

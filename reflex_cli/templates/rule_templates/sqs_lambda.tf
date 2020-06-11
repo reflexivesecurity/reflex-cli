@@ -1,14 +1,9 @@
-module "{{ rule_name.replace('-','_') }}" {
-  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref={{ engine_version }}"
-  rule_name        = "{{ rule_class_name }}"
-  rule_description = "TODO: Provide rule description"
-
-  event_pattern = <<PATTERN
-# TODO: Provide event pattern
-PATTERN
-
+module "sqs_lambda" {
+  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/sqs_lambda?ref={{ engine_version }}"
+  cloudwatch_event_rule_id  = var.cloudwatch_event_rule_id
+  cloudwatch_event_rule_arn = var.cloudwatch_event_rule_arn
   function_name   = "{{ rule_class_name }}"
-  source_code_dir = "${path.module}/source"
+  source_code_dir = "${path.module}/../../source"
   handler         = "{{ rule_name.replace('-','_') }}.lambda_handler"
   lambda_runtime  = "python3.7"
   environment_variable_map = {

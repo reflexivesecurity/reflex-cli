@@ -8,6 +8,16 @@ variable "reflex_kms_key_id" {
   type        = string
 }
 
+variable "cloudwatch_event_rule_id" {
+  description = "Easy name of CWE"
+  type        = string
+}
+
+variable "cloudwatch_event_rule_arn" {
+  description = "Full arn of CWE"
+  type        = string
+}
+
 {% if mode.lower() == "remediate" -%}
 variable "mode" {
   description = "The mode that the Rule will operate in. Valid choices: DETECT | REMEDIATE"
