@@ -21,7 +21,6 @@ jobs:
           echo ::set-env name=VERSION::$(semantic version)
           echo ::set-env name=EGG::$(ls dist)
       - name: Build and publish
-        if: env.VERSION_CHANGED
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
