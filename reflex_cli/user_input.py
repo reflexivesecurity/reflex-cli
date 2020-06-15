@@ -133,6 +133,14 @@ class UserInput:
     def verify_upgrade_interest(self):
         """Prompts user whether or not they want to upgrade rule."""
         if self.interactive:
-            verify = self.get_input("Upgrade? (y/n):")
-            return verify.lower() == "y"
-        return False
+            upgrade_interest = [
+                {
+                    "type": "confirm",
+                    "message": "Upgrade?",
+                    "name": "upgrade_interest",
+                    "default": False,
+                }
+            ]
+            verify = prompt(upgrade_interest)
+            return verify["upgrade_interest"]
+        return True
