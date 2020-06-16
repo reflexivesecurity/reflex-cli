@@ -1,4 +1,5 @@
 """Holder of template generation logic"""
+import copy
 import logging
 import os
 from pathlib import Path
@@ -28,6 +29,7 @@ class RegionTemplateGenerator:
         self.create_reflex_kms_template()
         self.create_provider_templates()
         self.create_region_rule_templates()
+        self.create_backend_template()
 
     def create_reflex_kms_template(self):  # pragma: no cover
         """Generates template for central sns topic infrastructure."""
@@ -54,6 +56,26 @@ class RegionTemplateGenerator:
             )
             if rendered_template:
                 self.build_output_file(rule, rendered_template)
+
+    def create_backend_template(self):
+        """Creates tf file for the Terraform backend"""
+        if self.configuration["backend"]:
+            backend_type = list(self.configuration["backend"])[0]
+            if backend_type != "s3":
+                return
+            template = self.template_env.get_template("backend.tf")
+            config_copy = copy.deepcopy(self.configuration)
+            for config in config_copy["backend"][backend_type]:
+                for key, _ in config.items():
+                    if key == "key":
+                        config[key] += f"-{self.region}"
+            rendered_template = template.render(
+                backend_type=backend_type,
+                backend_config_array=config_copy["backend"][
+                    backend_type
+                ],
+            )
+            self.build_output_file(["backend"], rendered_template)
 
     def generate_template(self, template_name, rule):  # pragma: no cover
         """Creates tf output for every file in our template."""
