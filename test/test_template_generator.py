@@ -8,6 +8,7 @@ EXAMPLE_CONFIG = {
     "version": 0.1,
     "globals": {"default_email": "john@example.com"},
     "providers": ["aws"],
+    "backend": None,
     "rules": [
         "aws-detect-root-user-activity",
         {"aws-detect-deactivate-mfa": {"email": "john.smith@example.com"}},
@@ -38,6 +39,9 @@ class TemplateGeneratorTestCase(unittest.TestCase):
             ),
             "Example",
         )
+
+    def test_create_backend_template_returns_none_no_backend(self):
+        assert self.generator.create_backend_template() is None
 
     @patch(
         "reflex_cli.template_generator.TemplateGenerator.write_template_file"
