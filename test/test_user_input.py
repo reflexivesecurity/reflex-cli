@@ -108,9 +108,9 @@ class UserInputTestCase(unittest.TestCase):
         self.assertEqual("us-east-1", self.user_input.get_region())
 
     @patch("reflex_cli.user_input.UserInput.get_input")
-    def test_verify_upgrade_interested(self, input_mock):
+    @patch("reflex_cli.user_input.UserInput.ask_to_overwrite")
+    def test_verify_upgrade_interested(self, overwrite_mock, input_mock):
         """Test our logic for rules is correct"""
-        input_mock.return_value = "Y"
+        overwrite_mock.return_value = True
         all_input = UserInput(False)
-        self.assertFalse(all_input.verify_upgrade_interest())
-        self.assertTrue(self.user_input.verify_upgrade_interest())
+        self.assertTrue(all_input.verify_upgrade_interest())

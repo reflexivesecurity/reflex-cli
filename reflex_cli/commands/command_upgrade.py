@@ -55,5 +55,6 @@ def cli(rule, select_all, config):
         update_requested = updater.compare_current_rule_version(rule)
     else:
         update_requested = updater.compare_current_rule_versions()
+        updater.upgrade_engine_version()
     if update_requested:
         updater.overwrite_reflex_config()

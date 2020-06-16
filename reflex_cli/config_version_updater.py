@@ -41,6 +41,12 @@ class ConfigVersionUpdater:
             )
         return remote_versions
 
+    def upgrade_engine_version(self):
+        """Checks for the latest engine version"""
+        engine_data = RuleDiscoverer().collect_engine()
+        engine_version = engine_data["reflex-engine"]["version"]
+        self.current_config.raw_configuration["engine_version"] = engine_version
+
     def _find_rule_value(self, rule_name, key):
         for rule in self.current_config.raw_configuration["rules"]["aws"]:
             if rule.get(rule_name):
