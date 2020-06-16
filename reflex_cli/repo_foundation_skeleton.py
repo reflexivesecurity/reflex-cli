@@ -10,18 +10,17 @@ LOGGER = logging.getLogger(__name__)
 DEFAULT_GITHUB_ORG = "cloudmitigator"
 
 
-class RuleTemplateGenerator:
+class RepoFoundationSkeleton:
     """Generate a set of templates from a given config."""
 
     def __init__(
-        self, output_directory, github_org_name, rule_name, class_name, mode
+        self, output_directory, configuration
     ):  # pylint: disable=too-many-arguments
         self.output_directory = output_directory
-        self.github_org_name = github_org_name
-        self.rule_name = rule_name
-        self.class_name = class_name
-        self.engine_version = self.get_engine_version()
-        self.mode = mode
+        self.github_org_name = configuration.github_org_name
+        self.rule_name = configuration.rule_name
+        self.class_name = configuration.class_name
+        self.mode = configuration.mode
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates/rule_templates"),
             autoescape=select_autoescape(["tf"]),
@@ -35,10 +34,6 @@ class RuleTemplateGenerator:
         self.create_gitignore_template()
         self.create_license_template()
         self.create_readme_template()
-        self.create_cwe_terraform_template()
-        self.create_cwe_output_template()
-        self.create_sqs_lambda_terraform_template()
-        self.create_variables_terraform_template()
 
     def create_template(
         self, template_file, template_options, output_path
@@ -90,42 +85,6 @@ class RuleTemplateGenerator:
             "README.md",
         )
 
-    def create_cwe_terraform_template(self):  # pragma: no cover
-        """ Generates a .tf module for our rule """
-        self.create_template(
-            "cwe.tf",
-            {
-                "rule_class_name": self.class_name,
-                "engine_version": self.engine_version,
-            },
-            "terraform/cwe/cwe.tf",
-        )
-
-    def create_cwe_output_template(self):  # pragma: no cover
-        """ Generates a .tf module for our rule """
-        self.create_template("output.tf", None, "terraform/cwe/output.tf")
-
-    def create_sqs_lambda_terraform_template(self):  # pragma: no cover
-        """ Generates a .tf module for our rule """
-        self.create_template(
-            "sqs_lambda.tf",
-            {
-                "rule_name": self.rule_name,
-                "rule_class_name": self.class_name,
-                "mode": self.mode,
-                "engine_version": self.engine_version,
-            },
-            "terraform/sqs_lambda/sqs_lambda.tf",
-        )
-
-    def create_variables_terraform_template(self):  # pragma: no cover
-        """Creates tf output for every file in our template."""
-        self.create_template(
-            "variables.tf",
-            {"mode": self.mode},
-            "terraform/sqs_lambda/variables.tf",
-        )
-
     def write_template_file(
         self, output_file, rendered_template
     ):  # pragma: no cover
@@ -134,13 +93,6 @@ class RuleTemplateGenerator:
         LOGGER.info("Creating %s", output_file)
         with open(output_file, "w+") as file_handler:
             file_handler.write(rendered_template)
-
-    @staticmethod
-    def get_engine_version():
-        """ Pulls current engine version from manifest."""
-        measure_manifest = RuleDiscoverer()
-        engine_dictionary = measure_manifest.collect_engine()
-        return engine_dictionary["reflex-engine"]["version"]
 
     def _ensure_output_directory_exists(self):  # pragma: no cover
         """Ensure that the path to the output directory exists."""
