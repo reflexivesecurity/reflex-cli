@@ -7,8 +7,6 @@ import os
 import click
 
 from reflex_cli.repo_foundation_skeleton import RepoFoundationSkeleton
-from reflex_cli.rule_template_generator import RuleTemplateGenerator
-from reflex_cli.skeleton_configuration import SkeletonConfiguration
 from reflex_cli.terraform_skeleton import TerraformSkeleton
 
 LOGGER = logging.getLogger(__name__)
@@ -64,16 +62,17 @@ def cli(output, rule_name, class_name, mode, github_org):
     else:
         output_directory = os.path.abspath(os.path.join(os.getcwd(), rule_name))
 
-    skeleton_configuration = SkeletonConfiguration(
-        rule_name=rule_name,
-        class_name=class_name,
-        mode=mode,
-        github_org=github_org,
-    )
+    skeleton_configuration = {
+        "rule_name": rule_name,
+        "class_name": class_name,
+        "mode": mode,
+        "github_org": github_org
+    }
 
     foundation_generator = RepoFoundationSkeleton(
-        output_directory=output_directory, configuration=skeleton_configuration
-    )
+        output_directory=output_directory,
+        configuration=skeleton_configuration
+        )
     foundation_generator.create_templates()
 
     terraform_generator = TerraformSkeleton(

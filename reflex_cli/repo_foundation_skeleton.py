@@ -1,10 +1,9 @@
 """ Creates templates for new Reflex rules """
 import logging
 import os
-from pathlib import Path
 
 from jinja2 import Environment, PackageLoader, select_autoescape
-from reflex_cli.rule_discoverer import RuleDiscoverer
+from reflex_cli.create_template_utils import ensure_output_directory_exists, write_template_file
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_GITHUB_ORG = "cloudmitigator"
@@ -17,10 +16,10 @@ class RepoFoundationSkeleton:
         self, output_directory, configuration
     ):  # pylint: disable=too-many-arguments
         self.output_directory = output_directory
-        self.github_org_name = configuration.github_org_name
-        self.rule_name = configuration.rule_name
-        self.class_name = configuration.class_name
-        self.mode = configuration.mode
+        self.github_org_name = configuration.get("github_org")
+        self.rule_name = configuration.get("rule_name")
+        self.class_name = configuration.get("class_name")
+        self.mode = configuration.get("mode")
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates/rule_templates"),
             autoescape=select_autoescape(["tf"]),
@@ -28,6 +27,7 @@ class RepoFoundationSkeleton:
 
     def create_templates(self):  # pragma: no cover
         """ Generates templates for rule. """
+        ensure_output_directory_exists(self.output_directory)
         self.create_workflow_template()
         self.create_source_template()
         self.create_requirements_template()
@@ -42,7 +42,7 @@ class RepoFoundationSkeleton:
         template = self.template_env.get_template(template_file)
         rendered_template = template.render(template_options)
         output_file = os.path.join(self.output_directory, output_path)
-        self.write_template_file(output_file, rendered_template)
+        write_template_file(output_file, rendered_template)
 
     def create_workflow_template(self):  # pragma: no cover
         """ Generates template for GitHub release file """
@@ -83,29 +83,4 @@ class RepoFoundationSkeleton:
                 "rule_name": self.rule_name,
             },
             "README.md",
-        )
-
-    def write_template_file(
-        self, output_file, rendered_template
-    ):  # pragma: no cover
-        """Writes output of rendering to file"""
-        self._ensure_output_directory_exists()
-        LOGGER.info("Creating %s", output_file)
-        with open(output_file, "w+") as file_handler:
-            file_handler.write(rendered_template)
-
-    def _ensure_output_directory_exists(self):  # pragma: no cover
-        """Ensure that the path to the output directory exists."""
-        Path(self.output_directory).mkdir(parents=True, exist_ok=True)
-        Path(self.output_directory + "/source").mkdir(
-            parents=True, exist_ok=True
-        )
-        Path(self.output_directory + "/.github/workflows").mkdir(
-            parents=True, exist_ok=True
-        )
-        Path(self.output_directory + "/terraform/cwe").mkdir(
-            parents=True, exist_ok=True
-        )
-        Path(self.output_directory + "/terraform/sqs_lambda").mkdir(
-            parents=True, exist_ok=True
         )
