@@ -40,7 +40,9 @@ class RuleTemplateGenerator:
         self.create_sqs_lambda_terraform_template()
         self.create_variables_terraform_template()
 
-    def create_template(self, template_file, template_options, output_path):
+    def create_template(
+        self, template_file, template_options, output_path
+    ):  # pragma: no cover
         """Helper method to create file from rendered jinja."""
         template = self.template_env.get_template(template_file)
         rendered_template = template.render(template_options)
