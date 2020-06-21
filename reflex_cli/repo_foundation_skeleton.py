@@ -50,39 +50,52 @@ class RepoFoundationSkeleton:
     def create_workflow_template(self):  # pragma: no cover
         """ Generates template for GitHub release file """
         self.create_template(
-            ".github/workflows/release.yaml.jinja2",
-            [],
-            ".github/workflows/release.yaml",
+            template_file=".github/workflows/release.yaml.jinja2",
+            template_options={},
+            output_path=".github/workflows/release.yaml",
         )
 
     def create_source_template(self):  # pragma: no cover
         """ Generates template for rule source code """
         self.create_template(
-            "source/rule.py.jinja2",
-            {"rule_class_name": self.class_name, "mode": self.mode},
-            f"source/{self.rule_name.replace('-', '_')}.py",
+            template_file="source/rule.py.jinja2",
+            template_options={
+                "rule_class_name": self.class_name,
+                "mode": self.mode,
+            },
+            output_path=f"source/{self.rule_name.replace('-', '_')}.py",
         )
 
     def create_requirements_template(self):  # pragma: no cover
         """ Generates template for requirements.txt """
         require_file = "source/requirements.txt"
-        self.create_template(require_file, [], require_file)
+        self.create_template(
+            template_file=require_file,
+            template_options={},
+            output_path=require_file,
+        )
 
     def create_gitignore_template(self):  # pragma: no cover
         """ Generates template for .gitignore """
-        self.create_template(".gitignore", [], ".gitignore")
+        self.create_template(
+            template_file=".gitignore",
+            template_options={},
+            output_path=".gitignore",
+        )
 
     def create_license_template(self):  # pragma: no cover
         """ Generates template for LICENSE """
-        self.create_template("LICENSE", [], "LICENSE")
+        self.create_template(
+            template_file="LICENSE", template_options={}, output_path="LICENSE"
+        )
 
     def create_readme_template(self):  # pragma: no cover
         """ Generates template for README.md """
         self.create_template(
-            "README.md",
-            {
+            template_file="README.md",
+            template_options={
                 "github_org_name": self.github_org_name,
                 "rule_name": self.rule_name,
             },
-            "README.md",
+            output_path="README.md",
         )

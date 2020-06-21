@@ -46,37 +46,41 @@ class TerraformSkeleton:
     def create_cwe_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
         self.create_template(
-            "cwe.tf",
-            {
+            template_file="cwe.tf",
+            template_options={
                 "rule_class_name": self.class_name,
                 "engine_version": self.engine_version,
             },
-            "terraform/cwe/cwe.tf",
+            output_path="terraform/cwe/cwe.tf",
         )
 
     def create_cwe_output_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
-        self.create_template("output.tf", [], "terraform/cwe/output.tf")
+        self.create_template(
+            template_file="output.tf",
+            template_options={},
+            output_path="terraform/cwe/output.tf",
+        )
 
     def create_sqs_lambda_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
         self.create_template(
-            "sqs_lambda.tf",
-            {
+            template_file="sqs_lambda.tf",
+            template_options={
                 "rule_name": self.rule_name,
                 "rule_class_name": self.class_name,
                 "mode": self.mode,
                 "engine_version": self.engine_version,
             },
-            "terraform/sqs_lambda/sqs_lambda.tf",
+            output_path="terraform/sqs_lambda/sqs_lambda.tf",
         )
 
     def create_variables_terraform_template(self):  # pragma: no cover
         """Creates tf output for every file in our template."""
         self.create_template(
-            "variables.tf",
-            {"mode": self.mode},
-            "terraform/sqs_lambda/variables.tf",
+            template_file="variables.tf",
+            template_options={"mode": self.mode},
+            output_path="terraform/sqs_lambda/variables.tf",
         )
 
     @staticmethod
