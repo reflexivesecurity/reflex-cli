@@ -6,10 +6,10 @@ import os
 
 import click
 
-from reflex_cli.rule_template_generator import RuleTemplateGenerator
+from reflex_cli.repo_foundation_skeleton import RepoFoundationSkeleton
+from reflex_cli.terraform_skeleton import TerraformSkeleton
 
 LOGGER = logging.getLogger(__name__)
-DEFAULT_GITHUB_ORG = "cloudmitigator"
 BOLD = "\033[1m"
 ENDC = "\033[0m"
 
@@ -44,7 +44,14 @@ ENDC = "\033[0m"
     help="The mode for your rule. Options: DETECT | REMEDIATE",
     prompt="The mode for your rule. [DETECT | REMEDIATE]",
 )
-def cli(output, rule_name, class_name, mode):
+@click.option(
+    "-g",
+    "--github-org",
+    type=str,
+    help="The organization or user that will store this repository.",
+    prompt="The organization or user that will store this repository.",
+)
+def cli(output, rule_name, class_name, mode, github_org):
     """
     Creates a skeleton rule directory to enable the faster creation of custom reflex rules.
 
@@ -54,14 +61,23 @@ def cli(output, rule_name, class_name, mode):
         output_directory = os.path.abspath(os.path.join(os.getcwd(), output))
     else:
         output_directory = os.path.abspath(os.path.join(os.getcwd(), rule_name))
-    github_org_name = DEFAULT_GITHUB_ORG
 
-    template_generator = RuleTemplateGenerator(
+    skeleton_configuration = {
+        "rule_name": rule_name,
+        "class_name": class_name,
+        "mode": mode,
+        "github_org": github_org
+    }
+
+    foundation_generator = RepoFoundationSkeleton(
         output_directory=output_directory,
-        github_org_name=github_org_name,
-        rule_name=rule_name,
-        class_name=class_name,
-        mode=mode,
+        configuration=skeleton_configuration
+        )
+    foundation_generator.create_templates()
+
+    terraform_generator = TerraformSkeleton(
+        output_directory=output_directory, configuration=skeleton_configuration
     )
+    terraform_generator.create_templates()
+
     LOGGER.info("%s🎨 Generating custom rule template files...%s", BOLD, ENDC)
-    template_generator.create_templates()
