@@ -3,8 +3,11 @@ import logging
 import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
+from reflex_cli.create_template_utils import (
+    ensure_output_directory_exists,
+    write_template_file,
+)
 from reflex_cli.rule_discoverer import RuleDiscoverer
-from reflex_cli.create_template_utils import ensure_output_directory_exists, write_template_file
 
 LOGGER = logging.getLogger(__name__)
 
@@ -14,10 +17,10 @@ class TerraformSkeleton:
 
     def __init__(self, output_directory, configuration):
         self.output_directory = output_directory
-        self.rule_name = configuration.rule_name
-        self.class_name = configuration.class_name
+        self.rule_name = configuration.get("rule_name")
+        self.class_name = configuration.get("class_name")
         self.engine_version = self.get_engine_version()
-        self.mode = configuration.mode
+        self.mode = configuration.get("mode")
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates/rule_templates"),
             autoescape=select_autoescape(["tf"]),
@@ -53,7 +56,7 @@ class TerraformSkeleton:
 
     def create_cwe_output_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
-        self.create_template("output.tf", None, "terraform/cwe/output.tf")
+        self.create_template("output.tf", [], "terraform/cwe/output.tf")
 
     def create_sqs_lambda_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """

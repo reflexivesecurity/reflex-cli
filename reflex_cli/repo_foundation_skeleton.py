@@ -51,7 +51,7 @@ class RepoFoundationSkeleton:
         """ Generates template for GitHub release file """
         self.create_template(
             ".github/workflows/release.yaml.jinja2",
-            None,
+            [],
             ".github/workflows/release.yaml",
         )
 
@@ -66,15 +66,15 @@ class RepoFoundationSkeleton:
     def create_requirements_template(self):  # pragma: no cover
         """ Generates template for requirements.txt """
         require_file = "source/requirements.txt"
-        self.create_template(require_file, None, require_file)
+        self.create_template(require_file, [], require_file)
 
     def create_gitignore_template(self):  # pragma: no cover
         """ Generates template for .gitignore """
-        self.create_template(".gitignore", None, ".gitignore")
+        self.create_template(".gitignore", [], ".gitignore")
 
     def create_license_template(self):  # pragma: no cover
         """ Generates template for LICENSE """
-        self.create_template("LICENSE", None, "LICENSE")
+        self.create_template("LICENSE", [], "LICENSE")
 
     def create_readme_template(self):  # pragma: no cover
         """ Generates template for README.md """

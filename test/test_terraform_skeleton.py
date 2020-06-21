@@ -11,10 +11,11 @@ class TerraformSkeletonTestCase(unittest.TestCase):
         rule_discoverer_mock.return_value = {
             "reflex-engine": {"version": "v1.0.0"}
         }
-        configuration_object = MagicMock()
-        configuration_object.rule_name = "unit-test-rule"
-        configuration_object.class_name = "UnitTestRule"
-        configuration_object.mode = "detect"
+        configuration_object = {
+            "rule_name": "unit-test-rule",
+            "class_name": "UnitTestRule",
+            "mode": "detect",
+        }
         self.terraform_skeleton = TerraformSkeleton(
             output_directory="test_dir", configuration=configuration_object
         )
