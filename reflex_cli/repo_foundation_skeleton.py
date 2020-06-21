@@ -3,7 +3,10 @@ import logging
 import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
-from reflex_cli.create_template_utils import ensure_output_directory_exists, write_template_file
+from reflex_cli.create_template_utils import (
+    ensure_output_directory_exists,
+    write_template_file,
+)
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_GITHUB_ORG = "cloudmitigator"
@@ -56,15 +59,14 @@ class RepoFoundationSkeleton:
         """ Generates template for rule source code """
         self.create_template(
             "source/rule.py.jinja2",
-            {"rule_cliass_name": self.class_name, "mode": self.mode},
+            {"rule_class_name": self.class_name, "mode": self.mode},
             f"source/{self.rule_name.replace('-', '_')}.py",
         )
 
     def create_requirements_template(self):  # pragma: no cover
         """ Generates template for requirements.txt """
-        self.create_template(
-            "source/requirements.txt", None, "source/requirements.txt"
-        )
+        require_file = "source/requirements.txt"
+        self.create_template(require_file, None, require_file)
 
     def create_gitignore_template(self):  # pragma: no cover
         """ Generates template for .gitignore """
