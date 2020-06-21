@@ -25,7 +25,7 @@ pre-commit==2.4.0
 prompt-toolkit==1.0.14
 PyGithub==1.51
 Pygments==2.6.1
-pyhcl==0.4.0
+pyhcl==0.4.4
 PyInquirer==1.0.3
 PyJWT==1.7.1
 pylint==2.5.3
