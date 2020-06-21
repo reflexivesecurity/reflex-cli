@@ -32,7 +32,7 @@ pylint==2.5.3
 PyYAML==5.3.1
 regex==2020.5.14
 requests==2.23.0
-six==1.14.0
+six==1.15.0
 toml==0.10.1
 typed-ast==1.4.1
 urllib3==1.25.9
