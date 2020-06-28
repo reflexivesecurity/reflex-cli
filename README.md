@@ -3,6 +3,8 @@
 The reflex cli (command Line interface) tool enables guardrail developers to leverage
 the reflex framework.
 
+![Example CLI usage](/reflex_cli.gif)
+
 ## Requirements
 
 1. Python 3.7.x
