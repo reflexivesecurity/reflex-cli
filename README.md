@@ -3,7 +3,9 @@
 The reflex cli (command Line interface) tool enables guardrail developers to leverage
 the reflex framework.
 
-![Example CLI usage](/reflex_cli.gif)
+## Demo
+
+![Example CLI usage](/docs/_static/reflex_cli.gif)
 
 ## Requirements
 
