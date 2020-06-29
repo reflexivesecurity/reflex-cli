@@ -17,7 +17,7 @@ venv: ./venv/bin/activate
 
 ./venv/bin/activate: requirements.txt
 	test -d ./venv || python -m venv ./venv
-	./venv/bin/activate; pip install --upgrade pip; pip install -Ur requirements.freeze.txt
+	./venv/bin/activate; pip install --upgrade pip; pip install -Ur requirements.txt; pip install -Ur requirements-dev.txt
 	touch ./venv/bin/activate
 
 test: venv
