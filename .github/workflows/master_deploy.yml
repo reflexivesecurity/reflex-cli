@@ -69,7 +69,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_GITHUB }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_PAT }}
         with:
           tag_name: ${{ env.VERSION }}
           release_name: Release ${{ env.VERSION }}
