@@ -25,6 +25,7 @@ test: venv
 	$(VENV_BIN_PATH)/coverage report
 
 lint: venv
+	$(VENV_BIN_PATH)/black ./reflex_cli/
 	$(VENV_BIN_PATH)/pylint ./reflex_cli/
 
 build: venv

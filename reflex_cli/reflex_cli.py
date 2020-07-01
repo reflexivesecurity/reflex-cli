@@ -3,12 +3,10 @@
 # pylint: disable=unused-argument,inconsistent-return-statements
 import logging
 import os
-
+import sys
 import click
 
-CMD_FOLDER = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "commands")
-)
+CMD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
 
 
 class ReflexCli(click.MultiCommand):
@@ -33,12 +31,9 @@ class ReflexCli(click.MultiCommand):
 
     def get_command(self, context, name):
         try:
-            mod = __import__(
-                f"reflex_cli.commands.command_{name}", None, None, ["cli"]
-            )
+
+            mod = __import__(f"reflex_cli.commands.command_{name}", None, None, ["cli"])
         except ImportError:
-            logging.error(
-                "Failed to import reflex_cli.commands.command_%s", name
-            )
-            raise
+            logging.error("%s is not a command for reflex.", name)
+            sys.exit(77)
         return mod.cli

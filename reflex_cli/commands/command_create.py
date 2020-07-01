@@ -18,9 +18,7 @@ ENDC = "\033[0m"
 @click.option(
     "-o",
     "--output",
-    type=click.Path(
-        exists=False, dir_okay=True, file_okay=False, resolve_path=True
-    ),
+    type=click.Path(exists=False, dir_okay=True, file_okay=False, resolve_path=True),
     help="Output directory for this reflex rule",
 )
 @click.option(
@@ -66,13 +64,12 @@ def cli(output, rule_name, class_name, mode, github_org):
         "rule_name": rule_name,
         "class_name": class_name,
         "mode": mode,
-        "github_org": github_org
+        "github_org": github_org,
     }
 
     foundation_generator = RepoFoundationSkeleton(
-        output_directory=output_directory,
-        configuration=skeleton_configuration
-        )
+        output_directory=output_directory, configuration=skeleton_configuration
+    )
     foundation_generator.create_templates()
 
     terraform_generator = TerraformSkeleton(
