@@ -9,9 +9,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from reflex_cli.rule_discoverer import RuleDiscoverer
 from reflex_cli.user_input import UserInput
 
-TEMPLATE_FOLDER = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "templates")
-)
+TEMPLATE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates"))
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -73,17 +71,13 @@ class ReflexInitializer:
         self.configs["cli_version"] = self.get_reflex_version()
         self.configs["engine_version"] = self.get_engine_version()
         self.configs["globals"] = self.set_global_values()
-        self.configs["providers"] = [
-            {"aws": {"region": self.user_input.get_region()}}
-        ]
+        self.configs["providers"] = [{"aws": {"region": self.user_input.get_region()}}]
         self.configs["backend"] = self.user_input.get_backend_configuration()
         self.configs["rules"] = {"aws": self.query_possible_rules()}
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
-        version_dump = yaml.dump(
-            {"cli_version": ("%s" % self.configs["cli_version"])}
-        )
+        version_dump = yaml.dump({"cli_version": ("%s" % self.configs["cli_version"])})
         engine_dump = yaml.dump(
             {"engine_version": ("%s" % self.configs["engine_version"])}
         )

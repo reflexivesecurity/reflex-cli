@@ -23,9 +23,7 @@ ENDC = "\033[0m"
 @click.option(
     "-o",
     "--output",
-    type=click.Path(
-        exists=False, dir_okay=True, file_okay=False, resolve_path=True
-    ),
+    type=click.Path(exists=False, dir_okay=True, file_okay=False, resolve_path=True),
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )
@@ -46,10 +44,7 @@ def cli(output, config):
     LOGGER.debug("Output directory set to: %s", output)
     configuration = ConfigParser(config)
     configuration.parse_valid_config()
-    if (
-        configuration.raw_configuration["globals"]["default_email"]
-        == PLACEHOLDER_EMAIL
-    ):
+    if configuration.raw_configuration["globals"]["default_email"] == PLACEHOLDER_EMAIL:
         questions = [
             {
                 "type": "confirm",
@@ -79,7 +74,5 @@ def cli(output, config):
             generator = RegionTemplateGenerator(
                 configuration.raw_configuration, output_file, region
             )
-            LOGGER.info(
-                "✍  %s Writing terraform output files ...%s", BOLD, ENDC
-            )
+            LOGGER.info("✍  %s Writing terraform output files ...%s", BOLD, ENDC)
             generator.create_templates()

@@ -12,9 +12,7 @@ BOLD = "\033[1m"
 ENDC = "\033[0m"
 
 
-@click.command(
-    "init", short_help="Initializes a directory with a configuration file."
-)
+@click.command("init", short_help="Initializes a directory with a configuration file.")
 @click.option(
     "-i",
     "--interactive",
@@ -37,9 +35,7 @@ def cli(interactive, config):
     Default configuration file name is reflex.yaml
     """
     LOGGER.debug("Initializing reflex directory in: %s", config)
-    LOGGER.info(
-        "%s📝 Generating reflex.yaml config file in: %s%s", BOLD, config, ENDC
-    )
+    LOGGER.info("%s📝 Generating reflex.yaml config file in: %s%s", BOLD, config, ENDC)
     initializer = ReflexInitializer(interactive, config)
     initializer.determine_config_values()
     initializer.write_config_file()

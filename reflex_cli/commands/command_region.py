@@ -19,15 +19,12 @@ ENDC = "\033[0m"
 
 
 @click.command(
-    "region",
-    short_help="Builds out tf files for region forwarder architecture.",
+    "region", short_help="Builds out tf files for region forwarder architecture.",
 )
 @click.option(
     "-o",
     "--output",
-    type=click.Path(
-        exists=False, dir_okay=True, file_okay=False, resolve_path=True
-    ),
+    type=click.Path(exists=False, dir_okay=True, file_okay=False, resolve_path=True),
     default=OUTPUT_DEFAULT,
     help="Output directory for reflex",
 )
@@ -56,13 +53,8 @@ def cli(output, region, config):
     configuration.parse_valid_config()
     if output == OUTPUT_DEFAULT:
         output = OUTPUT_DEFAULT + "_" + region.replace("-", "_")
-    generator = RegionTemplateGenerator(
-        configuration.raw_configuration, output, region
-    )
+    generator = RegionTemplateGenerator(configuration.raw_configuration, output, region)
     LOGGER.info(
-        "✍  %s Writing regional terraform files for %s ... %s",
-        BOLD,
-        region,
-        ENDC,
+        "✍  %s Writing regional terraform files for %s ... %s", BOLD, region, ENDC,
     )
     generator.create_templates()

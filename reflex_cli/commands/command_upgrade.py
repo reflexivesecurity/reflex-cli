@@ -13,9 +13,7 @@ from reflex_cli.config_version_updater import ConfigVersionUpdater
 LOGGER = logging.getLogger("reflex_cli")
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 
-SHORT_UPGRADE_HELP = (
-    "Evaluates existing reflex deployment for possible upgrades."
-)
+SHORT_UPGRADE_HELP = "Evaluates existing reflex deployment for possible upgrades."
 BOLD = "\033[1m"
 ENDC = "\033[0m"
 
@@ -35,9 +33,7 @@ ENDC = "\033[0m"
     is_flag=True,
     help="Chooses to upgrade all possible rules.",
 )
-@click.option(
-    "-r", "--rule", help="Specify a rule that you would like to upgrade."
-)
+@click.option("-r", "--rule", help="Specify a rule that you would like to upgrade.")
 def cli(rule, select_all, config):
     """
     Compares a local configuration file with external version information to allow users to upgrade rule versions automatically within their configuration.
