@@ -20,10 +20,10 @@ jobs:
         run: |
           curl -X POST https://api.github.com/repos/cloudmitigator/reflex-docs-infrastructure/dispatches \
           -H "Accept: application/vnd.github.everest-preview+json" \
-          -H "Authorization: token $DEPLOY_PAT" \
+          -H "Authorization: token $GIHTUB_TOKEN" \
           --data '{"event_type": "deploy"}'
         env:
-          DEPLOY_PAT: ${{ secrets.DEPLOY_PAT }}
+          GITHUB_TOKEN: ${{ secrets.CLOUDMITIGATOR_GITHUB_PAT }}
       - name: Set version
         run: |
           echo ::set-env name=VERSION::$(semantic current)

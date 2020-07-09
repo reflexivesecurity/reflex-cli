@@ -58,9 +58,7 @@ class UserInput:
                 if rule.configurables:
                     configurable_dict = {}
                     for config in rule.configurables:
-                        LOGGER.debug(
-                            "Adding element %s to config array.", config
-                        )
+                        LOGGER.debug("Adding element %s to config array.", config)
                         if isinstance(config, str):
                             configurable_dict[config] = ""
                         elif isinstance(config, dict):
@@ -75,9 +73,7 @@ class UserInput:
                         }
                     )
                 else:
-                    possible_rules.append(
-                        {rule.name: {"version": rule.version}}
-                    )
+                    possible_rules.append({rule.name: {"version": rule.version}})
         return possible_rules
 
     def collect_backend_key_values(self):  # pragma: no cover
@@ -88,9 +84,7 @@ class UserInput:
             config_key = self.get_input("Backend configuration key: ")
             config_value = self.get_input("Backend configuration value: ")
             key_value_array.append({config_key: config_value})
-            continue_config = self.get_input(
-                "Add more configurations? (Yy/Nn):"
-            )
+            continue_config = self.get_input("Add more configurations? (Yy/Nn):")
             more_config = continue_config.lower() == "y"
         return key_value_array
 

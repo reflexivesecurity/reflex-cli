@@ -1,78 +1,22 @@
-# reflex CLI
+# reflex-cli
 
-The reflex cli (command Line interface) tool enables guardrail developers to leverage
-the reflex framework.
+![](https://github.com/cloudmitigator/reflex-cli/workflows/reflex-cli/badge.svg)
+
+Rapidly generates a configurable infrastructure as code approach to deploying the [reflex infrastructure](https://github.com/cloudmitigator/reflex-engine). After building the infrastructure code, simply deploy the infrastructure via `terraform`. 
+
+Full reflex documentation (including CLI usage) can be found on our [docs site](https://docs.cloudmitigator.com).
+
+## Installation
+
+`pip install reflex-cli`
+
+## Basic Usage
+
+1. Generate a configuration file: `reflex init` 
+2. Build terraform output files: `reflex build`
+3. Deploy those files: `terraform init && terraform apply`
+4. Sleep better at night! 
 
 ## Demo
 
 ![Example CLI usage](/docs/_static/reflex_cli.gif)
-
-## Requirements
-
-1. Python 3.7.x
-2. Terraform v0.12.x
-
-## Setup
-
-```sh
-pip install reflex-cli
-```
-
-## Usage
-
-### Show help
-
-```sh
-reflex --help
-```
-
-### Initialize reflex
-
-```sh
-reflex init
-```
-
-Launches a wizard to generate a `reflex.yaml` configuration file for use during a build
-of reflex.
-
-### Build reflex
-
-```sh
-reflex build
-```
-
-Take a local `reflex.yaml` and generate terraform templates based on the measures
-specified.
-
-### Show rules
-
-```sh
-reflex show
-```
-
-Display discovered measures via the CLI.
-
-### Deploy reflex
-
-```sh
-reflex tf [terraform_args]
-```
-
-From output directory of the build, use `reflex tf` to map to `terraform` commands
-(`apply`, `plan`).
-
-## Development
-
-Install deveopment dependencies in `requirements.txt`.
-
-```sh
-pip install -r requirements.txt
-```
-
-Install in editable mode.
-
-Note: This will also install dependencies specified in `setup.py`
-
-```sh
-pip install -e .
-```

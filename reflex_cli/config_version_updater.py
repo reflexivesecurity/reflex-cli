@@ -36,9 +36,7 @@ class ConfigVersionUpdater:
                 remote_versions[rule.name] = ReflexGithub().get_remote_version(
                     ReflexGithub.get_repo_format(remote_url)
                 )
-            LOGGER.debug(
-                "rule has remote version: %s", remote_versions[rule.name]
-            )
+            LOGGER.debug("rule has remote version: %s", remote_versions[rule.name])
         return remote_versions
 
     def upgrade_engine_version(self):
@@ -68,9 +66,7 @@ class ConfigVersionUpdater:
             current_version = self._find_rule_value(rule.name, "version")
             remote_version = remote_versions[rule.name]
             if not remote_version:
-                LOGGER.debug(
-                    "No release information for %s. Skipping!", rule.name
-                )
+                LOGGER.debug("No release information for %s. Skipping!", rule.name)
                 continue
             if current_version != remote_version:
                 LOGGER.info(
@@ -95,9 +91,7 @@ class ConfigVersionUpdater:
                 current_version = self._find_rule_value(rule.name, "version")
                 remote_version = remote_versions[rule.name]
                 if not remote_version:
-                    LOGGER.info(
-                        "No release information for %s. Skipping!", rule.name
-                    )
+                    LOGGER.info("No release information for %s. Skipping!", rule.name)
                     return update_requested
                 if current_version != remote_version:
                     LOGGER.info(
@@ -108,9 +102,7 @@ class ConfigVersionUpdater:
                     )
                     if self.user_input.verify_upgrade_interest():
                         update_requested = True
-                        self._set_rule_value(
-                            rule.name, "version", remote_version
-                        )
+                        self._set_rule_value(rule.name, "version", remote_version)
                     return update_requested
                 LOGGER.info("%s rule does not have a new release.", rule.name)
                 return update_requested
