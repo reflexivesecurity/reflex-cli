@@ -26,7 +26,7 @@ jobs:
           DEPLOY_PAT: ${{ secrets.DEPLOY_PAT }}
       - name: Set version
         run: |
-          echo ::set-env name=VERSION::$(semantic version)
+          echo ::set-env name=VERSION::$(semantic current)
           echo ::set-env name=EGG::$(ls dist)
       - name: Build and publish
         env:
