@@ -11,7 +11,7 @@ Jinja2==2.11.2
 MarkupSafe==1.1.1
 packaging==20.4
 pbr==5.4.5
-prompt-toolkit==1.0.14
+prompt-toolkit==3.0.5
 PyGithub==1.51
 Pygments==2.6.1
 pyhcl==0.4.4
