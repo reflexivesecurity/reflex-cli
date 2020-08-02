@@ -15,7 +15,7 @@ from reflex_cli.package_generator import PackageGenerator
 
 # REGION_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_region"))
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
-OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "build"))
+OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "package_build"))
 LOGGER = logging.getLogger(__name__)
 # PLACEHOLDER_EMAIL = "placeholder@example.com"
 # BOLD = "\033[1m"
@@ -39,12 +39,12 @@ LOGGER = logging.getLogger(__name__)
 )
 @click.option(
     "-r",
-    "--rule",
+    "--custom-rule-module",
     type=click.Path(exists=True, dir_okay=False, resolve_path=True),
     default=None,
     help="Custom AWSRule file location",
 )
-def cli(output, config, rule):
+def cli(output, config, custom_rule_module):
     """
     Builds lambda deployment packages for reflex rules based on input configuration file.
 
@@ -56,7 +56,7 @@ def cli(output, config, rule):
     configuration = ConfigParser(config)
     configuration.parse_valid_config()
 
-    package_generator = PackageGenerator(output_directory=output, custom_rule_path=rule)
+    package_generator = PackageGenerator(output_directory=output, custom_rule_path=custom_rule_module)
 
     for reflex_rule in configuration.rule_list:
         package_generator.generate_package(reflex_rule)
