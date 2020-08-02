@@ -11,7 +11,7 @@ import requests
 LOGGER = logging.getLogger(__name__)
 
 
-class PackageGenerator:
+class PackageGenerator: # pylint: disable=too-few-public-methods
     """Generates lambda packages for Reflex rules.
     """
 
@@ -20,6 +20,11 @@ class PackageGenerator:
         self.custom_rule_path = custom_rule_path
 
     def generate_package(self, rule):
+        """Creates a deployment package for the specified Rule.
+
+        Args:
+            rule (reflex_cli.Rule): The Reflex Rule to create a deployment package for
+        """
         LOGGER.info(
             "Getting zip from https://api.github.com/repos/%s/%s/zipball/%s",
             rule.github_org,
@@ -27,7 +32,7 @@ class PackageGenerator:
             rule.version,
         )
         response = requests.get(
-            f"https://api.github.com/repos/{rule.github_org}/{rule.repository_name}/zipball/{rule.version}",
+            f"https://api.github.com/repos/{rule.github_org}/{rule.repository_name}/zipball/{rule.version}", # pylint: disable=line-too-long
             allow_redirects=True,
         )
 
