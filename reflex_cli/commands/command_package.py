@@ -56,7 +56,9 @@ def cli(output, config, custom_rule_module):
     configuration = ConfigParser(config)
     configuration.parse_valid_config()
 
-    package_generator = PackageGenerator(output_directory=output, custom_rule_path=custom_rule_module)
+    package_generator = PackageGenerator(
+        output_directory=output, custom_rule_path=custom_rule_module
+    )
 
     for reflex_rule in configuration.rule_list:
         package_generator.generate_package(reflex_rule)
