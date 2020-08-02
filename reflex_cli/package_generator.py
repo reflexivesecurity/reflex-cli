@@ -54,7 +54,8 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
             LOGGER.debug("temp directory already exists")
 
         LOGGER.debug("Writing zip to temp/rule.zip")
-        open("temp/rule.zip", "wb").write(response.content)
+        with open("temp/rule.zip", "wb") as source_codebase:
+            source_codebase.write(response.content)
 
     @staticmethod
     def extract_zipped_codebase():
