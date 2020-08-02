@@ -12,8 +12,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class PackageGenerator:  # pylint: disable=too-few-public-methods
-    """Generates lambda packages for Reflex rules.
-    """
+    """Generates lambda packages for Reflex rules."""
 
     def __init__(self, output_directory, custom_rule_path):
         self.output_directory = output_directory
@@ -25,27 +24,15 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         Args:
             rule (reflex_cli.Rule): The Reflex Rule to create a deployment package for
         """
-        LOGGER.info(
-            "Getting zip from https://api.github.com/repos/%s/%s/zipball/%s",
-            rule.github_org,
-            rule.repository_name,
-            rule.version,
-        )
+        self.create_directories()
         self.download_zipped_codebase(rule)
         self.extract_zipped_codebase()
         self.build_package_contents()
         self.build_package_archive(rule)
+        self.clean_up()
 
-        LOGGER.debug("Deleting temp/")
-        shutil.rmtree("temp")
-
-    def download_zipped_codebase(self, rule):
-        """Pulls full codebase down as zip from github."""
-        response = requests.get(
-            f"https://api.github.com/repos/{rule.github_org}/{rule.repository_name}/zipball/{rule.version}",  # pylint: disable=line-too-long
-            allow_redirects=True,
-        )
-
+    def create_directories(self):
+        """Creates required directories."""
         LOGGER.debug("Creating temp directory")
         os.makedirs("temp", exist_ok=True)
         try:
@@ -53,6 +40,19 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         except FileExistsError:
             LOGGER.debug("temp directory already exists")
 
+    @staticmethod
+    def download_zipped_codebase(rule):
+        """Pulls full codebase down as zip from GitHub."""
+        LOGGER.info(
+            "Getting zip from https://api.github.com/repos/%s/%s/zipball/%s",
+            rule.github_org,
+            rule.repository_name,
+            rule.version,
+        )
+        response = requests.get(
+            f"https://api.github.com/repos/{rule.github_org}/{rule.repository_name}/zipball/{rule.version}",  # pylint: disable=line-too-long
+            allow_redirects=True,
+        )
         LOGGER.debug("Writing zip to temp/rule.zip")
         with open("temp/rule.zip", "wb") as source_codebase:
             source_codebase.write(response.content)
@@ -67,8 +67,7 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         LOGGER.debug("Deleting temp/rule.zip")
         os.remove("temp/rule.zip")
 
-    @staticmethod
-    def build_package_contents():
+    def build_package_contents(self):
         """Runs pip install and builds python package."""
         # Get the rule directory name
         rule_directory = os.listdir("temp")[0]
@@ -95,12 +94,12 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         # Remove requirements.txt from package directory
         os.remove("temp/package/requirements.txt")
 
-    def build_package_archive(self, rule):
-        """Creates built zip package for deployment."""
         # Overwrite AWSRule with custom AWSRule if desired
         if self.custom_rule_path:
             shutil.copy(self.custom_rule_path, "temp/package/reflex_core")
 
+    def build_package_archive(self, rule):
+        """Creates built zip package for deployment."""
         LOGGER.info(
             "Creating zip package for %s: %s/%s.zip",
             rule.name,
@@ -110,3 +109,9 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         shutil.make_archive(
             f"{self.output_directory}/{rule.name}", "zip", "temp/package"
         )
+
+    @staticmethod
+    def clean_up():
+        """Delete temp/ directory."""
+        LOGGER.debug("Deleting temp/")
+        shutil.rmtree("temp")
