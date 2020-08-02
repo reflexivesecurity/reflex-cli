@@ -11,7 +11,7 @@ import requests
 LOGGER = logging.getLogger(__name__)
 
 
-class PackageGenerator: # pylint: disable=too-few-public-methods
+class PackageGenerator:  # pylint: disable=too-few-public-methods
     """Generates lambda packages for Reflex rules.
     """
 
@@ -31,8 +31,18 @@ class PackageGenerator: # pylint: disable=too-few-public-methods
             rule.repository_name,
             rule.version,
         )
+        self.download_zipped_codebase(rule)
+        self.extract_zipped_codebase()
+        self.build_package_contents()
+        self.build_package_archive(rule)
+
+        LOGGER.debug("Deleting temp/")
+        shutil.rmtree("temp")
+
+    def download_zipped_codebase(self, rule):
+        """Pulls full codebase down as zip from github."""
         response = requests.get(
-            f"https://api.github.com/repos/{rule.github_org}/{rule.repository_name}/zipball/{rule.version}", # pylint: disable=line-too-long
+            f"https://api.github.com/repos/{rule.github_org}/{rule.repository_name}/zipball/{rule.version}",  # pylint: disable=line-too-long
             allow_redirects=True,
         )
 
@@ -46,6 +56,9 @@ class PackageGenerator: # pylint: disable=too-few-public-methods
         LOGGER.debug("Writing zip to temp/rule.zip")
         open("temp/rule.zip", "wb").write(response.content)
 
+    @staticmethod
+    def extract_zipped_codebase():
+        """Extracts zipped codebase and deletes zip file."""
         LOGGER.debug("Extracting zip to temp")
         with zipfile.ZipFile("temp/rule.zip", "r") as zip_file:
             zip_file.extractall("temp")
@@ -53,6 +66,9 @@ class PackageGenerator: # pylint: disable=too-few-public-methods
         LOGGER.debug("Deleting temp/rule.zip")
         os.remove("temp/rule.zip")
 
+    @staticmethod
+    def build_package_contents():
+        """Runs pip install and builds python package."""
         # Get the rule directory name
         rule_directory = os.listdir("temp")[0]
 
@@ -78,6 +94,8 @@ class PackageGenerator: # pylint: disable=too-few-public-methods
         # Remove requirements.txt from package directory
         os.remove("temp/package/requirements.txt")
 
+    def build_package_archive(self, rule):
+        """Creates built zip package for deployment."""
         # Overwrite AWSRule with custom AWSRule if desired
         if self.custom_rule_path:
             shutil.copy(self.custom_rule_path, "temp/package/reflex_core")
@@ -91,6 +109,3 @@ class PackageGenerator: # pylint: disable=too-few-public-methods
         shutil.make_archive(
             f"{self.output_directory}/{rule.name}", "zip", "temp/package"
         )
-
-        LOGGER.debug("Deleting temp/")
-        shutil.rmtree("temp")
