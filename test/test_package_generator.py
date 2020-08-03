@@ -12,7 +12,7 @@ class PackageGeneratorTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
 
     def setUp(self):
-        self.generator = PackageGenerator(OUTPUT_DIRECTORY, None)
+        self.generator = PackageGenerator(OUTPUT_DIRECTORY, None, [], [])
         self.rule = Rule(
             "s3-bucket-not-encrypted",
             {"configuration": {"mode": "detect"}, "version": "v1.0.0"},
