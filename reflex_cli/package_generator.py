@@ -101,7 +101,8 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         if self.custom_rule_path:
             shutil.copy(self.custom_rule_path, "temp/package/reflex_core/aws_rule.py")
 
-    def install_package_dependencies(self, requirements_path):
+    @staticmethod
+    def install_package_dependencies(requirements_path):
         """Installs requirements from the specified requirements file using pip.
 
         Args:
