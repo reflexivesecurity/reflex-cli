@@ -96,7 +96,7 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
 
         # Overwrite AWSRule with custom AWSRule if desired
         if self.custom_rule_path:
-            shutil.copy(self.custom_rule_path, "temp/package/reflex_core")
+            shutil.copy(self.custom_rule_path, "temp/package/reflex_core/aws_rule.py")
 
     def build_package_archive(self, rule):
         """Creates built zip package for deployment."""
