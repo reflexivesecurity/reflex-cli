@@ -38,13 +38,29 @@ LOGGER = logging.getLogger(__name__)
     help="Configuration file for reflex",
 )
 @click.option(
-    "-r",
+    "-m",
     "--custom-rule-module",
     type=click.Path(exists=True, dir_okay=False, resolve_path=True),
     default=None,
     help="Custom AWSRule file location",
 )
-def cli(output, config, custom_rule_module):
+@click.option(
+    "-a",
+    "--additional-requirements",
+    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
+    default=[],
+    help="Path to additional requirements.txt files declaring additional dependencies to include",
+    multiple=True,
+)
+@click.option(
+    "-f",
+    "--additional-files",
+    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
+    default=[],
+    help="Additional files to include in your packages",
+    multiple=True,
+)
+def cli(output, config, custom_rule_module, additional_requirements, additional_files):
     """
     Builds lambda deployment packages for reflex rules based on input configuration file.
 
@@ -57,7 +73,10 @@ def cli(output, config, custom_rule_module):
     configuration.parse_valid_config()
 
     package_generator = PackageGenerator(
-        output_directory=output, custom_rule_path=custom_rule_module
+        output_directory=output,
+        custom_rule_path=custom_rule_module,
+        additional_requirements=additional_requirements,
+        additional_files=additional_files,
     )
 
     for reflex_rule in configuration.rule_list:

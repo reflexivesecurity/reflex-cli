@@ -14,9 +14,17 @@ LOGGER = logging.getLogger(__name__)
 class PackageGenerator:  # pylint: disable=too-few-public-methods
     """Generates lambda packages for Reflex rules."""
 
-    def __init__(self, output_directory, custom_rule_path):
+    def __init__(
+        self,
+        output_directory,
+        custom_rule_path,
+        additional_requirements,
+        additional_files,
+    ):
         self.output_directory = output_directory
         self.custom_rule_path = custom_rule_path
+        self.additional_requirements = additional_requirements
+        self.additional_files = additional_files
 
     def generate_package(self, rule):
         """Creates a deployment package for the specified Rule.
@@ -77,19 +85,14 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         )
         shutil.copytree(f"temp/{rule_directory}/source", "temp/package")
 
-        LOGGER.debug("Installing all dependencies into temp/package")
-        subprocess.check_call(
-            [
-                sys.executable,
-                "-m",
-                "pip",
-                "install",
-                "-r",
-                "temp/package/requirements.txt",
-                "-t",
-                "temp/package",
-            ]
-        )
+        self.install_package_dependencies("temp/package/requirements.txt")
+        if self.additional_requirements:
+            for requirements_file in self.additional_requirements:
+                self.install_package_dependencies(requirements_file)
+
+        if self.additional_files:
+            for additional_file in self.additional_files:
+                shutil.copy(additional_file, "temp/package/")
 
         # Remove requirements.txt from package directory
         os.remove("temp/package/requirements.txt")
@@ -97,6 +100,21 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         # Overwrite AWSRule with custom AWSRule if desired
         if self.custom_rule_path:
             shutil.copy(self.custom_rule_path, "temp/package/reflex_core/aws_rule.py")
+
+    def install_package_dependencies(self, requirements_path):
+        LOGGER.debug("Installing dependencies from %s into temp/package", requirements_path)
+        subprocess.check_call(
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "-r",
+                requirements_path,
+                "-t",
+                "temp/package",
+            ]
+        )
 
     def build_package_archive(self, rule):
         """Creates built zip package for deployment."""
