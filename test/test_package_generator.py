@@ -1,30 +1,27 @@
+"""Tests for reflex_cli/package_generator.py"""
 import os
 import unittest
-import shutil
-from unittest.mock import MagicMock, patch
 
 from reflex_cli.package_generator import PackageGenerator
+from reflex_cli.rule import Rule
 
 OUTPUT_DIRECTORY = os.getcwd()
+
 
 class PackageGeneratorTestCase(unittest.TestCase):
     """Test class for the environment context of our CLI tool."""
 
     def setUp(self):
         self.generator = PackageGenerator(OUTPUT_DIRECTORY, None)
+        self.rule = Rule(
+            "s3-bucket-not-encrypted",
+            {"configuration": {"mode": "detect"}, "version": "v1.0.0"},
+        )
 
-    @patch(
-        "reflex_cli.package_generator.requests.get"
-    )
-    def test_download_zipped_codebase(self, requests_mock):
-        rule_mock = MagicMock()
-        rule_mock.repository_name = "example"
-        rule_mock.version = "0.0.1"
-        rule_mock.github_org = "example"
-        content_mock = MagicMock()
-        content_mock.content = b"test"
-        requests_mock.return_value = content_mock
-        self.assertFalse(os.path.exists("temp/rule.zip"))
-        self.generator.download_zipped_codebase(rule_mock)
-        self.assertTrue(os.path.exists("temp/rule.zip"))
-        shutil.rmtree(OUTPUT_DIRECTORY + "/temp/")
+    def tearDown(self):
+        os.remove("s3-bucket-not-encrypted.zip")
+
+    def test_generate_package(self):
+        """Test that generate_package creates the expected zip package."""
+        self.generator.generate_package(self.rule)
+        assert os.path.isfile("s3-bucket-not-encrypted.zip")
