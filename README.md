@@ -1,10 +1,10 @@
 # reflex-cli
 
-![](https://github.com/cloudmitigator/reflex-cli/workflows/reflex-cli/badge.svg)
+![](https://github.com/reflexivesecurity/reflex-cli/workflows/reflex-cli/badge.svg)
 
-Rapidly generates a configurable infrastructure as code approach to deploying the [reflex infrastructure](https://github.com/cloudmitigator/reflex-engine). After building the infrastructure code, simply deploy the infrastructure via `terraform`. 
+Rapidly generates a configurable infrastructure as code approach to deploying the [reflex infrastructure](https://github.com/reflexivesecurity/reflex-engine). After building the infrastructure code, simply deploy the infrastructure via `terraform`. 
 
-Full reflex documentation (including CLI usage) can be found on our [docs site](https://docs.cloudmitigator.com).
+Full reflex documentation (including CLI usage) can be found on our [docs site](https://docs.reflexivesecurity.com).
 
 ## Installation
 

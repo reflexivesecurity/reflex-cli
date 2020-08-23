@@ -19,8 +19,8 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = "reflex-cli"
-copyright = "2020, CloudMitigator"
-author = "CloudMitigator"
+copyright = "2020, Reflexive Security"
+author = "Reflexive Security"
 
 
 # -- General configuration ---------------------------------------------------
@@ -46,7 +46,7 @@ exclude_patterns = []
 #
 html_theme = "alabaster"
 html_theme_options = {
-    "github_user": "cloudmitigator",
+    "github_user": "reflexivesecurity",
     "github_repo": "reflex-cli",
 }
 
