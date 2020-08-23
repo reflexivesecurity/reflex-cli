@@ -13,7 +13,7 @@ class ReflexGithub:
     """Discovers rules by querying github remotes."""
 
     def __init__(self):
-        self.github_organizations = ["cloudmitigator"]
+        self.github_organizations = ["reflexivesecurity"]
 
         token = os.environ.get("REFLEX_GITHUB_TOKEN")
         self.github_client = github.Github(token)

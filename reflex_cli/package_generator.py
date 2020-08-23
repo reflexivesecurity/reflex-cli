@@ -108,7 +108,9 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         Args:
             requirements_path (str): Path to a pip requirements file
         """
-        LOGGER.debug("Installing dependencies from %s into temp/package", requirements_path)
+        LOGGER.debug(
+            "Installing dependencies from %s into temp/package", requirements_path
+        )
         subprocess.check_call(
             [
                 sys.executable,

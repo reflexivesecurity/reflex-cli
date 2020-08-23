@@ -53,7 +53,8 @@ def cli(output, rule_name, class_name, mode, github_org):
     """
     Creates a skeleton rule directory to enable the faster creation of custom reflex rules.
 
-    For further information on creating rules for reflex, check out https://docs.cloudmitigator.com.
+    For further information on creating rules for
+    reflex, check out https://docs.reflexivesecurity.com.
     """
     if output:
         output_directory = os.path.abspath(os.path.join(os.getcwd(), output))
