@@ -52,7 +52,7 @@ class RuleDiscoverer:
 
     def display_discovered_rules(self):  # pragma: no cover
         """Method outputs rule information in a usable fashion"""
-        LOGGER.info("Rules discovered in ReflexiveSecurity Github organization.")
+        LOGGER.info("Rules discovered in Reflexive Security Github organization.")
         LOGGER.info("-------------------------------------------")
         for rule in self.discovered_rules:
             if rule.version:
