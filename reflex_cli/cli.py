@@ -32,7 +32,7 @@ def cli(context, verbose, home):
     """
     CLI interface for building infrastructure to deploy the reflex cloud security framework.
 
-    To learn more about reflex, check out https://docs.cloudmitigator.com.
+    To learn more about reflex, check out https://docs.reflexivesecurity.com.
 
     Get started by building a configuration file with `reflex init`.
     """

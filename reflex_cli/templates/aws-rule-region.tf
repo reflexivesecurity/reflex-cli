@@ -3,7 +3,7 @@ module "{{module_name}}" {
 }
 
 module "forwarder-{{module_name}}" {
-  source            = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/sns_cross_region_sqs?ref={{engine_version}}"
+  source            = "git::https://github.com/reflexivesecurity/reflex-engine.git//modules/sns_cross_region_sqs?ref={{engine_version}}"
   kms_key_id = module.reflex-kms-key.key_id
   cloudwatch_event_rule_id = module.{{module_name}}.id
   central_region = "{{central_region}}"

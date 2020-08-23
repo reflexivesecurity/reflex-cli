@@ -47,7 +47,7 @@ class Rule:
         """
         if "github_org" in self.raw_rule:
             return self.raw_rule["github_org"]
-        return "cloudmitigator"
+        return "reflexivesecurity"
 
     @property
     def repository_name(self):

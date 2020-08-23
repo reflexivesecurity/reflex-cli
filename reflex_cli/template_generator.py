@@ -6,7 +6,7 @@ from pathlib import Path
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 LOGGER = logging.getLogger("reflex_cli")
-DEFAULT_GITHUB_ORG = "cloudmitigator"
+DEFAULT_GITHUB_ORG = "reflexivesecurity"
 BOLD = "\033[1m"
 ENDC = "\033[0m"
 

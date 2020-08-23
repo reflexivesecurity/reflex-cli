@@ -9,7 +9,7 @@ from reflex_cli.create_template_utils import (
 )
 
 LOGGER = logging.getLogger(__name__)
-DEFAULT_GITHUB_ORG = "cloudmitigator"
+DEFAULT_GITHUB_ORG = "reflexivesecurity"
 
 
 class RepoFoundationSkeleton:

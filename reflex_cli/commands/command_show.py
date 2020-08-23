@@ -16,7 +16,7 @@ def cli():
     """
     Displays the currently supported common rules provided by reflex.
 
-    Requires access to reflex's internal system manifest at manifest.cloudmitigator.com.
+    Requires access to reflex's internal system manifest at manifest.reflexivesecurity.com.
     """
     discoverer = RuleDiscoverer()
     LOGGER.info("Collecting list of available rules...")

@@ -1,5 +1,5 @@
 module "sqs_lambda" {
-  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/sqs_lambda?ref={{ engine_version }}"
+  source           = "git::https://github.com/reflexivesecurity/reflex-engine.git//modules/sqs_lambda?ref={{ engine_version }}"
   cloudwatch_event_rule_id  = var.cloudwatch_event_rule_id
   cloudwatch_event_rule_arn = var.cloudwatch_event_rule_arn
   function_name   = "{{ rule_class_name }}"
