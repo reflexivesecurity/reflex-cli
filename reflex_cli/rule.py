@@ -37,3 +37,34 @@ class Rule:
             "minor": split_version[1],
             "patch": split_version[2],
         }
+
+    @property
+    def github_org(self):
+        """Returns the GitHub organization that owns this Rule.
+
+        Returns:
+            str: GitHub organization name
+        """
+        if "github_org" in self.raw_rule:
+            return self.raw_rule["github_org"]
+        return "reflexivesecurity"
+
+    @property
+    def repository_name(self):
+        """Returns the repository name for this Rule.
+
+        Returns:
+            str: The repository name
+        """
+        if "github_org" in self.raw_rule:
+            return self.name
+        return f"reflex-aws-{self.name}"
+
+    @property
+    def remote_url(self):
+        """Returns the remote repository URL.
+
+        Returns:
+            str: The remote repository URL
+        """
+        return f"https://github.com/{self.github_org}/{self.repository_name}"

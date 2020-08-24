@@ -1,10 +1,11 @@
-reflex-cli documentation
+Reflex CLI
 =======================================
 
 reflex-cli provides a user friendly interface for creating and managing Reflex rules and infrastructure.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    cli
+   reflex-config-file
