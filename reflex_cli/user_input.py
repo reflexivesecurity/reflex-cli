@@ -1,6 +1,7 @@
 """Class that takes in user input for various CLI pieces"""
 import logging
 import os
+import sys
 
 from PyInquirer import prompt
 
@@ -113,16 +114,19 @@ class UserInput:
     @staticmethod
     def ask_to_overwrite(file_path):
         """Asks user whether to allow overwrite file. """
-        configuration_overwrite = [
-            {
-                "type": "confirm",
-                "message": f"Configuration file found at {file_path}, overwrite?",
-                "name": "overwrite_configuration",
-                "default": False,
-            }
-        ]
-        overwrite = prompt(configuration_overwrite)
-        return overwrite["overwrite_configuration"]
+        try:
+            configuration_overwrite = [
+                {
+                    "type": "confirm",
+                    "message": f"Configuration file found at {file_path}, overwrite?",
+                    "name": "overwrite_configuration",
+                    "default": False,
+                }
+            ]
+            overwrite = prompt(configuration_overwrite)
+            return overwrite["overwrite_configuration"]
+        except KeyError:
+            sys.exit(1)
 
     def verify_upgrade_interest(self):
         """Prompts user whether or not they want to upgrade rule."""
