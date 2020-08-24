@@ -67,8 +67,12 @@ class ConfigParser:
     def parse_yaml_config(self):
         """Opens config file, parses yaml."""
         with open(self.config_file, "r") as config_file:
-            configuration = yaml.safe_load(config_file)
-            LOGGER.debug("Configuration dictionary: %s", configuration)
+            try:
+                configuration = yaml.safe_load(config_file)
+                LOGGER.debug("Configuration dictionary: %s", configuration)
+            except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+                LOGGER.error("%s is not a valid yaml file.", self.config_file)
+                sys.exit(1)
         return configuration
 
     @staticmethod
