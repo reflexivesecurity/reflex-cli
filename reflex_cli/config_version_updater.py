@@ -33,7 +33,7 @@ class ConfigVersionUpdater:
                         remote_versions[rule.name] = manifest_rule.version
             else:
                 LOGGER.debug("Rule: %s has remote: %s", rule, remote_url)
-                remote_versions[rule.name] = ReflexGithub().get_remote_version(
+                remote_versions[rule.name] = ReflexGithub().get_remote_latest_version(
                     ReflexGithub.get_repo_format(remote_url)
                 )
             LOGGER.debug("rule has remote version: %s", remote_versions[rule.name])
