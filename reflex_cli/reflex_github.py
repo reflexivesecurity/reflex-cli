@@ -1,4 +1,4 @@
-"""Holder of template generation logic"""
+"""Class that iterates over github API and collects a list of repos"""
 import base64
 import logging
 import os
@@ -29,7 +29,7 @@ class ReflexGithub:
 
         return repositories
 
-    def get_remote_version(self, remote):
+    def get_remote_latest_version(self, remote):
         """Calls github API for remote to get latest release."""
         try:  # pragma: no cover
             repo = self.github_client.get_repo(remote)
