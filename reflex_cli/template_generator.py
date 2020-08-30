@@ -87,11 +87,16 @@ class TemplateGenerator:
         else:
             repo_name = rule_name
 
+        if rule[rule_name]["version"] == "latest":
+            rule_version = "master"
+        else:
+            rule_version = rule[rule_name]["version"]
+
         rendered_template = template.render(
             module_name=rule_name,
             cwe_module_name=f"{rule_name}-cwe",
             template_name=repo_name,
-            version=rule[rule_name]["version"],
+            version=rule_version,
             github_org=github_org,
             configuration=rule[rule_name].get("configuration"),
         )
