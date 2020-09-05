@@ -2,6 +2,7 @@
 # pylint: disable=line-too-long
 import logging
 import os
+import sys
 
 import click
 
@@ -54,16 +55,22 @@ def cli(output, config):
             }
         ]
         answers = prompt(questions)
-        if answers["edit_email"]:
-            email_form = [
-                {
-                    "type": "input",
-                    "name": "default_email",
-                    "message": "Default email address for reflex notifications:",
-                }
-            ]
-            email = prompt(email_form)["default_email"]
-            configuration.raw_configuration["globals"]["default_email"] = email
+        # TODO: When a new release of PyInquirer comes out, we should use their
+        #       new feature to raise the keyboard interrupt instead of catching
+        #       the KeyError.  prompt(questions, raise_keyboard_interrupt=True)
+        try:
+            if answers["edit_email"]:
+                email_form = [
+                    {
+                        "type": "input",
+                        "name": "default_email",
+                        "message": "Default email address for reflex notifications:",
+                    }
+                ]
+                email = prompt(email_form)["default_email"]
+                configuration.raw_configuration["globals"]["default_email"] = email
+        except KeyError:
+            sys.exit(1)
     generator = TemplateGenerator(configuration.raw_configuration, output)
     LOGGER.info("✍  %s Writing terraform output files ...%s", BOLD, ENDC)
     generator.create_templates()
