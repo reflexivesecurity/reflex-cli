@@ -5,7 +5,7 @@ The generated asset of ``reflex init`` is a config file which is by default name
 .. code-block:: yaml
 
   ---
-  cli_version: '1.0'
+  cli_version: '1.0.0'
 
 
   engine_version: v1.0.0
@@ -24,13 +24,15 @@ The generated asset of ``reflex init`` is a config file which is by default name
   providers:
   - aws:
       region: us-east-1
-
+      forwarding_regions:
+        - us-east-2
+        - eu-west-1
 
   rules:
     aws:
     - enforce-s3-encryption:
         configuration:
-        - mode: detect
+          mode: detect
         version: v0.4.2
     - detect-deactivate-mfa:
         version: v0.3.3
@@ -38,9 +40,8 @@ The generated asset of ``reflex init`` is a config file which is by default name
         version: v0.2.4
     - enforce-no-public-ami:
         configuration:
-        - mode: detect
+          mode: detect
         version: v0.3.2
     - custom-reflex-rule-repository-name:
-        configuration:
-        - github_org: github_username
+        github_org: github_username
         version: v0.0.2
