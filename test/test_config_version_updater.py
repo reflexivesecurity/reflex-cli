@@ -37,15 +37,17 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
         )
 
     @patch("reflex_cli.config_version_updater.RuleDiscoverer.collect_rules")
-    def test_gather_latest_remote_versions(self, rule_mock):
-        rule_list_mock = MagicMock()
-        rule_list_mock.name = "aws-detect-root-user-activity"
-        rule_list_mock.version = "v0.0.1"
-        collect_rule_mock = MagicMock()
-        collect_rule_mock.name = "reflex-aws-aws-detect-root-user-activity"
-        collect_rule_mock.version = "v0.0.1"
-        rule_mock.return_value = [collect_rule_mock]
-        self.test_config_updater.current_config.rule_list = [rule_list_mock]
+    def test_gather_latest_remote_versions(self, mock_collect_rules):
+        mock_rule = MagicMock()
+        mock_rule.name = "aws-detect-root-user-activity"
+        mock_rule.version = "v0.0.1"
+        mock_rule.remote_url = "https://www.github.com/reflexivesecurity/reflex-aws-aws-detect-root-user-activity"  # pylint: disable=line-too-long
+        mock_rule.is_custom = False
+        collect_rule_return = MagicMock()
+        collect_rule_return.name = "reflex-aws-aws-detect-root-user-activity"
+        collect_rule_return.version = "v0.0.1"
+        mock_collect_rules.return_value = [collect_rule_return]
+        self.test_config_updater.current_config.rule_list = [mock_rule]
         latest_versions = (
             self.test_config_updater.gather_latest_remote_versions()
         )

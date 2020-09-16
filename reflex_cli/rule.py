@@ -68,3 +68,16 @@ class Rule:
             str: The remote repository URL
         """
         return f"https://github.com/{self.github_org}/{self.repository_name}"
+
+    @property
+    def is_custom(self):
+        """Returns a boolean representing if this is a custom rule.
+
+        Returns True if a custom rule, False otherwise.
+
+        Returns:
+            bool: Whether or not the rule is custom
+        """
+        if self.github_org == "reflexivesecurity":
+            return False
+        return True

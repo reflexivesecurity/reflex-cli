@@ -25,18 +25,17 @@ class ConfigVersionUpdater:
         manifest_rules = RuleDiscoverer().collect_rules()
         remote_versions = {}
         for rule in self.current_config.rule_list:
-            remote_url = self._find_rule_value(rule.name, "url")
-            if not remote_url:
+            if not rule.is_custom:
                 cleaned_rule_name = f"reflex-aws-{rule.name}"
                 for manifest_rule in manifest_rules:
                     if manifest_rule.name == cleaned_rule_name:
                         remote_versions[rule.name] = manifest_rule.version
             else:
-                LOGGER.debug("Rule: %s has remote: %s", rule, remote_url)
+                LOGGER.debug("Rule: %s has remote: %s", rule, rule.remote_url)
                 remote_versions[rule.name] = ReflexGithub().get_remote_latest_version(
-                    ReflexGithub.get_repo_format(remote_url)
+                    ReflexGithub.get_repo_format(rule.remote_url)
                 )
-            LOGGER.debug("rule has remote version: %s", remote_versions[rule.name])
+            LOGGER.debug("Rule has remote version: %s", remote_versions[rule.name])
         return remote_versions
 
     def upgrade_engine_version(self):
@@ -62,6 +61,7 @@ class ConfigVersionUpdater:
         LOGGER.debug("Comparing current rule versions.")
         update_requested = False
         remote_versions = self.gather_latest_remote_versions()
+
         for rule in self.current_config.rule_list:
             current_version = self._find_rule_value(rule.name, "version")
             remote_version = remote_versions[rule.name]
@@ -82,17 +82,24 @@ class ConfigVersionUpdater:
 
     def compare_current_rule_version(self, rule_name):
         """ Check single rule version and compare it to remote version."""
+        LOGGER.debug("Comparing current rule version.")
         update_requested = False
-        rule_found = False
         remote_versions = self.gather_latest_remote_versions()
+
+        rule_found = False
+
         for rule in self.current_config.rule_list:
             if rule.name == rule_name:
+
                 rule_found = True
+
                 current_version = self._find_rule_value(rule.name, "version")
                 remote_version = remote_versions[rule.name]
                 if not remote_version:
                     LOGGER.info("No release information for %s. Skipping!", rule.name)
+
                     return update_requested
+
                 if current_version != remote_version:
                     LOGGER.info(
                         "%s (current version: %s) has new release: %s.",
@@ -103,8 +110,11 @@ class ConfigVersionUpdater:
                     if self.user_input.verify_upgrade_interest():
                         update_requested = True
                         self._set_rule_value(rule.name, "version", remote_version)
+
                     return update_requested
+
                 LOGGER.info("%s rule does not have a new release.", rule.name)
+
                 return update_requested
         if not rule_found:
             LOGGER.info(
