@@ -41,6 +41,7 @@ class ConfigVersionUpdaterTestCase(unittest.TestCase):
         rule_list_mock = MagicMock()
         rule_list_mock.name = "aws-detect-root-user-activity"
         rule_list_mock.version = "v0.0.1"
+        rule_list_mock.remote_url = "https://www.github.com/reflexivesecurity/reflex-aws-aws-detect-root-user-activity"  # pylint: disable=line-too-long
         collect_rule_mock = MagicMock()
         collect_rule_mock.name = "reflex-aws-aws-detect-root-user-activity"
         collect_rule_mock.version = "v0.0.1"
