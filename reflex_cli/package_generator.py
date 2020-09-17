@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import zipfile
 
 import requests
@@ -25,6 +26,7 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         self.custom_rule_path = custom_rule_path
         self.additional_requirements = additional_requirements
         self.additional_files = additional_files
+        self.temp_dir = f"{tempfile.gettempdir()}/reflex_package"
 
     def generate_package(self, rule):
         """Creates a deployment package for the specified Rule.
@@ -32,24 +34,26 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
         Args:
             rule (reflex_cli.Rule): The Reflex Rule to create a deployment package for
         """
-        self.create_directories()
-        self.download_zipped_codebase(rule)
-        self.extract_zipped_codebase()
-        self.build_package_contents()
-        self.build_package_archive(rule)
-        self.clean_up()
+        try:
+            self.create_directories()
+            self.download_zipped_codebase(rule)
+            self.extract_zipped_codebase()
+            self.build_package_contents()
+            self.build_package_archive(rule)
+        finally:
+            self.clean_up()
 
     def create_directories(self):
         """Creates required directories."""
-        LOGGER.debug("Creating temp directory")
-        os.makedirs("temp", exist_ok=True)
         try:
             os.mkdir(self.output_directory)
         except FileExistsError:
-            LOGGER.debug("temp directory already exists")
+            LOGGER.debug("%s already exists", self.output_directory)
 
-    @staticmethod
-    def download_zipped_codebase(rule):
+        LOGGER.debug("Creating temp directory")
+        os.makedirs(self.temp_dir, exist_ok=True)
+
+    def download_zipped_codebase(self, rule):
         """Pulls full codebase down as zip from GitHub."""
         LOGGER.info(
             "Getting zip from https://api.github.com/repos/%s/%s/zipball/%s",
@@ -62,54 +66,62 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
             allow_redirects=True,
         )
         LOGGER.debug("Writing zip to temp/rule.zip")
-        with open("temp/rule.zip", "wb") as source_codebase:
+        with open(f"{self.temp_dir}/rule.zip", "wb") as source_codebase:
             source_codebase.write(response.content)
 
-    @staticmethod
-    def extract_zipped_codebase():
+    def extract_zipped_codebase(self):
         """Extracts zipped codebase and deletes zip file."""
         LOGGER.debug("Extracting zip to temp")
-        with zipfile.ZipFile("temp/rule.zip", "r") as zip_file:
-            zip_file.extractall("temp")
+        with zipfile.ZipFile(f"{self.temp_dir}/rule.zip", "r") as zip_file:
+            zip_file.extractall(self.temp_dir)
 
-        LOGGER.debug("Deleting temp/rule.zip")
-        os.remove("temp/rule.zip")
+        LOGGER.debug("Deleting %s/rule.zip", self.temp_dir)
+        os.remove(f"{self.temp_dir}/rule.zip")
 
     def build_package_contents(self):
         """Runs pip install and builds python package."""
         # Get the rule directory name
-        rule_directory = os.listdir("temp")[0]
+        rule_directory = os.listdir(self.temp_dir)[0]
 
         LOGGER.debug(
-            "Copying source files from temp/%s/source to temp/package", rule_directory
+            "Copying source files from %s/%s/source to %s/package",
+            self.temp_dir,
+            rule_directory,
+            self.temp_dir,
         )
-        shutil.copytree(f"temp/{rule_directory}/source", "temp/package")
+        shutil.copytree(
+            f"{self.temp_dir}/{rule_directory}/source", f"{self.temp_dir}/package"
+        )
 
-        self.install_package_dependencies("temp/package/requirements.txt")
+        self.install_package_dependencies(f"{self.temp_dir}/package/requirements.txt")
         if self.additional_requirements:
             for requirements_file in self.additional_requirements:
                 self.install_package_dependencies(requirements_file)
 
         if self.additional_files:
             for additional_file in self.additional_files:
-                shutil.copy(additional_file, "temp/package/")
+                shutil.copy(additional_file, f"{self.temp_dir}/package/")
 
         # Remove requirements.txt from package directory
-        os.remove("temp/package/requirements.txt")
+        os.remove(f"{self.temp_dir}/package/requirements.txt")
 
         # Overwrite AWSRule with custom AWSRule if desired
         if self.custom_rule_path:
-            shutil.copy(self.custom_rule_path, "temp/package/reflex_core/aws_rule.py")
+            shutil.copy(
+                self.custom_rule_path,
+                f"{self.temp_dir}/package/reflex_core/aws_rule.py",
+            )
 
-    @staticmethod
-    def install_package_dependencies(requirements_path):
+    def install_package_dependencies(self, requirements_path):
         """Installs requirements from the specified requirements file using pip.
 
         Args:
             requirements_path (str): Path to a pip requirements file
         """
         LOGGER.debug(
-            "Installing dependencies from %s into temp/package", requirements_path
+            "Installing dependencies from %s into %s/package",
+            requirements_path,
+            self.temp_dir,
         )
         subprocess.check_call(
             [
@@ -120,7 +132,7 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
                 "-r",
                 requirements_path,
                 "-t",
-                "temp/package",
+                f"{self.temp_dir}/package",
             ]
         )
 
@@ -133,11 +145,10 @@ class PackageGenerator:  # pylint: disable=too-few-public-methods
             rule.name,
         )
         shutil.make_archive(
-            f"{self.output_directory}/{rule.name}", "zip", "temp/package"
+            f"{self.output_directory}/{rule.name}", "zip", f"{self.temp_dir}/package"
         )
 
-    @staticmethod
-    def clean_up():
+    def clean_up(self):
         """Delete temp/ directory."""
-        LOGGER.debug("Deleting temp/")
-        shutil.rmtree("temp")
+        LOGGER.debug("Deleting %s", self.temp_dir)
+        shutil.rmtree(self.temp_dir)
