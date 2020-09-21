@@ -34,6 +34,11 @@ ENDC = "\033[0m"
     type=str,
     help="The PascalCase name for your rule. Example: MyEncryptionRule",
     prompt="The PascalCase name for your rule.",
+    default=lambda: click.get_current_context()
+    .params["rule_name"]
+    .replace("-", " ")
+    .title()
+    .replace(" ", ""),
 )
 @click.option(
     "-m",
@@ -49,6 +54,7 @@ ENDC = "\033[0m"
     help="The organization or user that will store this repository.",
     prompt="The organization or user that will store this repository.",
 )
+@click.pass_context
 def cli(output, rule_name, class_name, mode, github_org):
     """
     Creates a skeleton rule directory to enable the faster creation of custom reflex rules.
