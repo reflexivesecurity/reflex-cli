@@ -33,6 +33,8 @@ class TerraformSkeleton:
         self.create_cwe_output_template()
         self.create_sqs_lambda_terraform_template()
         self.create_variables_terraform_template()
+        self.create_assume_role_terraform_template()
+        self.create_assume_role_variables_terraform_template()
 
     def create_template(
         self, template_file, template_options, output_path
@@ -46,7 +48,7 @@ class TerraformSkeleton:
     def create_cwe_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
         self.create_template(
-            template_file="cwe.tf",
+            template_file="terraform/cwe/main.tf",
             template_options={
                 "rule_class_name": self.class_name,
                 "engine_version": self.engine_version,
@@ -57,7 +59,7 @@ class TerraformSkeleton:
     def create_cwe_output_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
         self.create_template(
-            template_file="output.tf",
+            template_file="terraform/cwe/output.tf",
             template_options={},
             output_path="terraform/cwe/output.tf",
         )
@@ -65,7 +67,7 @@ class TerraformSkeleton:
     def create_sqs_lambda_terraform_template(self):  # pragma: no cover
         """ Generates a .tf module for our rule """
         self.create_template(
-            template_file="sqs_lambda.tf",
+            template_file="terraform/sqs_lambda/sqs_lambda.tf",
             template_options={
                 "rule_name": self.rule_name,
                 "rule_class_name": self.class_name,
@@ -78,9 +80,31 @@ class TerraformSkeleton:
     def create_variables_terraform_template(self):  # pragma: no cover
         """Creates tf output for every file in our template."""
         self.create_template(
-            template_file="variables.tf",
-            template_options={"mode": self.mode},
+            template_file="terraform/sqs_lambda/variables.tf.jinja2",
+            template_options={"rule_name": self.rule_name, "mode": self.mode},
             output_path="terraform/sqs_lambda/variables.tf",
+        )
+
+    def create_assume_role_terraform_template(self):  # pragma: no cover
+        """Generates assume_role.tf file"""
+        self.create_template(
+            template_file="terraform/assume_role/assume_role.tf.jinja2",
+            template_options={
+                "rule_class_name": self.class_name,
+                "engine_version": self.engine_version,
+            },
+            output_path="terraform/assume_role/assume_role.tf",
+        )
+
+    def create_assume_role_variables_terraform_template(self):  # pragma: no cover
+        """Generates assume_role/variables.tf file"""
+        self.create_template(
+            template_file="terraform/assume_role/variables.tf",
+            template_options={
+                "rule_class_name": self.class_name,
+                "engine_version": self.engine_version,
+            },
+            output_path="terraform/assume_role/variables.tf",
         )
 
     @staticmethod
