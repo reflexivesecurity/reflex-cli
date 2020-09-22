@@ -23,7 +23,7 @@ class TerraformSkeletonTestCase(unittest.TestCase):
     @patch("reflex_cli.terraform_skeleton.write_template_file")
     def test_create_template(self, write_template_file):
         self.terraform_skeleton.create_template(
-            "cwe.tf",
+            "terraform/cwe/main.tf",
             {
                 "rule_class_name": self.terraform_skeleton.class_name,
                 "engine_version": self.terraform_skeleton.engine_version,

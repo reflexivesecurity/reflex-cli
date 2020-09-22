@@ -25,3 +25,9 @@ variable "mode" {
   default     = "detect"
 }
 {%- endif %}
+
+variable "package_location" {
+  description = "Path for the Lambda deployment package"
+  type        = string
+  default     = "../package_build/{{ rule_name }}.zip"
+}

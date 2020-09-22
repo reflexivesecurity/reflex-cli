@@ -15,9 +15,7 @@ DEFAULT_GITHUB_ORG = "reflexivesecurity"
 class RepoFoundationSkeleton:
     """Generate a set of templates from a given config."""
 
-    def __init__(
-        self, output_directory, configuration
-    ):  # pylint: disable=too-many-arguments
+    def __init__(self, output_directory, configuration):
         self.output_directory = output_directory
         self.github_org_name = configuration.get("github_org")
         self.rule_name = configuration.get("rule_name")
@@ -89,6 +87,7 @@ class RepoFoundationSkeleton:
             template_options={
                 "github_org_name": self.github_org_name,
                 "rule_name": self.rule_name,
+                "mode": self.mode,
             },
             output_path="README.md",
         )

@@ -14,6 +14,7 @@ def ensure_output_directory_exists(output_directory):  # pragma: no cover
         "/.github/workflows",
         "/terraform/cwe",
         "/terraform/sqs_lambda",
+        "/terraform/assume_role",
     ]
     for directory in directory_list:
         Path(output_directory + directory).mkdir(parents=True, exist_ok=True)
