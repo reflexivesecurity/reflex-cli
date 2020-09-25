@@ -9,9 +9,11 @@ import click
 from PyInquirer import prompt
 from reflex_cli.config_parser import ConfigParser
 from reflex_cli.region_template_generator import RegionTemplateGenerator
+from reflex_cli.child_template_generator import ChildTemplateGenerator
 from reflex_cli.template_generator import TemplateGenerator
 
 REGION_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_region"))
+CHILD_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_child"))
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
 LOGGER = logging.getLogger("reflex_cli")
@@ -80,6 +82,14 @@ def cli(output, config):
             output_file = REGION_DEFAULT + "_" + region.replace("-", "_")
             generator = RegionTemplateGenerator(
                 configuration.raw_configuration, output_file, region
+            )
+            LOGGER.info("✍  %s Writing terraform output files ...%s", BOLD, ENDC)
+            generator.create_templates()
+    if aws_provider.get("child_accounts"):
+        for child_account in aws_provider.get("child_accounts"):
+            output_file = CHILD_DEFAULT + "_" + child_account
+            generator = ChildTemplateGenerator(
+                configuration.raw_configuration, output_file, child_account
             )
             LOGGER.info("✍  %s Writing terraform output files ...%s", BOLD, ENDC)
             generator.create_templates()
