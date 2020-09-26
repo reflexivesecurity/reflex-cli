@@ -15,10 +15,14 @@ ENDC = "\033[0m"
 class ChildTemplateGenerator:
     """Generate a set of templates from a given config."""
 
-    def __init__(self, configuration, output_directory, account_id):
+    def __init__(
+        self, configuration, output_directory, child_account_id, parent_account_id
+    ):
         self.configuration = configuration
         self.output_directory = output_directory
-        self.account_id = account_id
+        self.account_id = child_account_id
+        self.region = configuration["providers"][0]["aws"]["region"]
+        self.parent_account_id = parent_account_id
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates"),
             autoescape=select_autoescape(["tf"]),
@@ -44,7 +48,7 @@ class ChildTemplateGenerator:
         for provider in self.configuration["providers"]:
             template = self.template_env.get_template("provider.tf")
             rendered_template = template.render(
-                provider_name=list(provider)[0], child_name=self.child
+                provider_name=list(provider)[0], region_name=self.region
             )
             self.build_output_file(["providers"], rendered_template)
 
@@ -66,7 +70,7 @@ class ChildTemplateGenerator:
             for config in config_copy["backend"][backend_type]:
                 for key, _ in config.items():
                     if key == "key":
-                        config[key] += f"-{self.child}"
+                        config[key] += f"-{self.account_id}"
             rendered_template = template.render(
                 backend_type=backend_type,
                 backend_config_array=config_copy["backend"][backend_type],
@@ -92,6 +96,7 @@ class ChildTemplateGenerator:
             engine_version=self.configuration["engine_version"],
             github_org=github_org,
             central_region=self.configuration["providers"][0]["aws"]["region"],
+            parent_account_id=self.parent_account_id,
             queue_name=camel_name,
             configuration=rule[rule_name].get("configuration"),
         )

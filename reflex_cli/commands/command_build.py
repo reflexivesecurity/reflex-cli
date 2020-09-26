@@ -86,10 +86,23 @@ def cli(output, config):
             LOGGER.info("✍  %s Writing terraform output files ...%s", BOLD, ENDC)
             generator.create_templates()
     if aws_provider.get("child_accounts"):
+        parent_account_id = aws_provider.get("parent_account")
+        if not parent_account_id:
+            parent_account_form = [
+                {
+                    "type": "input",
+                    "name": "parent_account",
+                    "message": "Parent reflex AWS account ID for multi-account support:",
+                }
+            ]
+            parent_account_id = prompt(parent_account_form)["default_email"]
         for child_account in aws_provider.get("child_accounts"):
-            output_file = CHILD_DEFAULT + "_" + child_account
+            output_file = CHILD_DEFAULT + "_" + str(child_account)
             generator = ChildTemplateGenerator(
-                configuration.raw_configuration, output_file, child_account
+                configuration.raw_configuration,
+                output_file,
+                str(child_account),
+                str(parent_account_id),
             )
             LOGGER.info("✍  %s Writing terraform output files ...%s", BOLD, ENDC)
             generator.create_templates()
