@@ -2,7 +2,7 @@ module "{{module_name}}" {
   source            = "git::https://github.com/{{github_org}}/{{template_name}}.git//terraform/cwe?ref={{version}}"
 }
 
-module "s3-bucket-not-encrypted-iam-assume" {
+module "{{module_name}}-iam-assume" {
   parent_account = "{{parent_account_id}}"
   source            = "git::https://github.com/{{github_org}}/{{template_name}}.git//terraform/assume_role?ref={{version}}"
 }
