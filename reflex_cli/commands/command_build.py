@@ -14,6 +14,7 @@ from reflex_cli.template_generator import TemplateGenerator
 REGION_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_region"))
 CONFIG_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex.yaml"))
 OUTPUT_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "reflex_out"))
+PACKAGE_DEFAULT = os.path.abspath(os.path.join(os.getcwd(), "package_build"))
 LOGGER = logging.getLogger("reflex_cli")
 PLACEHOLDER_EMAIL = "placeholder@example.com"
 BOLD = "\033[1m"
@@ -45,6 +46,9 @@ def cli(output, config):
     LOGGER.debug("Output directory set to: %s", output)
     configuration = ConfigParser(config)
     configuration.parse_valid_config()
+    if not os.path.exists(PACKAGE_DEFAULT):
+        LOGGER.info("✍  %s Package directory nonexistent, creating ...%s", BOLD, ENDC)
+        os.system("reflex package")
     if configuration.raw_configuration["globals"]["default_email"] == PLACEHOLDER_EMAIL:
         questions = [
             {
