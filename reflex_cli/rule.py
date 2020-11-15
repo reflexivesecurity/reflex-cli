@@ -5,7 +5,7 @@ DEFAULT_VARIABLES = [
     "reflex_kms_key_id",
     "cloudwatch_event_rule_id",
     "cloudwatch_event_rule_arn",
-    "package_location"
+    "package_location",
 ]
 
 
