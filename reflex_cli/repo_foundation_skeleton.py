@@ -57,7 +57,10 @@ class RepoFoundationSkeleton:
         """ Generates template for rule source code """
         self.create_template(
             template_file="source/rule.py.jinja2",
-            template_options={"rule_class_name": self.class_name, "mode": self.mode,},
+            template_options={
+                "rule_class_name": self.class_name,
+                "mode": self.mode,
+            },
             output_path=f"source/{self.rule_name.replace('-', '_')}.py",
         )
 
@@ -65,13 +68,17 @@ class RepoFoundationSkeleton:
         """ Generates template for requirements.txt """
         require_file = "source/requirements.txt"
         self.create_template(
-            template_file=require_file, template_options={}, output_path=require_file,
+            template_file=require_file,
+            template_options={},
+            output_path=require_file,
         )
 
     def create_gitignore_template(self):  # pragma: no cover
         """ Generates template for .gitignore """
         self.create_template(
-            template_file=".gitignore", template_options={}, output_path=".gitignore",
+            template_file=".gitignore",
+            template_options={},
+            output_path=".gitignore",
         )
 
     def create_license_template(self):  # pragma: no cover

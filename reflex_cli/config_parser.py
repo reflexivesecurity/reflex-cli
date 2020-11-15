@@ -43,7 +43,8 @@ class ConfigParser:
         valid_config = self.validate_config(self.raw_configuration)
         if not valid_config:
             LOGGER.info(
-                "Invalid configuration file format found at %s", self.config_file,
+                "Invalid configuration file format found at %s",
+                self.config_file,
             )
             sys.exit(55)
 

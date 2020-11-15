@@ -65,7 +65,8 @@ class ReflexGithub:
             return None
         except Exception as exception:  # pylint: disable=broad-except
             LOGGER.warning(
-                "Something went wrong when trying to determine mode for %s", remote,
+                "Something went wrong when trying to determine mode for %s",
+                remote,
             )
             LOGGER.exception(exception)
             return None

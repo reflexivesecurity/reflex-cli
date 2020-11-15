@@ -55,7 +55,9 @@ ENDC = "\033[0m"
     prompt="The organization or user that will store this repository.",
 )
 @click.pass_context
-def cli(output, rule_name, class_name, mode, github_org):
+def cli(
+    _context, output, rule_name, class_name, mode, github_org
+):  # pylint: disable=unused-argument
     """
     Creates a skeleton rule directory to enable the faster creation of custom reflex rules.
 
