@@ -26,8 +26,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CLOUDMITIGATOR_GITHUB_PAT }}
       - name: Set version
         run: |
-          echo ::set-env name=VERSION::$(semantic current)
-          echo ::set-env name=EGG::$(ls dist)
+          echo "VERSION=$(semantic current)" >> $GITHUB_ENV
+          echo "EGG=$(ls dist)" >> $GITHUB_ENV
       - name: Build and publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}

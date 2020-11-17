@@ -28,10 +28,10 @@ jobs:
         fi        
         if [ "${CHANGED}" == "True" ]
           then
-            echo ::set-env name=VERSION_CHANGED::${CHANGED}
-            echo ::set-env name=VERSION::$(semantic version)
-            echo ::set-env name=EGG::$(ls dist)
-            echo ::set-env name=RELEASE_BODY::$(semantic release-body)
+            echo "VERSION_CHANGED=${CHANGED}" >> $GITHUB_ENV
+            echo "VERSION=$(semantic version)" >> $GITHUB_ENV
+            echo "EGG=$(ls dist)" >> $GITHUB_ENV
+            echo "RELEASE_BODY=$(semantic release-body)" >> $GITHUB_ENV
         fi
 
     - name: Create Release
