@@ -20,6 +20,13 @@ ENDC = "\033[0m"
 
 @click.command("upgrade", short_help=SHORT_UPGRADE_HELP)
 @click.option(
+    "-o",
+    "--auto-overwrite",
+    "auto_overwrite",
+    is_flag=True,
+    help="Automatically overwrite reflex configuration file.",
+)
+@click.option(
     "-c",
     "--config",
     type=click.Path(exists=True, dir_okay=False, resolve_path=True),
@@ -34,7 +41,7 @@ ENDC = "\033[0m"
     help="Chooses to upgrade all possible rules.",
 )
 @click.option("-r", "--rule", help="Specify a rule that you would like to upgrade.")
-def cli(rule, select_all, config):
+def cli(rule, select_all, config, auto_overwrite):
     """
     Compares a local configuration file with external version information to allow users to upgrade rule versions automatically within their configuration.
 
@@ -46,7 +53,7 @@ def cli(rule, select_all, config):
         config,
         ENDC,
     )
-    updater = ConfigVersionUpdater(config, select_all)
+    updater = ConfigVersionUpdater(config, select_all, auto_overwrite)
     if rule:
         update_requested = updater.compare_current_rule_version(rule)
     else:
