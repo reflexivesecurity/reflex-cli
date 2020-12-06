@@ -13,12 +13,13 @@ LOGGER = logging.getLogger("reflex_cli")
 class ConfigVersionUpdater:
     """Checks remote sources for newer rule releases"""
 
-    def __init__(self, config_file, select_all):
+    def __init__(self, config_file, select_all, auto_overwrite=False):
 
         self.user_input = UserInput(not select_all)
         self.config_file = config_file
         self.current_config = ConfigParser(self.config_file)
         self.current_config.parse_valid_config()
+        self.auto_overwrite = auto_overwrite
 
     def gather_latest_remote_versions(self):
         """Reaches out to urls to get tag information per rule."""
@@ -125,7 +126,7 @@ class ConfigVersionUpdater:
 
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""
-        initializer = ReflexInitializer(False, self.config_file)
+        initializer = ReflexInitializer(False, self.config_file, self.auto_overwrite)
         initializer.config_file = self.config_file
         initializer.configs = self.current_config.raw_configuration
         initializer.write_config_file()

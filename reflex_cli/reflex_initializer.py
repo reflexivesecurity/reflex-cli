@@ -19,10 +19,11 @@ REFLEX_PREFIX = "reflex-aws-"
 class ReflexInitializer:
     """Creates assets required to build a reflex deployment."""
 
-    def __init__(self, interactive, config_file):
+    def __init__(self, interactive, config_file, auto_overwrite=False):
         self.user_input = UserInput(interactive)
         self.configs = {}
         self.config_file = config_file
+        self.auto_overwrite = auto_overwrite
         self.rule_discoverer = RuleDiscoverer()
         self.template_env = Environment(
             loader=PackageLoader("reflex_cli", "templates"),
@@ -101,7 +102,7 @@ class ReflexInitializer:
     def write_config_file(self):  # pragma: no cover
         """Opens config file, dumps dict as yaml."""
         LOGGER.debug("Writing config file to: %s", self.config_file)
-        if os.path.exists(self.config_file):
+        if os.path.exists(self.config_file) and not self.auto_overwrite:
             write_file = self.user_input.ask_to_overwrite(self.config_file)
         else:
             write_file = True
