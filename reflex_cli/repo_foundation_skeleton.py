@@ -29,7 +29,9 @@ class RepoFoundationSkeleton:
     def create_templates(self):  # pragma: no cover
         """ Generates templates for rule. """
         ensure_output_directory_exists(self.output_directory)
-        self.create_workflow_template()
+        self.create_release_workflow_templates()
+        self.create_test_workflow_template()
+        self.create_renovate_template()
         self.create_source_template()
         self.create_requirements_template()
         self.create_gitignore_template()
@@ -45,12 +47,33 @@ class RepoFoundationSkeleton:
         output_file = os.path.join(self.output_directory, output_path)
         write_template_file(output_file, rendered_template)
 
-    def create_workflow_template(self):  # pragma: no cover
-        """ Generates template for GitHub release file """
+    def create_release_workflow_templates(self):  # pragma: no cover
+        """ Generates templates for GitHub release files """
         self.create_template(
             template_file=".github/workflows/release.yaml.jinja2",
             template_options={},
             output_path=".github/workflows/release.yaml",
+        )
+        self.create_template(
+            template_file=".github/.releaserc.json.jinja2",
+            template_options={},
+            output_path=".github/.releaserc.json",
+        )
+
+    def create_test_workflow_template(self):  # pragma: no cover
+        """ Generates template for GitHub test file """
+        self.create_template(
+            template_file=".github/workflows/test.yaml.jinja2",
+            template_options={},
+            output_path=".github/workflows/test.yaml",
+        )
+
+    def create_renovate_template(self):  # pragma: no cover
+        """ Generates template for Renovate config file """
+        self.create_template(
+            template_file=".github/renovate.json.jinja2",
+            template_options={},
+            output_path=".github/renovate.json",
         )
 
     def create_source_template(self):  # pragma: no cover

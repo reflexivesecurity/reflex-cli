@@ -9,10 +9,6 @@ from reflex_core import AWSRule, subscription_confirmation
 class {{ rule_class_name }}(AWSRule):
     """ TODO: A description for your rule """
 
-    # TODO: Instantiate whatever boto3 client you'll need, if any.
-    # Example:
-    # client = boto3.client("s3")
-
     def __init__(self, event):
         super().__init__(event)
 
