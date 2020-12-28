@@ -35,7 +35,9 @@ class ReflexInitializer:
         discovered_rules = self.rule_discoverer.collect_rules()
         raw_rules = self.user_input.get_rule_input(discovered_rules)
         LOGGER.debug("Rules selected for config: %s", raw_rules)
-        possible_rules = self.strip_rule_common_names(raw_rules)
+        possible_rules = sorted(
+            self.strip_rule_common_names(raw_rules), key=lambda d: list(d.keys())
+        )
         return possible_rules
 
     @staticmethod
