@@ -6,6 +6,11 @@ Rapidly generates a configurable infrastructure as code approach to deploying th
 
 Full reflex documentation (including CLI usage) can be found on our [docs site](https://docs.reflexivesecurity.com).
 
+## reflex
+![Reflex](https://avatars3.githubusercontent.com/u/59374073?s=200&v=4)
+
+Reflex enforces security best practices in cloud environments through event-driven automation. Get started by visiting [our documentation](https://docs.reflexivesecurity.com/).
+
 ## Installation
 
 `pip install reflex-cli`
