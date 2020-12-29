@@ -29,6 +29,8 @@ jobs:
         run: |
           echo "VERSION=$(gh release view | sed -n 2p | awk '{ print $2 }')" >> $GITHUB_ENV
           echo "EGG=$(ls dist)" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.CLOUDMITIGATOR_GITHUB_PAT }}
       - name: Build and publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
