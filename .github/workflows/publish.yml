@@ -3,6 +3,7 @@ on:
   release:
     types:
       - published
+  workflow_dispatch:
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -33,6 +34,5 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
-          export VERSION=${{ env.VERSION }}
           python setup.py sdist bdist_wheel
           twine upload dist/*
