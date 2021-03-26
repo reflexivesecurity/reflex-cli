@@ -35,6 +35,7 @@ class RepoFoundationSkeleton:
         self.create_source_template()
         self.create_requirements_template()
         self.create_gitignore_template()
+        self.create_pylintrc_template()
         self.create_license_template()
         self.create_readme_template()
 
@@ -102,6 +103,14 @@ class RepoFoundationSkeleton:
             template_file=".gitignore",
             template_options={},
             output_path=".gitignore",
+        )
+
+    def create_pylintrc_template(self):  # pragma: no cover
+        """ Generates template for .pylintrc """
+        self.create_template(
+            template_file=".pylintrc",
+            template_options={},
+            output_path=".pylintrc",
         )
 
     def create_license_template(self):  # pragma: no cover
