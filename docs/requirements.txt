@@ -20,7 +20,7 @@ PyJWT==2.0.1
 pyparsing==2.4.7
 pytz==2020.5
 PyYAML==5.4
-regex==2020.11.13
+regex==2021.4.4
 requests==2.25.1
 six==1.15.0
 snowballstemmer==2.0.0
