@@ -8,6 +8,6 @@ module "assume_role" {
 # TODO: Provide required lambda permissions policy
 EOF
 
-  lambda_execution_role_arn = "arn:aws:iam::${var.parent_account}:role/Reflex{{ rule_class_name }}LambdaExecution"
+  lambda_execution_role_arn = var.parent_account ? "arn:aws:iam::${var.parent_account}:role/Reflex{{ rule_class_name }}LambdaExecution" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Reflex{{ rule_class_name }}LambdaExecution"
 
 }
