@@ -12,9 +12,6 @@ module "sqs_lambda" {
     MODE      = var.mode
     {%- endif %}
   }
-  custom_lambda_policy = <<EOF
-# TODO: Provide required lambda permissions policy
-EOF
 
   queue_name    = "{{ rule_class_name }}"
   delay_seconds = 0

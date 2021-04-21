@@ -2,6 +2,10 @@ module "{{cwe_module_name}}" {
   source            = "git::https://github.com/{{github_org}}/{{template_name}}.git//terraform/cwe?ref={{version}}"
 }
 
+module "{{module_name}}-iam-assume" {
+  source            = "git::https://github.com/{{github_org}}/{{template_name}}.git//terraform/assume_role?ref={{version}}"
+}
+
 module "{{module_name}}" {
   source            = "git::https://github.com/{{github_org}}/{{template_name}}.git//terraform/sqs_lambda?ref={{version}}"
   cloudwatch_event_rule_id = module.{{cwe_module_name}}.id
