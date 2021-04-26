@@ -15,7 +15,7 @@ mccabe==0.6.1
 nodeenv==1.5.0
 pathspec==0.8.1
 pre-commit==2.11.1
-pylint==2.6.0
+pylint==2.8.2
 toml==0.10.2
 typed-ast==1.4.2
 virtualenv==20.4.3
