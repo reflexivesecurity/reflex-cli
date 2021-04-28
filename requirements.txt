@@ -10,7 +10,7 @@ PyGithub==1.54.1
 Pygments==2.8.1
 pyhcl==0.4.4
 PyInquirer==1.0.3
-PyJWT==1.7.1
+PyJWT==2.1.0
 PyYAML==5.4
 regex==2021.4.4
 requests==2.25.1
