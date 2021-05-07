@@ -11,7 +11,7 @@ Pygments==2.8.1
 pyhcl==0.4.4
 PyInquirer==1.0.3
 PyJWT==1.7.1
-PyYAML==5.4
+PyYAML==5.4.1
 regex==2021.4.4
 requests==2.25.1
 six==1.15.0
