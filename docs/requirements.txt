@@ -8,7 +8,7 @@ docutils==0.17.1
 idna==2.10
 imagesize==1.2.0
 Jinja2==2.11.3
-MarkupSafe==1.1.1
+MarkupSafe==2.0.1
 packaging==21.0
 pbr==5.5.1
 prompt-toolkit==1.0.18
