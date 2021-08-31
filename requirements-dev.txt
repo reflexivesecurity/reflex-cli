@@ -18,5 +18,5 @@ pre-commit==2.14.0
 pylint==2.6.0
 toml==0.10.2
 typed-ast==1.4.3
-virtualenv==20.4.3
+virtualenv==20.7.2
 zipp==3.5.0
