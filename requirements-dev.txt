@@ -10,7 +10,7 @@ filelock==3.0.12
 identify==2.2.13
 importlib-metadata==3.10.1
 isort==5.9.3
-lazy-object-proxy==1.4.3
+lazy-object-proxy==1.6.0
 mccabe==0.6.1
 nodeenv==1.6.0
 pathspec==0.9.0
