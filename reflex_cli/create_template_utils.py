@@ -23,5 +23,5 @@ def ensure_output_directory_exists(output_directory):  # pragma: no cover
 def write_template_file(output_file, rendered_template):  # pragma: no cover
     """Writes output of rendering to file"""
     LOGGER.info("Creating %s", output_file)
-    with open(output_file, "w+") as file_handler:
+    with open(output_file, "w+", encoding="utf8") as file_handler:
         file_handler.write(rendered_template)

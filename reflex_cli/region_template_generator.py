@@ -51,7 +51,9 @@ class RegionTemplateGenerator:
     def create_region_rule_templates(self):
         """Creates tf file for each rule"""
         for rule in self.configuration["rules"]["aws"]:
-            rendered_template = self.generate_template("aws-rule-region.tf", rule)
+            rendered_template = self.generate_template(
+                "aws-rule-region.tf", rule
+            )
             if rendered_template:
                 self.build_output_file(rule, rendered_template)
 
@@ -109,11 +111,15 @@ class RegionTemplateGenerator:
         output_file = os.path.join(self.output_directory, template_name)
         self.write_template_file(output_file, rendered_template)
 
-    def write_template_file(self, output_file, rendered_template):  # pragma: no cover
+    def write_template_file(
+        self, output_file, rendered_template
+    ):  # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
-        LOGGER.info("📃 Writing terraform file to: %s%s%s", BOLD, output_file, ENDC)
-        with open(output_file, "w+") as file_handler:
+        LOGGER.info(
+            "📃 Writing terraform file to: %s%s%s", BOLD, output_file, ENDC
+        )
+        with open(output_file, "w+", encoding="utf8") as file_handler:
             file_handler.write(rendered_template)
 
     def _ensure_output_directory_exists(self):  # pragma: no cover

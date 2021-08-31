@@ -3,6 +3,7 @@ import logging
 import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
+
 from reflex_cli.create_template_utils import (
     ensure_output_directory_exists,
     write_template_file,
@@ -27,7 +28,7 @@ class RepoFoundationSkeleton:
         )
 
     def create_templates(self):  # pragma: no cover
-        """ Generates templates for rule. """
+        """Generates templates for rule."""
         ensure_output_directory_exists(self.output_directory)
         self.create_release_workflow_templates()
         self.create_test_workflow_template()
@@ -49,7 +50,7 @@ class RepoFoundationSkeleton:
         write_template_file(output_file, rendered_template)
 
     def create_release_workflow_templates(self):  # pragma: no cover
-        """ Generates templates for GitHub release files """
+        """Generates templates for GitHub release files"""
         self.create_template(
             template_file=".github/workflows/release.yaml.jinja2",
             template_options={},
@@ -62,7 +63,7 @@ class RepoFoundationSkeleton:
         )
 
     def create_test_workflow_template(self):  # pragma: no cover
-        """ Generates template for GitHub test file """
+        """Generates template for GitHub test file"""
         self.create_template(
             template_file=".github/workflows/test.yaml.jinja2",
             template_options={},
@@ -70,7 +71,7 @@ class RepoFoundationSkeleton:
         )
 
     def create_renovate_template(self):  # pragma: no cover
-        """ Generates template for Renovate config file """
+        """Generates template for Renovate config file"""
         self.create_template(
             template_file=".github/renovate.json.jinja2",
             template_options={},
@@ -78,7 +79,7 @@ class RepoFoundationSkeleton:
         )
 
     def create_source_template(self):  # pragma: no cover
-        """ Generates template for rule source code """
+        """Generates template for rule source code"""
         self.create_template(
             template_file="source/rule.py.jinja2",
             template_options={
@@ -89,7 +90,7 @@ class RepoFoundationSkeleton:
         )
 
     def create_requirements_template(self):  # pragma: no cover
-        """ Generates template for requirements.txt """
+        """Generates template for requirements.txt"""
         require_file = "source/requirements.txt"
         self.create_template(
             template_file=require_file,
@@ -98,7 +99,7 @@ class RepoFoundationSkeleton:
         )
 
     def create_gitignore_template(self):  # pragma: no cover
-        """ Generates template for .gitignore """
+        """Generates template for .gitignore"""
         self.create_template(
             template_file=".gitignore",
             template_options={},
@@ -106,7 +107,7 @@ class RepoFoundationSkeleton:
         )
 
     def create_pylintrc_template(self):  # pragma: no cover
-        """ Generates template for .pylintrc """
+        """Generates template for .pylintrc"""
         self.create_template(
             template_file=".pylintrc",
             template_options={},
@@ -114,13 +115,13 @@ class RepoFoundationSkeleton:
         )
 
     def create_license_template(self):  # pragma: no cover
-        """ Generates template for LICENSE """
+        """Generates template for LICENSE"""
         self.create_template(
             template_file="LICENSE", template_options={}, output_path="LICENSE"
         )
 
     def create_readme_template(self):  # pragma: no cover
-        """ Generates template for README.md """
+        """Generates template for README.md"""
         self.create_template(
             template_file="README.md",
             template_options={

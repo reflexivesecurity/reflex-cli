@@ -4,8 +4,9 @@ import sys
 
 # pylint: disable=wrong-import-order
 import yaml
-from reflex_cli.rule import Rule
 from yaml.constructor import SafeConstructor
+
+from reflex_cli.rule import Rule
 
 LOGGER = logging.getLogger("reflex_cli")
 REQUIRED_KEYS = [
@@ -67,7 +68,7 @@ class ConfigParser:
 
     def parse_yaml_config(self):
         """Opens config file, parses yaml."""
-        with open(self.config_file, "r") as config_file:
+        with open(self.config_file, "r", encoding="utf8") as config_file:
             try:
                 configuration = yaml.safe_load(config_file)
                 LOGGER.debug("Configuration dictionary: %s", configuration)

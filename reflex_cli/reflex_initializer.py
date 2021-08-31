@@ -3,13 +3,15 @@ import logging
 import os
 
 import pkg_resources
-
-from jinja2 import Environment, PackageLoader, select_autoescape
 import yaml
+from jinja2 import Environment, PackageLoader, select_autoescape
+
 from reflex_cli.rule_discoverer import RuleDiscoverer
 from reflex_cli.user_input import UserInput
 
-TEMPLATE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates"))
+TEMPLATE_FOLDER = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "templates")
+)
 
 LOGGER = logging.getLogger("reflex_cli")
 
@@ -36,7 +38,8 @@ class ReflexInitializer:
         raw_rules = self.user_input.get_rule_input(discovered_rules)
         LOGGER.debug("Rules selected for config: %s", raw_rules)
         possible_rules = sorted(
-            self.strip_rule_common_names(raw_rules), key=lambda d: list(d.keys())
+            self.strip_rule_common_names(raw_rules),
+            key=lambda d: list(d.keys()),
         )
         return possible_rules
 
@@ -74,13 +77,17 @@ class ReflexInitializer:
         self.configs["cli_version"] = self.get_reflex_version()
         self.configs["engine_version"] = self.get_engine_version()
         self.configs["globals"] = self.set_global_values()
-        self.configs["providers"] = [{"aws": {"region": self.user_input.get_region()}}]
+        self.configs["providers"] = [
+            {"aws": {"region": self.user_input.get_region()}}
+        ]
         self.configs["backend"] = self.user_input.get_backend_configuration()
         self.configs["rules"] = {"aws": self.query_possible_rules()}
 
     def render_template(self):  # pragma: no cover
         """Renders jinja2 template with yaml dumps."""
-        version_dump = yaml.dump({"cli_version": ("%s" % self.configs["cli_version"])})
+        version_dump = yaml.dump(
+            {"cli_version": ("%s" % self.configs["cli_version"])}
+        )
         engine_dump = yaml.dump(
             {"engine_version": ("%s" % self.configs["engine_version"])}
         )
@@ -109,5 +116,5 @@ class ReflexInitializer:
         else:
             write_file = True
         if write_file:
-            with open(self.config_file, "w") as config_file:
+            with open(self.config_file, "w", encoding="utf8") as config_file:
                 config_file.write(self.render_template())

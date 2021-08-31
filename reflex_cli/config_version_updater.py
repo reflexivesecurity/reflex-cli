@@ -33,10 +33,14 @@ class ConfigVersionUpdater:
                         remote_versions[rule.name] = manifest_rule.version
             else:
                 LOGGER.debug("Rule: %s has remote: %s", rule, rule.remote_url)
-                remote_versions[rule.name] = ReflexGithub().get_remote_latest_version(
+                remote_versions[
+                    rule.name
+                ] = ReflexGithub().get_remote_latest_version(
                     ReflexGithub.get_repo_format(rule.remote_url)
                 )
-            LOGGER.debug("Rule has remote version: %s", remote_versions[rule.name])
+            LOGGER.debug(
+                "Rule has remote version: %s", remote_versions[rule.name]
+            )
         return remote_versions
 
     def upgrade_engine_version(self):
@@ -67,7 +71,9 @@ class ConfigVersionUpdater:
             current_version = self._find_rule_value(rule.name, "version")
             remote_version = remote_versions[rule.name]
             if not remote_version:
-                LOGGER.debug("No release information for %s. Skipping!", rule.name)
+                LOGGER.debug(
+                    "No release information for %s. Skipping!", rule.name
+                )
                 continue
             if current_version != remote_version:
                 LOGGER.info(
@@ -82,7 +88,7 @@ class ConfigVersionUpdater:
         return update_requested
 
     def compare_current_rule_version(self, rule_name):
-        """ Check single rule version and compare it to remote version."""
+        """Check single rule version and compare it to remote version."""
         LOGGER.debug("Comparing current rule version.")
         update_requested = False
         remote_versions = self.gather_latest_remote_versions()
@@ -97,7 +103,9 @@ class ConfigVersionUpdater:
                 current_version = self._find_rule_value(rule.name, "version")
                 remote_version = remote_versions[rule.name]
                 if not remote_version:
-                    LOGGER.info("No release information for %s. Skipping!", rule.name)
+                    LOGGER.info(
+                        "No release information for %s. Skipping!", rule.name
+                    )
 
                     return update_requested
 
@@ -110,7 +118,9 @@ class ConfigVersionUpdater:
                     )
                     if self.user_input.verify_upgrade_interest():
                         update_requested = True
-                        self._set_rule_value(rule.name, "version", remote_version)
+                        self._set_rule_value(
+                            rule.name, "version", remote_version
+                        )
 
                     return update_requested
 
@@ -126,7 +136,9 @@ class ConfigVersionUpdater:
 
     def overwrite_reflex_config(self):
         """If any upgrades possible, overwrite current reflex config."""
-        initializer = ReflexInitializer(False, self.config_file, self.auto_overwrite)
+        initializer = ReflexInitializer(
+            False, self.config_file, self.auto_overwrite
+        )
         initializer.config_file = self.config_file
         initializer.configs = self.current_config.raw_configuration
         initializer.write_config_file()

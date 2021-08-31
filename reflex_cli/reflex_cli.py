@@ -4,9 +4,12 @@
 import logging
 import os
 import sys
+
 import click
 
-CMD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
+CMD_FOLDER = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "commands")
+)
 
 
 class ReflexCli(click.MultiCommand):
@@ -19,7 +22,7 @@ class ReflexCli(click.MultiCommand):
             return True
         return False
 
-    def list_commands(self, context):
+    def list_commands(self, ctx):
         command_files = []
         for filename in os.listdir(CMD_FOLDER):
             if self.is_command_file(filename):
@@ -29,11 +32,13 @@ class ReflexCli(click.MultiCommand):
         command_files.sort()
         return command_files
 
-    def get_command(self, context, name):
+    def get_command(self, ctx, cmd_name):
         try:
 
-            mod = __import__(f"reflex_cli.commands.command_{name}", None, None, ["cli"])
+            mod = __import__(
+                f"reflex_cli.commands.command_{cmd_name}", None, None, ["cli"]
+            )
         except ImportError:
-            logging.error("%s is not a command for reflex.", name)
+            logging.error("%s is not a command for reflex.", cmd_name)
             sys.exit(77)
         return mod.cli

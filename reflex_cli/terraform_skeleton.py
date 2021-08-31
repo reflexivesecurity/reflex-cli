@@ -3,6 +3,7 @@ import logging
 import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
+
 from reflex_cli.create_template_utils import (
     ensure_output_directory_exists,
     write_template_file,
@@ -27,7 +28,7 @@ class TerraformSkeleton:
         )
 
     def create_templates(self):  # pragma: no cover
-        """ Generates templates for rule. """
+        """Generates templates for rule."""
         ensure_output_directory_exists(self.output_directory)
         self.create_cwe_terraform_template()
         self.create_cwe_output_template()
@@ -46,7 +47,7 @@ class TerraformSkeleton:
         write_template_file(output_file, rendered_template)
 
     def create_cwe_terraform_template(self):  # pragma: no cover
-        """ Generates a .tf module for our rule """
+        """Generates a .tf module for our rule"""
         self.create_template(
             template_file="terraform/cwe/main.tf",
             template_options={
@@ -57,7 +58,7 @@ class TerraformSkeleton:
         )
 
     def create_cwe_output_template(self):  # pragma: no cover
-        """ Generates a .tf module for our rule """
+        """Generates a .tf module for our rule"""
         self.create_template(
             template_file="terraform/cwe/output.tf",
             template_options={},
@@ -65,7 +66,7 @@ class TerraformSkeleton:
         )
 
     def create_sqs_lambda_terraform_template(self):  # pragma: no cover
-        """ Generates a .tf module for our rule """
+        """Generates a .tf module for our rule"""
         self.create_template(
             template_file="terraform/sqs_lambda/sqs_lambda.tf",
             template_options={
@@ -96,7 +97,9 @@ class TerraformSkeleton:
             output_path="terraform/assume_role/assume_role.tf",
         )
 
-    def create_assume_role_variables_terraform_template(self):  # pragma: no cover
+    def create_assume_role_variables_terraform_template(
+        self
+    ):  # pragma: no cover
         """Generates assume_role/variables.tf file"""
         self.create_template(
             template_file="terraform/assume_role/variables.tf",
@@ -109,7 +112,7 @@ class TerraformSkeleton:
 
     @staticmethod
     def get_engine_version():
-        """ Pulls current engine version from manifest."""
+        """Pulls current engine version from manifest."""
         measure_manifest = RuleDiscoverer()
         engine_dictionary = measure_manifest.collect_engine()
         return engine_dictionary["reflex-engine"]["version"]

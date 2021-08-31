@@ -16,7 +16,11 @@ class ChildTemplateGenerator:
     """Generate a set of templates from a given config."""
 
     def __init__(
-        self, configuration, output_directory, child_account_id, parent_account_id
+        self,
+        configuration,
+        output_directory,
+        child_account_id,
+        parent_account_id,
     ):
         self.configuration = configuration
         self.output_directory = output_directory
@@ -55,7 +59,9 @@ class ChildTemplateGenerator:
     def create_child_rule_templates(self):
         """Creates tf file for each rule"""
         for rule in self.configuration["rules"]["aws"]:
-            rendered_template = self.generate_template("aws-rule-child.tf", rule)
+            rendered_template = self.generate_template(
+                "aws-rule-child.tf", rule
+            )
             if rendered_template:
                 self.build_output_file(rule, rendered_template)
 
@@ -114,11 +120,15 @@ class ChildTemplateGenerator:
         output_file = os.path.join(self.output_directory, template_name)
         self.write_template_file(output_file, rendered_template)
 
-    def write_template_file(self, output_file, rendered_template):  # pragma: no cover
+    def write_template_file(
+        self, output_file, rendered_template
+    ):  # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
-        LOGGER.info("📃 Writing terraform file to: %s%s%s", BOLD, output_file, ENDC)
-        with open(output_file, "w+") as file_handler:
+        LOGGER.info(
+            "📃 Writing terraform file to: %s%s%s", BOLD, output_file, ENDC
+        )
+        with open(output_file, "w+", encoding="utf8") as file_handler:
             file_handler.write(rendered_template)
 
     def _ensure_output_directory_exists(self):  # pragma: no cover

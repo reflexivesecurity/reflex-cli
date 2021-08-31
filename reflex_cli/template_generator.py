@@ -65,7 +65,9 @@ class TemplateGenerator:
             backend_type = list(self.configuration["backend"])[0]
             rendered_template = template.render(
                 backend_type=backend_type,
-                backend_config_array=self.configuration["backend"][backend_type],
+                backend_config_array=self.configuration["backend"][
+                    backend_type
+                ],
             )
             self.build_output_file(["backend"], rendered_template)
 
@@ -109,11 +111,15 @@ class TemplateGenerator:
         output_file = os.path.join(self.output_directory, template_name)
         self.write_template_file(output_file, rendered_template)
 
-    def write_template_file(self, output_file, rendered_template):  # pragma: no cover
+    def write_template_file(
+        self, output_file, rendered_template
+    ):  # pragma: no cover
         """Writes output of rendering to file"""
         self._ensure_output_directory_exists()
-        LOGGER.info("📃 Writing terraform file to: %s%s%s", BOLD, output_file, ENDC)
-        with open(output_file, "w+") as file_handler:
+        LOGGER.info(
+            "📃 Writing terraform file to: %s%s%s", BOLD, output_file, ENDC
+        )
+        with open(output_file, "w+", encoding="utf8") as file_handler:
             file_handler.write(rendered_template)
 
     def _ensure_output_directory_exists(self):  # pragma: no cover
