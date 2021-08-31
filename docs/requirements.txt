@@ -22,7 +22,7 @@ pytz==2020.5
 PyYAML==5.4.1
 regex==2021.8.28
 requests==2.26.0
-six==1.15.0
+six==1.16.0
 snowballstemmer==2.1.0
 Sphinx==3.5.4
 sphinx-click==3.0.1
