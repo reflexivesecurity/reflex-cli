@@ -13,7 +13,7 @@ packaging==21.0
 pbr==5.5.1
 prompt-toolkit==1.0.18
 PyGithub==1.54.1
-Pygments==2.8.1
+Pygments==2.10.0
 pyhcl==0.4.4
 PyInquirer==1.0.3
 PyJWT==2.0.1
