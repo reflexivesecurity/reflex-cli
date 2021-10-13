@@ -5,7 +5,7 @@ attrs==21.2.0
 backports.entry-points-selectable==1.1.0
 black==21.8b0
 certifi==2021.5.30
-cffi==1.14.6
+cffi==1.15.0
 cfgv==3.3.1
 chardet==4.0.0
 charset-normalizer==2.0.4
