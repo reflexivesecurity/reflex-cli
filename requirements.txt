@@ -33,7 +33,7 @@ PyGithub==1.55
 Pygments==2.10.0
 pyhcl==0.4.4
 PyInquirer==1.0.3
-PyJWT==2.1.0
+PyJWT==2.3.0
 pylint==2.10.2
 PyNaCl==1.4.0
 PyYAML==5.4.1
