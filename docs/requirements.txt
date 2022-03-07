@@ -34,7 +34,7 @@ pbr==5.6.0
 platformdirs==2.3.0
 pre-commit==2.14.1
 prompt-toolkit==1.0.14
-pycparser==2.20
+pycparser==2.21
 PyGithub==1.55
 Pygments==2.10.0
 pyhcl==0.4.4
