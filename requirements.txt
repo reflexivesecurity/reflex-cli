@@ -17,7 +17,7 @@ filelock==3.0.12
 identify==2.2.13
 idna==3.2
 importlib-metadata==4.8.1
-isort==5.9.3
+isort==5.10.1
 Jinja2==3.0.1
 lazy-object-proxy==1.6.0
 MarkupSafe==2.0.1
