@@ -16,7 +16,7 @@ coverage==5.5
 Deprecated==1.2.12
 distlib==0.3.2
 docutils==0.17.1
-filelock==3.0.12
+filelock==3.6.0
 identify==2.2.13
 idna==3.2
 imagesize==1.2.0
