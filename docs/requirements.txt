@@ -65,5 +65,5 @@ typing-extensions==3.10.0.2
 urllib3==1.26.6
 virtualenv==20.7.2
 wcwidth==0.2.5
-wrapt==1.12.1
+wrapt==1.14.0
 zipp==3.5.0
