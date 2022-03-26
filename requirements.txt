@@ -14,7 +14,7 @@ coverage==5.5
 Deprecated==1.2.12
 distlib==0.3.2
 filelock==3.0.12
-identify==2.2.13
+identify==2.4.12
 idna==3.2
 importlib-metadata==4.8.1
 isort==5.9.3
