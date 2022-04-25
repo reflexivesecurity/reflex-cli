@@ -5,7 +5,7 @@ astroid==2.7.3
 attrs==21.2.0
 Babel==2.9.1
 backports.entry-points-selectable==1.1.0
-black==21.8b0
+black==22.3.0
 certifi==2021.5.30
 cffi==1.14.6
 cfgv==3.3.1
