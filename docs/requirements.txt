@@ -61,7 +61,7 @@ sphinxcontrib-serializinghtml==1.1.5
 toml==0.10.2
 tomli==1.2.1
 typed-ast==1.4.3
-typing-extensions==3.10.0.2
+typing-extensions==4.2.0
 urllib3==1.26.6
 virtualenv==20.7.2
 wcwidth==0.2.5
